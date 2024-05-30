@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+<configuration>
+	
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+	</settings>
+	
+	<typeAliases>
+		<typeAlias type="com.tp.travely.member.model.vo.Board" alias="board" />
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="/mappers/board-mapper.xml" />
+	</mappers>
+	<!-- 
+		* 파일이 없는 상태에서 mapper 등록하면 오류 발생
+		* 파일이 있는 상태지만 namespace 를 누락하면 마찬가지로
+		   				 mapper 등록하면 오류 발생
+	-->
+	
+</configuration>  
+
+
+
+
+
