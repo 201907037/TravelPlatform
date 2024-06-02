@@ -6,11 +6,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ef0943861331616097f6a71fe10b40e2"></script>
 
 <style>
-	.outer{
+	.outer41{
 		box-sizing: border-box;
 		width: 99%;
 		height: 900px;
@@ -20,7 +20,7 @@
 <body>
 <jsp:include page="leftbar.jsp"/>
 
-<div class="outer">
+<div class="outer41">
 <div id="header" style="height: 10%;">header 영역</div>
 <div id="map" style="width:100%;height:90%;margin : auto;"></div>
 </div>
