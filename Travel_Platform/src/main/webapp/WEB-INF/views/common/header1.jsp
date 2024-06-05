@@ -22,11 +22,44 @@
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+
+
+
+    <style>
+       
+        header{
+            position: fixed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            height: 80px;
+            z-index: 400;
+            width: 100%;
+            -webkit-transition-duration:0.4s;
+            -webkit-transition-timing-function:ease;
+            transition-duration:0.4s;
+            transition-timing-function:ease;
+            
+  
+        }
+
+        .down {
+            background-color:rgba(176, 196, 222, 0.233);
+            
+            -webkit-transition-duration:0.4s;
+            -webkit-transition-timing-function:ease;
+            transition-duration:0.4s;
+            transition-timing-function:ease;
+            }
+    </style>
 
 </head>
 <body>
 
-    <nav id="header" class="header">
+    <header id="header" class="header">
         <div class="h1">
             <a href="" class="yellow underline">travley</a>
         </div>
@@ -41,7 +74,27 @@
         <div class="h3">
             <a href="" class="yellow underline">login</a>
         </div>
-    </nav>
+    </header>
+
+    <script>
+
+$(function(){
+  var $header = $('header'); //헤더를 변수에 넣기
+  var $page = $('.mid'); //색상이 변할 부분
+  var $window = $(window);
+  var pageOffsetTop = $page.offset().top;//색상 변할 부분의 top값 구하기
+  
+  $window.resize(function(){ //반응형을 대비하여 리사이즈시 top값을 다시 계산
+    pageOffsetTop = $page.offset().top;
+  });
+  
+  $window.on('scroll', function(){ //스크롤시
+    var scrolled = $window.scrollTop() >= pageOffsetTop; //스크롤된 상태; true or false
+    $header.toggleClass('down', scrolled); //클래스 토글
+  });
+});
+
+    </script>
     
 </body>
 </html>

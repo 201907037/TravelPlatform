@@ -18,6 +18,8 @@
     
 }
 
+
+
 .wrap{
     height: 4500px;
     
@@ -435,17 +437,7 @@
 
 
 /* 네비바 */
-.header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 12px;
-    height: 120px;
-    position: absolute;
-    z-index: 400;
-    width: 100%;
-   
-}
+
 
 
 .h1 > a{
@@ -455,6 +447,8 @@
 
 #nav{
     display: flex;
+    
+    
     
 }
 

@@ -21,6 +21,8 @@
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
 
     
 </head>
@@ -39,6 +41,8 @@
             </ul>
         </div>  
         -->
+        <jsp:include page="common/header1.jsp" />
+
 
         <nav id="main-navigation">
             <ul class="scroll">
@@ -383,6 +387,8 @@
 
         var swiper = new Swiper(".mySwiper", {
       direction: "vertical",
+      autoplay : true,
+      loop : true,
       pagination: {
         el: ".swiper-pagination",
         clickable: true,
