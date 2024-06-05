@@ -37,6 +37,7 @@
 		display : flex;
 		width : 100%;
 		height : 100%;
+		
 	}
 	.nav__brand {
 	    display: grid;
@@ -82,14 +83,15 @@
 	    font-size: var(--small-font-size);
 	}
 	
-	 .left-bar{
+	.left-bar{
         position : absolute;
         width : 250px;
-        border: 1px solid red;
-        background-color: lightgray;
+        border-radius : 15px;
+        background-color: var(--bg-color);
+   		color: var(--white-color);
         height: 95vh;
         z-index : 10;  
-       
+       	padding : 5px;
     }
     .t_box{
         width : 100%;
@@ -333,6 +335,6 @@
  <!-- IONICONS -->
  <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
  <!-- JS -->
- <script src="resources/js/main.js"></script>
+
 </body>
 </html>

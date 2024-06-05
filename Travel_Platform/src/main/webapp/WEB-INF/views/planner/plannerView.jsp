@@ -21,7 +21,7 @@
 <jsp:include page="leftbar.jsp"/>
 
 <div class="outer41">
-<div id="header" style="height: 10%;">header 영역</div>
+<div id="header" style="height: 10%;"></div>
 <div id="map" style="width:100%;height:90%;margin : auto;"></div>
 </div>
 <script>
