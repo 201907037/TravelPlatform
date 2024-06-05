@@ -73,6 +73,8 @@
         
         <div class="h3">
             <a href="" class="yellow underline">login</a>
+            <!-- 관리자 페이지 이동 임시버튼 -->
+            <a href="adminPage.ad" class="yellow underline">AdminPage</a>
         </div>
     </header>
 
