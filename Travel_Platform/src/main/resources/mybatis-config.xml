@@ -10,11 +10,14 @@
 	</settings>
 	
 	<typeAliases>
-		<typeAlias type="com.tp.travely.member.model.vo.Board" alias="board" />
+
+		<typeAlias type="com.tp.travely.member.model.vo.Member" alias="member" />
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="/mappers/board-mapper.xml" />
+		<mapper resource="/mappers/member-mapper.xml" />
+		<mapper resource="/mappers/admin-mapper.xml" />
 	</mappers>
 	
 </configuration>  

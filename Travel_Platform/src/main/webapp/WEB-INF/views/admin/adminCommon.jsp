@@ -46,7 +46,7 @@
                                 &nbsp;대시보드 통계
                             </a>
                             <div class="sb-sidenav-menu-heading">Member</div>
-                            <a class="nav-link" href="#">&nbsp;<i class="fa-solid fa-users"></i> &nbsp;
+                            <a class="nav-link" href="adminMember.ad">&nbsp;<i class="fa-solid fa-users"></i> &nbsp;
                                 &nbsp;회원 관리
                             </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
@@ -91,11 +91,7 @@
                 </nav>
             </div>
 
-            <div style="height: 1000px;">
-            <!-- container 영역 -->
             
-                
-            </div>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
             <script src="resources/js/scripts.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>

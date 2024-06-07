@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="adminMapper">
+
+ <resultMap type="member" id="memberResultSet">
+  		<result column="USER_NO" property="userNo"/>
+  		<result column="USER_ID" property="userId"/>
+  		<result column="USER_PWD" property="userPwd"/>
+  		<result column="NICK_NAME" property="nickName"/>
+  		<result column="NAME" property="name"/>
+  		<result column="AGE" property="age"/>
+  		<result column="EMAIL" property="email"/>
+  		<result column="PHONE" property="phone"/>
+  		<result column="ADDRESS" property="address"/>
+  		<result column="GENDER" property="gender"/>
+  		<result column="CHANGE_NAME" property="changeName"/>
+  		<result column="CREATE_DATE" property="createDate"/>
+  		<result column="MODIFY_DATE" property="modifyDate"/>
+  		<result column="STATUS" property="status"/>  
+  </resultMap>
+
+<select id="adminMemberList"
+		resultMap="memberResultSet">
+SELECT *
+  FROM MEMBER
+ WHERE STATUS = 'Y'
+</select>
+
+
+</mapper>

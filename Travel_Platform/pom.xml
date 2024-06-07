@@ -142,12 +142,23 @@
 		    <artifactId>commons-dbcp</artifactId>
 		    <version>1.4</version>
 		</dependency> 
+		
+		
 		<!-- 웹소켓 기능 구현을 위한 라이브러리 -->
 		<!-- spring-websocket 모듈 -->
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-websocket</artifactId>
 		    <version>${org.springframework-version}</version>
+		</dependency>
+		
+		<!-- Lombok 라이브러리 추가-->
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.32</version>
+		    <scope>provided</scope>
 		</dependency>
 		
 		<!-- JSON, GSON 라이브러리 추가 -->
