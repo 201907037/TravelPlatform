@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="noticeMapper">
+
+ <resultMap type="notice" id="noticeResultSet">
+  		<result column="NOTICE_NO" property="noticeNo"/>
+  		<result column="NOTICE_TITLE" property="noticeTitle"/>
+  		<result column="NOTICE_CONTENT" property="noticeContent"/>
+  		<result column="CHANGE_NAME" property="changeName"/>
+  		<result column="CREATE_DATE" property="createDate"/>
+  		<result column="STATUS" property="status"/>
+  </resultMap>
+
+<!-- 공지사항 리스트뷰 -->
+<select id="adminNoticeListView"
+		resultMap="noticeResultSet">
+SELECT *
+  FROM NOTICE
+ WHERE STATUS = 'Y'
+</select>
+
+<!-- 공지사항 isnert -->
+<insert id="insertNotice"
+			parameterType="notice">
+INSERT INTO NOTICE(
+NOTICE_NO,
+NOTICE_TITLE,
+NOTICE_CONTENT,
+CHANGE_NAME
+)
+VALUES(
+SEQ_NOTICE_NO.NEXTVAL,
+#{noticeTitle},
+#{noticeContent},
+#{changeName}
+)
+</insert>
+
+
+<!-- 공지사항 삭제 -->
+<update id="deleteNotice" parameterType="_int">
+UPDATE NOTICE
+SET STATUS = 'N'
+WHERE NOTICE_NO = #{num}
+</update>
+
+<!-- 공지사항 상세보기(작업중) -->
+<select id="detailNotice"
+		parameterType="_int"
+		resultMap="noticeResultSet">
+SELECT *
+  FROM NOTICE
+ WHERE STATUS = 'Y'
+ AND NOTICE_NO = #{num}
+</select>
+
+<!-- 공지사항 업데이트 -->
+<update id="updateNotice" parameterType="notice">
+UPDATE NOTICE
+SET NOTICE_TITLE = #{noticeTitle},
+	NOTICE_CONTENT = #{noticeContent},
+	CHANGE_NAME = #{changeName}
+WHERE NOTICE_NO = #{noticeNo}
+AND STATUS = 'Y'
+</update>
+
+</mapper>

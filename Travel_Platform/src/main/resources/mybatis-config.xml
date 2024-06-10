@@ -12,12 +12,16 @@
 	<typeAliases>
 
 		<typeAlias type="com.tp.travely.member.model.vo.Member" alias="member" />
+		<!-- notice alias 추가 (나현성) -->
+		<typeAlias type="com.tp.travely.notice.model.vo.Notice" alias="notice" />
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="/mappers/board-mapper.xml" />
 		<mapper resource="/mappers/member-mapper.xml" />
 		<mapper resource="/mappers/admin-mapper.xml" />
+				<!-- notice mapper 추가 (나현성) -->
+		<mapper resource="/mappers/notice-mapper.xml" />
 	</mappers>
 	
 </configuration>  

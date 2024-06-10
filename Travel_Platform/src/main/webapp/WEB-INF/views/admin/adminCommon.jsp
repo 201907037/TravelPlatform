@@ -57,7 +57,8 @@
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="#"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;공지사항 관리</a>
+                                	<!-- Notice 경로 추가 (나현성) -->
+                                    <a class="nav-link" href="noticeList.ad"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;공지사항 관리</a>
                                     <a class="nav-link" href="#"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;여행후기게시판 관리</a>
                                     <a class="nav-link" href="#"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;그룹채팅방 관리</a>
                                 </nav>
