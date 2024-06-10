@@ -13,7 +13,6 @@ import com.tp.travely.member.model.vo.Member;
 @Service
 public class AdminServiceImpl implements AdminService {
 
-	// 어노테이션 오류
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	

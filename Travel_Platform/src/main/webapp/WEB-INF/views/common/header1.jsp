@@ -67,7 +67,7 @@
         <ul id="nav" class="nav">
             <li><a class="yellow underline" href="">HOME</a></li>
             <li><a class="yellow underline" href="">NOTICE</a></li>
-            <li><a class="yellow underline" href="">COMUNITY</a></li>
+            <li><a class="yellow underline" href="selectList.bo">COMUNITY</a></li>
             <li><a class="yellow underline" href="">SERVICE</a></li>
         </ul>
         

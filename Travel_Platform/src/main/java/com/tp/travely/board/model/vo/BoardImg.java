@@ -11,15 +11,12 @@ import lombok.ToString;
 @Setter // setter 메소드들
 @Getter // getter 메소드들
 @ToString // ToString 메소드 오버라이딩
-public class Board {
+public class BoardImg {
 	
-	
-	private int boardNo;
-	private String boardTitle;
-	private String boardContent;
-	private String createDate;
-	private int count;
+	private int imgNo;
+	private String changeName;
+	private String fileLevel;
 	private String status;
-	private String userNo;
-
+	private String boardNo;
+	
 }

@@ -6,12 +6,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<!-- 테이블 템플릿 사용시 넣어줘야함 -->
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
 </head>
 <body>
 	
 	<jsp:include page="adminCommon.jsp"></jsp:include>
 	<!-- 패딩 영역 -->
-	<div style="width: 100%; padding:50px;">
+	<div style="width: 100%; padding:50px; height: 1000px;">
 	<!-- 내부 영역 -->
 	<div class="card mb-4" style="width: 100%;">
         <div class="card-header">
