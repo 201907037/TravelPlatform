@@ -18,6 +18,11 @@
 
 		<!-- tour alias 추가 (전유진) -->
 		<typeAlias type="com.tp.travely.tour.model.vo.Tour" alias="tour" />
+		
+		<!-- 최현호 -->
+		<typeAlias type="com.tp.travely.board.model.vo.Board" alias="board" />
+		<typeAlias type="com.tp.travely.board.model.vo.BoardImg" alias="boardImg" />
+
 
 	</typeAliases>
 	

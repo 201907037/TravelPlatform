@@ -92,6 +92,7 @@
             </div>
         </div>
         </c:forEach>
+    	
 	    
         <!-- 게시글 1 -->
         <div class="item">

@@ -38,6 +38,8 @@ public class BoardController {
 		
 		// 회원 목록조회 메소드도 사용해야함
 		
+		System.out.println(list1);
+		System.out.println(list2);
 		
 		
 		model.addAttribute("bList", list1);
