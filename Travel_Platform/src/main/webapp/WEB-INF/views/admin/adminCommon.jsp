@@ -73,7 +73,8 @@
                                     <a class="nav-link collapsed" href="#"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;
                                         플랜 관리
                                     </a>
-                                    <a class="nav-link collapsed" href="#"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;
+                                    <!-- 유진 - 여행지 관리 부분 포워딩 처리 (2024.06.10) -->
+                                    <a class="nav-link collapsed" href="adminTour.ad"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;
                                         여행지 관리
                                     </a>
                                     <a class="nav-link collapsed" href="#"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;
