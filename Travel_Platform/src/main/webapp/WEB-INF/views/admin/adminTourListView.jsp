@@ -25,43 +25,37 @@
                         <th>분류</th>
                         <th>지역</th>
                         <th>주소</th>
-                        <th>연락처</th>
+                        <th>여행지정보</th>
+                        <!-- <th>연락처</th>
                         <th>오픈시간</th>
-                        <th>휴무일</th>
+                        <th>휴무일</th> -->
+                        <th>최초생성일</th> <!-- 해당 여행지 추가한 날 -->
                         <th>수정 / 삭제</th>
                     </tr>
                 </thead>
                 <tbody>
-                <!-- 추후에 관리자 계정 제외후 일반 회원만 조회하게끔 구현 예정 -->
-                <c:forEach var="m" items="${requestScope.mList}">
-                    <tr>
-                        <th>${m.userId}</th>
-                        <th>${m.userPwd}</th>
-                        <th>${m.nickName}</th>
-                        <th>${m.name}</th>
-                        <th>${m.email}</th>
-                        <th>${m.phone}</th>
-                        <th>${m.address}</th>
-                        <th>${m.gender}</th>
-                        <th>${m.createDate}</th>
-                        <c:choose>
-                        <c:when test="${m.status eq 'Y'}">
-                        <th><select name="memberStatus">
-                            <option value="Y">가입</option>
-                            <option value="N">탈퇴</option>
-                        </select></th>
-                        </c:when>
-                        <c:otherwise>
-                        <th><select name="memberStatus">
-                            <option value="N">탈퇴</option>
-                            <option value="Y">가입</option>
-                        </select></th>
-                        </c:otherwise>
-                        </c:choose>
-                    </tr>
-                    </c:forEach>
+	                <c:forEach var="m" items="${requestScope.mList}">
+	                    <tr>
+	                        <th>${m.tourName}</th>
+	                        <th>${m.tourType}</th>
+	                        <%-- <th>${m.}</th> --%>
+	                        <th>${m.address}</th>
+	                        <th>${m.addDate}</th>
+	                        <c:if test="${m.status eq 'Y'}">
+		                        <th>
+		                        	<select name="memberStatus">
+		                            	<option value="Y">수정</option>
+		                            	<option value="N">삭제</option>
+		                        	</select>
+		                        </th>
+	                        </c:if>
+	                    </tr>
+	                </c:forEach>
                 </tbody>
             </table>
+        </div>
+        <div>
+        
         </div>
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
