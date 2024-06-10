@@ -23,6 +23,15 @@
  </resultMap>
  
  
+ <!-- 게시글 갯수 구하는 쿼리문 -->
+<select id="selectListCount"
+		resultType="_int">
+	SELECT COUNT(*)
+	  FROM BOARD
+	 WHERE STATUS = 'Y'
+</select>
+ 
+ 
 <insert id="insertBoard"
 		parameterType="board">
 INSERT INTO BOARD (BOARD_NO,
@@ -62,6 +71,7 @@ INSERT INTO BOARD (BOARD_NO,
 		SELECT *
 	  FROM BOARD_IMG
 	 WHERE STATUS = 'Y'
+	   AND FILE_LEVEL = 1
 	 ORDER BY IMG_NO DESC
 </select>
 	

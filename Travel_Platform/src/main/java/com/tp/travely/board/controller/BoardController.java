@@ -13,12 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tp.travely.board.model.service.BoardService;
 import com.tp.travely.board.model.vo.Board;
 import com.tp.travely.board.model.vo.BoardImg;
+import com.tp.travely.common.model.vo.PageInfo;
+import com.tp.travely.common.template.Pagination;
 
 @Controller
 public class BoardController {
@@ -30,18 +33,32 @@ public class BoardController {
 	
 	// 게시글 목록
 	@GetMapping("selectList.bo")
-	public String boardListView(Model model) {
+	public String boardListView(@RequestParam(value="cpage", defaultValue="1") int currentPage,
+								Model model) {
+		
+		
+		
+		int listCount = boardService.selectListCount();
+		int pageLimit = 10;
+		int boardLimit = 16;
+		
+		// System.out.println(listCount);
+		
+		// PageInfo 객체 만들어내기
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		
 		
 		// 목록불러오는 기능 추가 예정
-		ArrayList<Board> list1 = boardService.selectListBoard();
+		ArrayList<Board> list1 = boardService.selectListBoard(pi);
 		ArrayList<BoardImg> list2 = boardService.selectListBoardImg();
 		
 		// 회원 목록조회 메소드도 사용해야함
-		
+		/*
 		System.out.println(list1);
 		System.out.println(list2);
-		
-		
+		System.out.println(pi);
+		*/
+		model.addAttribute("pi", pi);
 		model.addAttribute("bList", list1);
 		model.addAttribute("biList", list2);
 		

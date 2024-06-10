@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.tp.travely.board.model.vo.Board;
 import com.tp.travely.board.model.vo.BoardImg;
+import com.tp.travely.common.model.vo.PageInfo;
 
 public interface BoardService {
 
@@ -12,8 +13,12 @@ public interface BoardService {
 	
 	int insertBoard(BoardImg bi);
 	
-	ArrayList<Board> selectListBoard();
+	int selectListCount();
+	
+	ArrayList<Board> selectListBoard(PageInfo pi);
 	
 	ArrayList<BoardImg> selectListBoardImg();
+	
+	
 	
 }

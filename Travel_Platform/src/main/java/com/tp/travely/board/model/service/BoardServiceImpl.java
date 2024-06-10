@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tp.travely.board.model.dao.BoardDao;
 import com.tp.travely.board.model.vo.Board;
 import com.tp.travely.board.model.vo.BoardImg;
+import com.tp.travely.common.model.vo.PageInfo;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -35,15 +36,21 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public ArrayList<Board> selectListBoard() {
+	public ArrayList<Board> selectListBoard(PageInfo pi) {
 		
-		return boardDao.selectListBoard(sqlSession);
+		return boardDao.selectListBoard(sqlSession, pi);
 	}
 
 	@Override
 	public ArrayList<BoardImg> selectListBoardImg() {
 		
 		return boardDao.selectListBoardImg(sqlSession);
+	}
+
+	@Override
+	public int selectListCount() {
+		
+		return boardDao.selectListCount(sqlSession);
 	}
 	
 	

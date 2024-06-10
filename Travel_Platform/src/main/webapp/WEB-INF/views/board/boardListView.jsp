@@ -64,7 +64,7 @@
             font-weight: bold;
         }
 
-        
+         #pagingArea {width:fit-content; margin:auto;}
     </style>
 </head>
 <body>
@@ -79,6 +79,7 @@
     <div class="container">
     	
     	<!-- 게시글 데이터 추출 -->
+    	
     	<c:forEach var="i" begin="0" end="${requestScope.bList.size() - 1}">
         <div class="item">
             <div class="header">
@@ -92,7 +93,7 @@
             </div>
         </div>
         </c:forEach>
-    	
+    	 
 	    
         <!-- 게시글 1 -->
         <div class="item">
@@ -193,6 +194,9 @@
         </div>
         <!-- 더 많은 게시글을 여기에 추가할 수 있습니다 -->
     </div>
+    
+    <!-- 이영역에는 페이징처리시 들어갈 버튼나열 부트스트렙 사용할것 -->
+    
     
     <jsp:include page="../common/footer1.jsp"></jsp:include>
 </body>
