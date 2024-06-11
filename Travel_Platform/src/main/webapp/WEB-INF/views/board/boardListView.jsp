@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Image Board</title>
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,7 +16,7 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr); /* 가로로 4줄 */
             grid-template-rows: repeat(4, auto); /* 세로로 4줄 */
-            gap: 100px; /* 게시글 간의 간격 */
+            gap: 125px; /* 게시글 간의 간격 */
             padding: 20px;
             margin: 50px;
         }
@@ -23,7 +24,7 @@
             border-radius: 5px;
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
-            height: 420px;
+            height: 440px;
         }
         .item img {
             width: 100%;
@@ -64,8 +65,19 @@
             font-weight: bold;
         }
 
-         #pagingArea {width:fit-content; margin:auto;}
+         #pagingArea {
+         	width:fit-content; margin:auto;
+         }
+         
+         #pagingArea ul>li {
+         	display: inline-block; /* 가로 배치 */
+            margin-right: 20px; /* 항목 간 간격 */
+         }
+         
+        
+         
     </style>
+    
 </head>
 <body>
 	<jsp:include page="../common/header1.jsp"></jsp:include>
@@ -81,15 +93,18 @@
     	<!-- 게시글 데이터 추출 -->
     	
     	<c:forEach var="i" begin="0" end="${requestScope.bList.size() - 1}">
-        <div class="item">
+        <div class="item" onclick="location.href='detail.bo?bno=${requestScope.bList.get(i).boardNo}'">
             <div class="header">
-                <img src="https://via.placeholder.com/32" alt="Profile Picture">
-                <span>faker</span>
+                <img src="${ requestScope.mList.get(i).changeName }" alt="Profile Picture">
+                <span>${ requestScope.mList.get(i).nickName }</span>
             </div>
             <img src="${requestScope.biList.get(i).changeName }">
             <div class="info">
                 <h3>${requestScope.bList.get(i).boardTitle}</h3>
-                <span>조회수: ${requestScope.bList.get(i).count}</span><span>, 좋아요: 0</span><span>, 작성일: ${requestScope.bList.get(i).createDate}</span>
+                <span>좋아요: 0</span><span>, 조회수: ${requestScope.bList.get(i).count}</span>
+                <div style="display: inline-block; text-align: right; width: 55%;" >
+                	<span> ${requestScope.bList.get(i).createDate}</span>
+                </div>
             </div>
         </div>
         </c:forEach>
@@ -194,8 +209,55 @@
         </div>
         <!-- 더 많은 게시글을 여기에 추가할 수 있습니다 -->
     </div>
-    
-    <!-- 이영역에는 페이징처리시 들어갈 버튼나열 부트스트렙 사용할것 -->
+    <!-- 페이징처리 영역 -->
+    <div id="pagingArea">
+                <ul class="pagination">
+                	<c:choose>
+                    <c:when test="${ requestScope.pi.currentPage eq 1 }">
+                    	<li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none; display:none;">Previous</a></li>
+                    </c:when>
+                    <c:otherwise>
+                    	<li class="page-item"><a class="page-link" href="list.bo?cpage=${ requestScope.pi.currentPage -1 }">Previous</a></li>
+                    </c:otherwise>
+                    </c:choose>
+                    <c:forEach var="p" begin="${ requestScope.pi.startPage }"
+                    		   end="${ requestScope.pi.endPage }"
+                    		   step="1">
+                    
+                    <c:choose>
+                    <c:when test="${ requestScope.pi.currentPage ne p }">		   
+	                    <li class="page-item">
+	                    	<a class="page-link" href="list.bo?cpage=${ p }">
+	                    		${ p }
+	                		</a>
+	                    </li>
+                    </c:when>
+                    <c:otherwise>
+                    	<li class="page-item active">
+                    				<!-- active 추가시 현재 내가 보고있는 페이지만 색칠됨 -->
+	                    	<a class="page-link">
+	                    			<!-- 현재 내가 보고 있는 페이지이므로 클릭해도 href 속성이 없기때문에 클릭 막기 -->
+	                    		${ p }
+	                		</a>
+	                    </li>
+                    </c:otherwise>
+                    </c:choose>
+                    
+                    </c:forEach>
+                    
+                    <c:choose>
+                    <c:when test="${ requestScope.pi.currentPage eq requestScope.pi.maxPage }">
+                    	<li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none; display:none;">Next</a></li>
+                    </c:when>
+                    <c:otherwise>
+                    	<li class="page-item"><a class="page-link" href="list.bo?cpage=${ requestScope.pi.currentPage + 1 }">Next</a></li>
+                    </c:otherwise>
+                    </c:choose>
+                </ul>
+            </div>
+            
+            <br><br><br><br>
+
     
     
     <jsp:include page="../common/footer1.jsp"></jsp:include>

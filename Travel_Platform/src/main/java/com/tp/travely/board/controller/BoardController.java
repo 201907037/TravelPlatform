@@ -22,6 +22,7 @@ import com.tp.travely.board.model.vo.Board;
 import com.tp.travely.board.model.vo.BoardImg;
 import com.tp.travely.common.model.vo.PageInfo;
 import com.tp.travely.common.template.Pagination;
+import com.tp.travely.member.model.vo.Member;
 
 @Controller
 public class BoardController {
@@ -52,29 +53,32 @@ public class BoardController {
 		ArrayList<Board> list1 = boardService.selectListBoard(pi);
 		ArrayList<BoardImg> list2 = boardService.selectListBoardImg();
 		
+		ArrayList<Member> list3 = boardService.selectMember();
 		// 회원 목록조회 메소드도 사용해야함
-		/*
-		System.out.println(list1);
-		System.out.println(list2);
-		System.out.println(pi);
-		*/
+		
+		// System.out.println(list1);
+		// System.out.println(list2);
+		// System.out.println(pi);
+		
+		
 		model.addAttribute("pi", pi);
 		model.addAttribute("bList", list1);
 		model.addAttribute("biList", list2);
+		model.addAttribute("mList", list3);
 		
 		
 		
 		return "board/boardListView";
 	}
 	
-	
+	// 게시글 작성페이지
 	@GetMapping("enrollForm.bo")
 	public String boardEnrollform() {
 		
 		return "board/boardInsert";
 	}
 	
-	
+	// 게시글 작성
 	@PostMapping("insert.bo")
 	public ModelAndView insertBoard(Board b, BoardImg bi, String userNo,
 							  ArrayList<MultipartFile> upfiles,
@@ -101,7 +105,7 @@ public class BoardController {
 				}
 				// 첨부파일이 있다면 자동으로 b객체 originName, changeName 필드값이 추가됨
 				results = boardService.insertBoard(bi);
-				System.out.println(results);
+				// System.out.println(results);
 			} 
 			
 			
@@ -109,14 +113,71 @@ public class BoardController {
 		}
 		
 		if(result > 0 && results > 0) {
+			
+			mv.addObject("alertMsg", "게시글 작성 성공");
 			mv.setViewName("redirect:/selectList.bo");
 		} else {
 			
 		}
 		
 		return mv;
-		
 	}
+	
+	
+	// 게시글 상세조회
+	@GetMapping("detail.bo")
+	public String detailBoard(int bno,	
+							  Model model) {
+		
+		// System.out.println(bno);
+		int result = boardService.increaseCount(bno);
+		
+		if(result > 0) { // 성공적으로 조회수가 증가되었다면
+		
+			
+			Member m = boardService.selectDetailMember(bno);
+			Board b = boardService.selectBoard(bno);
+			
+			ArrayList<BoardImg> biList = boardService.selectBoardImg(bno);
+			
+			model.addAttribute("m", m);
+			model.addAttribute("b", b);
+			model.addAttribute("biList", biList);
+			
+			
+			return "board/boardDetailView";
+		
+		} else {
+			
+		
+		
+		return "board/boardDetailView";
+		}
+	}
+	
+	
+	/*
+	 * 좋아요기능 로그인 session 완성후 구현
+	@GetMapping("likeCheck.bo")
+	public String ajaxLikeCheck(int bno,
+								HttpSession session,
+								Model model) {
+		
+		return 
+	}
+	*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	//--------------------------- 일반메소드 영역 -------------------------------
 	
 		// 현재 넘어온 첨부파일 그 자체를 서버의 폴더로 저장시키는 메소드

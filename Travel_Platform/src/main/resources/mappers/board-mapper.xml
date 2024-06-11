@@ -22,6 +22,12 @@
  	
  </resultMap>
  
+ <resultMap type="member" id="memberResultSet">
+ 	<result column="USER_NO" property="userNo"/>
+ 	<result column="NICK_NAME" property="nickName"/>
+ 	<result column="CHANGE_NAME" property="changeName"/>
+ </resultMap>
+ 
  
  <!-- 게시글 갯수 구하는 쿼리문 -->
 <select id="selectListCount"
@@ -31,7 +37,7 @@
 	 WHERE STATUS = 'Y'
 </select>
  
- 
+ <!-- 게시글 작성 쿼리문 -->
 <insert id="insertBoard"
 		parameterType="board">
 INSERT INTO BOARD (BOARD_NO,
@@ -44,6 +50,7 @@ INSERT INTO BOARD (BOARD_NO,
                         #{userNo})
 </insert>
 
+<!-- 게시글이미지 작성 쿼리문 -->
 <insert id="insertBoardImg"
 		parameterType="boardImg">
 	INSERT INTO BOARD_IMG (IMG_NO,
@@ -56,16 +63,34 @@ INSERT INTO BOARD (BOARD_NO,
 		                        SEQ_BOARD_NO.CURRVAL)
 </insert>
 
+<!-- 게시글 목록조회 쿼리문 -->
 <select id="selectListBoard"
 		resultMap="boardResultSet">
 		SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT, 
-		TO_CHAR(CREATE_DATE, 'MM/DD') AS CREATE_DATE, COUNT, STATUS, USER_NO
+		 CASE 
+        WHEN (SYSDATE - CREATE_DATE) * 24 * 60 &lt; 5 THEN '방금 전'
+        WHEN (SYSDATE - CREATE_DATE) * 24 &lt; 1 THEN TRUNC((SYSDATE - CREATE_DATE) * 24 * 60) || '분 전'
+        WHEN (SYSDATE - CREATE_DATE) * 24 &lt; 24 THEN TRUNC((SYSDATE - CREATE_DATE) * 24) || '시간 전'
+        ELSE TRUNC(SYSDATE - CREATE_DATE) || '일 전'
+    END AS CREATE_DATE, COUNT, STATUS, USER_NO
 	  FROM BOARD
 	 WHERE STATUS = 'Y'
 	 ORDER BY BOARD_NO DESC
 
 </select>
 
+<!-- 조회수 증가용 쿼리문 -->
+<update id="increaseCount"
+		parameterType="board">
+	UPDATE BOARD
+	  SET COUNT = COUNT + 1
+	WHERE STATUS = 'Y'
+	  AND BOARD_NO = #{boardNo}
+
+</update>
+
+
+<!-- 게시글 목록 썸네일 조회 쿼리문 -->
 <select id="selectListBoardImg"
 		resultMap="boardImgResultSet">
 		SELECT *
@@ -75,6 +100,62 @@ INSERT INTO BOARD (BOARD_NO,
 	 ORDER BY IMG_NO DESC
 </select>
 	
+	
+<!-- 게시글 상세조회 쿼리문 -->
+<select id="selectBoard"
+		resultMap="boardResultSet"
+		parameterType="_int">
+	SELECT BOARD_NO
+       ,BOARD_TITLE
+       ,BOARD_CONTENT
+       ,TO_CHAR(CREATE_DATE, 'MM/DD') AS CREATE_DATE
+       ,COUNT
+       ,STATUS
+       ,USER_NO
+	  FROM BOARD
+	 WHERE STATUS = 'Y'
+	   AND BOARD_NO = #{boardNo}
+</select>
+
+<!-- 게시글이미지 상세조회 쿼리문 -->
+<select id="selectBoardImg"
+		resultMap="boardImgResultSet"
+		parameterType="_int">
+	SELECT *
+	  FROM BOARD_IMG
+	 WHERE STATUS = 'Y'
+	   AND BOARD_NO = #{boardNo}
+</select>
+
+<!-- 게시글 회원 프로필조회 -->
+<select id="selectMember"
+		resultMap="memberResultSet">
+SELECT USER_NO, 
+       NICK_NAME,
+       CHANGE_NAME
+  FROM MEMBER
+JOIN BOARD USING(USER_NO)
+  WHERE MEMBER.STATUS = 'Y'
+    AND BOARD.STATUS = 'Y'
+  ORDER BY BOARD_NO DESC
+</select>
+
+<!-- 게시글 회원프로필 상세조회 -->
+<select id="selectDetailMember"
+		resultMap="memberResultSet"
+		parameterType="_int">
+	SELECT USER_NO, 
+	       NICK_NAME,
+	       CHANGE_NAME
+	  FROM MEMBER
+	JOIN BOARD USING(USER_NO)
+	  WHERE MEMBER.STATUS = 'Y'
+	    AND BOARD.STATUS = 'Y'
+	    AND BOARD_NO = #{boardNo}
+	
+
+</select>
+
 </mapper>
 
 

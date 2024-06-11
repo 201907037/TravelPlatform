@@ -11,6 +11,7 @@ import com.tp.travely.board.model.dao.BoardDao;
 import com.tp.travely.board.model.vo.Board;
 import com.tp.travely.board.model.vo.BoardImg;
 import com.tp.travely.common.model.vo.PageInfo;
+import com.tp.travely.member.model.vo.Member;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -51,6 +52,37 @@ public class BoardServiceImpl implements BoardService{
 	public int selectListCount() {
 		
 		return boardDao.selectListCount(sqlSession);
+	}
+
+	@Override
+	public Board selectBoard(int bno) {
+		
+		return boardDao.selectBoard(sqlSession, bno);
+	}
+
+	@Override
+	public ArrayList<BoardImg> selectBoardImg(int bno) {
+		
+		return boardDao.selectBoardImg(sqlSession, bno);
+	}
+
+	@Transactional
+	@Override
+	public int increaseCount(int bno) {
+		
+		return boardDao.increaseCount(sqlSession, bno);
+	}
+
+	@Override
+	public ArrayList<Member> selectMember() {
+		
+		return boardDao.selectMember(sqlSession);
+	}
+
+	@Override
+	public Member selectDetailMember(int bno) {
+		
+		return boardDao.selectDetailMember(sqlSession, bno);
 	}
 	
 	

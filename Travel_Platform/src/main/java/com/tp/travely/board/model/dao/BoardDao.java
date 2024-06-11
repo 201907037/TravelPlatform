@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.tp.travely.board.model.vo.Board;
 import com.tp.travely.board.model.vo.BoardImg;
 import com.tp.travely.common.model.vo.PageInfo;
+import com.tp.travely.member.model.vo.Member;
 
 @Component
 public class BoardDao {
@@ -44,6 +45,33 @@ public class BoardDao {
 	public int selectListCount(SqlSessionTemplate sqlSession) {
 		
 		return sqlSession.selectOne("boardMapper.selectListCount");
+	}
+
+	public Board selectBoard(SqlSessionTemplate sqlSession, int boardNo ) {
+		
+		return (Board)sqlSession.selectOne("boardMapper.selectBoard", boardNo);
+		
+		
+	}
+
+	public ArrayList<BoardImg> selectBoardImg(SqlSessionTemplate sqlSession, int boardNo) {
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.selectBoardImg", boardNo);
+	}
+
+	public int increaseCount(SqlSessionTemplate sqlSession, int boardNo) {
+		
+		return sqlSession.update("boardMapper.increaseCount", boardNo);
+	}
+
+	public ArrayList<Member> selectMember(SqlSessionTemplate sqlSession) {
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.selectMember");
+	}
+
+	public Member selectDetailMember(SqlSessionTemplate sqlSession, int boardNo) {
+		
+		return (Member)sqlSession.selectOne("boardMapper.selectDetailMember", boardNo);
 	}
 
 	
