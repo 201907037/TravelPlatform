@@ -40,7 +40,7 @@
                         <th>오픈시간</th>
                         <th>휴무일</th> -->
                         <th>최초생성일</th> <!-- 해당 여행지 추가한 날 -->
-                        <th>수정 / 삭제</th>
+                        <!-- <th>수정 / 삭제</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -64,7 +64,8 @@
 							        		모달 내용을 여기에 작성하세요.
 							      		</div>
 							      		<div class="modal-footer">
-							        		<button type="button" class="btn btn-secondary">닫기</button>
+						      				<button type="button" class="btn btn-primary">수정</button>
+						      				<button type="button" class="btn btn-danger">삭제</button>
 							      		</div>
 							    	</div>
 							  	</div>
@@ -82,21 +83,15 @@
 							      		$("#myModal").modal("hide");
 							    	});
 							  	});
-								
-								$(document).ready(function(){
-							    	$(".modal-footer>button").click(function(){
-							      		$("#myModal").modal("hide");
-							    	});
-							  	});
 							</script>
 	                        
 	                        <th>${t.addDate}</th>
-	                        <c:if test="${t.status eq 'Y'}">
+	                        <%-- <c:if test="${t.status eq 'Y'}">
 		                        <th>
 		                        	<button>수정</button>
 		                        	<button>삭제</button>
 		                        </th>
-	                        </c:if>
+	                        </c:if> --%>
 	                    </tr>
 	                </c:forEach>
                 </tbody>

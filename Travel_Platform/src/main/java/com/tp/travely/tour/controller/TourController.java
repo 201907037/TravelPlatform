@@ -1,4 +1,4 @@
-// 유진 - 관리자 여행지 목록 조회 (2024.06.10)
+// 유진 - tour 패키지 생성 (2024.06.10)
 package com.tp.travely.tour.controller;
 
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.tp.travely.tour.model.service.TourService;
 import com.tp.travely.tour.model.vo.Tour;
@@ -33,10 +34,17 @@ public class TourController {
 	}
 	
 	// 유진 - 2024.06.10
-	// 관리자 여행지 추가 컨트롤러
+	// 관리자 여행지 추가 (페이지로 이동하는) 컨트롤러
 	@GetMapping("adminTourEnroll.ad")
 	public String adminTourEnrollForm(Model model) {
 		// 응답페이지 포워딩
 		return "admin/adminTourEnrollForm";
+	}
+	
+	// 유진 - 2024.06.11
+	// 관리자 여행지 추가 컨트롤러 (INSERT)
+	@PostMapping("adminTourInsert.ad")
+	public void adminTourInsert() {
+		
 	}
 }
