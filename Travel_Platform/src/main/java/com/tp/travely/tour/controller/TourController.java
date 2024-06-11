@@ -8,8 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.tp.travely.tour.model.service.TourService;
+import com.tp.travely.tour.model.vo.City;
 import com.tp.travely.tour.model.vo.Tour;
 
 @Controller
@@ -46,5 +49,18 @@ public class TourController {
 	@PostMapping("adminTourInsert.ad")
 	public void adminTourInsert() {
 		
+	}
+	
+	// 김동현 - 2024.06.11
+	// 여행지 조회 메소드(SELECT)
+	@GetMapping(value="cityList.to", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String selectCity(int areaCode) {
+		
+		ArrayList<City> list =  tourService.selectCity(areaCode);
+//		for(City c : list) {
+//			System.out.println(c);
+//		}
+		return new Gson().toJson(list);
 	}
 }

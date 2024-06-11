@@ -22,6 +22,8 @@
 		<!-- 최현호 -->
 		<typeAlias type="com.tp.travely.board.model.vo.Board" alias="board" />
 		<typeAlias type="com.tp.travely.board.model.vo.BoardImg" alias="boardImg" />
+		<!-- 김동현 -->
+		<typeAlias type="com.tp.travely.tour.model.vo.City" alias="city"/>
 
 
 	</typeAliases>
