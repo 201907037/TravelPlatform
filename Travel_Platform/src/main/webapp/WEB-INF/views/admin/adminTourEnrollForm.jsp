@@ -23,8 +23,8 @@
         <!-- 유진 - 관리자 여행지 추가 페이지 초안 완성 (2024.06.11) -->
         <div class="card-body">
         	<div class="form-group">
-	        	<form id="tourEnroll" action="adminTourInsert.ad" method="post">
-	        		<label>썸네일 설정 :</label>
+	        	<form id="tourEnroll" action="adminTourInsert.ad" method="post"  enctype="multipart/form-data">
+	        		<label>대표이미지 설정(필수) :</label>
                     <input type="file" class="form-control" name="thumbImg" id="thumbImgInput" required>
                     <div id="checkResult" 
 						 style="font-size : 0.8em; display : none;">
@@ -49,10 +49,80 @@
 		                        $(this).val("");
 		                    } else {
 		                        // 허용된 확장자일 경우
-		                        $("#checkResult").show().text("올바른 파일 형식입니다.") .css("color", "green");
+		                        $("#checkResult").show().text("올바른 파일 형식입니다.").css("color", "green");
 		                    }
 		                });
 					</script>
+					
+					<br>
+					
+					<label>참고이미지들(선택) :</label>
+					<input type="file" class="form-control" name="changeNo" id="imgInput" multiple required>
+					<div id="checkResult2" 
+						 style="font-size : 0.8em; display : none;">
+					</div>
+					
+					
+					<script>
+						/*
+						let resultText = "추가된 파일들 : ";
+						let count = 0;
+						
+						$(function() {
+								// 파일 선택 시 이벤트 처리
+						     $("#imgInput").change(function() {
+						         const files = $(this)[0].files; // 선택한 모든 파일들 가져오기
+						         
+						         // 허용된 확장자 : .jpg, .jpeg, .png
+						         const allowedExts = ['jpg', 'jpeg', 'png'];
+						         let validFileNames = []; // 허용된 파일들의 이름을 저장할 배열
+						         
+						      	// 기존에 선택된 파일들의 이름 배열에 추가
+						         $("#checkResult2").text().split(', ').forEach(function(fileName) {
+						             validFileNames.push(fileName);
+						         });
+						         
+						         let lastFileName = "";
+						         
+						         // 새로 선택된 파일들의 확장자 검사 후 허용된 확장자만 validFileNames 배열에 추가
+						         for(let i = 0; i < files.length; i++) {
+						             const fileExt = files[i].name.split('.').pop().toLowerCase(); // 파일의 확장자 추출 및 소문자로 변환
+						             if(allowedExts.indexOf(fileExt) !== -1) {
+						                 validFileNames.push(files[i].name);
+						                 // console.log(files[i].name);
+						                 lastFileName = files[i].name;
+						             }
+						         }
+						         
+						         // console.log(files);
+						         resultText = joinString(resultText, lastFileName, count);
+						      	
+						         // console.log(resultText);
+						      	// console.log(lastFileName);
+						      	
+						      	// 허용된 파일들 출력
+						         if (validFileNames.length > 0) {
+						         	$("#checkResult2").show().text(resultText).css("color", "green");	
+						         } else {
+						             $("#checkResult2").show().html("허용되지 않는 파일 형식입니다.").css("color", "red");
+						         }
+						         
+						         count += 1;
+						     });
+						 
+						 	function joinString(resultText, lastFileName, count){
+						 		if(count == 0){
+						 			resultText += lastFileName;
+						 		}else{
+						 			resultText = resultText + ", " + lastFileName;
+						 		}
+						 		
+						 		return resultText;
+						 	}
+						 });
+						*/
+					</script>
+					
                     
                     <br> 
 	   				

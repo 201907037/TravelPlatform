@@ -1,4 +1,4 @@
-// �쑀吏� - tour �뙣�궎吏� �깮�꽦 (2024.06.10)
+// 유진 - tour 패키지 생성 (2024.06.10)
 package com.tp.travely.tour.model.service;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class TourServiceImpl implements TourService {
 	@Autowired
 	private TourDao tourDao;
 	
-	// �쑀吏� - 愿�由ъ옄 �뿬�뻾吏� 紐⑸줉 議고쉶 �꽌鍮꾩뒪 (2024.06.10)
+	// 유진 - 관리자 여행지 목록 조회 서비스 (2024.06.10)
 	@Override
 	public ArrayList<Tour> adminTourList() {
 		return tourDao.adminTourList(sqlSession);
