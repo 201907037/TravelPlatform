@@ -4,7 +4,12 @@ package com.tp.travely.tour.model.service;
 import java.util.ArrayList;
 
 import com.tp.travely.tour.model.vo.City;
+import com.tp.travely.tour.model.vo.LeportsData;
+import com.tp.travely.tour.model.vo.LodgingData;
+import com.tp.travely.tour.model.vo.RestaurantData;
 import com.tp.travely.tour.model.vo.Tour;
+import com.tp.travely.tour.model.vo.TourImg;
+import com.tp.travely.tour.model.vo.TourSpotData;
 
 public interface TourService {
 
@@ -13,4 +18,7 @@ public interface TourService {
 	
 	// 김동현-2024.06.11
 	ArrayList<City> selectCity(int code);
+
+	// 유진 - 관리자 여행지 추가 서비스 (2024.06.12)
+	int insertTour(TourSpotData tsd, LodgingData lod, RestaurantData rd, LeportsData led, TourImg ti);
 }

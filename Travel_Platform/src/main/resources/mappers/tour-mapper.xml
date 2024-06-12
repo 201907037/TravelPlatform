@@ -47,4 +47,47 @@
 	FROM CITY
 	WHERE REF_LCODE = #{code}
 	</select>
+	
+	<!-- 유진 - 관리자 여행지 추가 쿼리문 (2024.06.12) -->
+	<insert id="insertTourSpotData" 
+			parameterType="tsd">
+		INSERT INTO TOUR (TOUR_NO, TOUR_NAME, ADDRESS, THUMB_IMG, TOUR_TYPE, SEASON, USE_TIME, TEL, PET) 
+		SELECT T.TOUR_NO, T.TOUR_NAME, T.ADDRESS, T.THUMB_IMG, T.TOUR_TYPE, TS.SEASON, TS.USE_TIME, TS.TEL, TS.PET 
+		FROM TOUR T 
+		JOIN TOUR_SPOT TS ON T.TOUR_NO = TS.REF_TNO 
+		WHERE T.STATUS = 'Y'
+	</insert>
+	<insert id="insertLodgingData" 
+			parameterType="lod">
+		INSERT INTO TOUR (TOUR_NO, TOUR_NAME, ADDRESS, THUMB_IMG, TOUR_TYPE, ROOM_TYPE, CHECK_IN, CHECK_OUT, COOK, TEL, PARKING) 
+		SELECT T.TOUR_NO, T.TOUR_NAME, T.ADDRESS, T.THUMB_IMG, T.TOUR_TYPE, LO.ROOM_TYPE, LO.CHECK_IN, LO.CHECK_OUT, LO.COOK, LO.TEL, LO.PARKING 
+		FROM TOUR T 
+		JOIN LODGING LO ON T.TOUR_NO = LO.REF_TNO 
+		WHERE T.STATUS = 'Y'
+	</insert>
+	<insert id="insertRestaurantData" 
+			parameterType="rd">
+		INSERT INTO TOUR (TOUR_NO, TOUR_NAME, ADDRESS, THUMB_IMG, TOUR_TYPE, KID_ROOM, FIRST_MENU, TREAT_MENU, TEL, OPEN_TIME, REST_DATE) 
+		SELECT T.TOUR_NO, T.TOUR_NAME, T.ADDRESS, T.THUMB_IMG, T.TOUR_TYPE, R.KID_ROOM, R.FIRST_MENU, R.TREAT_MENU, R.TEL, R.OPEN_TIME, R.REST_DATE 
+		FROM TOUR T 
+		JOIN RESTAURANT R ON T.TOUR_NO = R.REF_TNO 
+		WHERE T.STATUS = 'Y'
+	</insert>
+	<insert id="insertLeportsData" 
+			parameterType="led">
+		INSERT INTO TOUR (TOUR_NO, TOUR_NAME, ADDRESS, THUMB_IMG, TOUR_TYPE, USE_TIME, PARKING, PET, TEL) 
+		SELECT T.TOUR_NO, T.TOUR_NAME, T.ADDRESS, T.THUMB_IMG, T.TOUR_TYPE, LE.USE_TIME, LE.PARKING, LE.PET, LE.TEL 
+		FROM TOUR T 
+		JOIN LEPORTS LE ON T.TOUR_NO = LE.REF_TNO 
+		WHERE T.STATUS = 'Y'
+	</insert>
+	<insert id="insertTourImg" 
+			parameterType="tourImg">
+		INSERT INTO TOUR_IMG(TIMG_NO 
+							 , REF_TNO 
+		                     , CHANGE_NO)
+		                VALUES(TIMG_NO.NEXTVAL
+		                     , TOUR_DNO.CURRVAL
+		                     , ?)
+	</insert>
 </mapper>

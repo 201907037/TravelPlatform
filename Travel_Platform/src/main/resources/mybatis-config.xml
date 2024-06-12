@@ -25,12 +25,18 @@
 		<!-- 김동현 -->
 		<typeAlias type="com.tp.travely.tour.model.vo.City" alias="city"/>
 
-		<!-- alias 추가 (전유진) -->
+		<!-- alias 추가 (전유진) - 2024.06.11 -->
 		<typeAlias type="com.tp.travely.tour.model.vo.Leports" alias="leports" />
 		<typeAlias type="com.tp.travely.tour.model.vo.Lodging" alias="lodging" />
 		<typeAlias type="com.tp.travely.tour.model.vo.Restaurant" alias="restaurant" />
 		<typeAlias type="com.tp.travely.tour.model.vo.TourImg" alias="tourImg" />
 		<typeAlias type="com.tp.travely.tour.model.vo.TourSpot" alias="tourSpot" />
+		
+		<!-- alias 추가 (전유진) - 2024.06.12 -->
+		<typeAlias type="com.tp.travely.tour.model.vo.LeportsData" alias="led" />
+		<typeAlias type="com.tp.travely.tour.model.vo.LodgingData" alias="lod" />
+		<typeAlias type="com.tp.travely.tour.model.vo.RestaurantData" alias="rd" />
+		<typeAlias type="com.tp.travely.tour.model.vo.TourSpotData" alias="tsd" />
 	</typeAliases>
 	
 	<mappers>
