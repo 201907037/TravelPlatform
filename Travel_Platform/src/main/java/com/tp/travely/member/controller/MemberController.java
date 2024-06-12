@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tp.travely.member.model.service.MailSendService;
 import com.tp.travely.member.model.service.MemberService;
 import com.tp.travely.member.model.vo.Member;
 
@@ -324,6 +325,23 @@ public class MemberController {
 		
 		return (count > 0) ? "NNNNN" : "NNNNY";
 	}
+	
+	
+	@Autowired
+	private MailSendService mailService;
+	
+	//회원가입 페이지 이동
+		@GetMapping("/userJoin")
+		public void userJoin() {}
+	
+	//이메일 인증
+		@GetMapping("mailCheck.do")
+		@ResponseBody
+		public String mailCheck(String email) {
+			System.out.println("이메일 인증 요청이 들어옴!");
+			System.out.println("이메일 인증 이메일 : " + email);
+			return mailService.joinEmail(email);
+		}
 	
 	
 

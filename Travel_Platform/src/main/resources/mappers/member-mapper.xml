@@ -8,6 +8,7 @@
 	-->
 	<resultMap id="memberResultSet"
 			   type="member">
+		<result column="USER_NO" property="userNo" />	   
 		<result column="USER_ID" property="userId" />
 		<result column="USER_PWD" property="userPwd" />
 		<result column="NICK_NAME" property="nickName" />
@@ -21,6 +22,8 @@
 		<result column="CREATE_DATE" property="createDate" />
 		<result column="MODIFY_DATE" property="modifyDate" />
 		<result column="STATUS" property="status" />
+		<result column="MAIL_AUTH" property="mail_auth" />
+		<result column="MAIL_KEY" property="mail_key" />
 	</resultMap>
 
 	<!-- 로그인용 쿼리문 -->
@@ -100,6 +103,12 @@
 		  FROM MEMBER
 		 WHERE USER_ID = #{checkId}
 	</select>
+	
+	
+
+	
+	
+	
 
 
 
