@@ -178,16 +178,16 @@
         <div id="mid" class="mid">
             
             <div class="mid_img">
-                <img id="midphototop" src="resources/image/test1.gif">
+                <img id="midphototop" src="resources/image/city.jpg">
             
             
-                <img id="midphotobot" src="resources/image/test1.gif">
+                <img id="midphotobot" src="resources/image/jeju.jpg">
             
             
-                <img id="midphototop" src="resources/image/test1.gif">
+                <img id="midphototop" src="resources/image/tra.jpg">
             
             
-                <img id="midphotobot" src="resources/image/test1.gif">
+                <img id="midphotobot" src="resources/image/se.jpg">
             
             
                 <img id="midphototop" src="resources/image/test1.gif">
@@ -363,6 +363,12 @@
         duration : 900,
         interval : 300
         });     
+
+        ScrollReveal().reveal('.mid3 > div', {
+        delay:600, 
+        duration : 900,
+        interval : 300
+        });  
 
         ScrollReveal().reveal('.scroll a', {
         delay:600, 
