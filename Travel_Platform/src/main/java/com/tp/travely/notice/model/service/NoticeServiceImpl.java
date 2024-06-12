@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tp.travely.common.model.vo.PageInfo;
 import com.tp.travely.notice.model.dao.NoticeDao;
 import com.tp.travely.notice.model.vo.Notice;
 
@@ -50,5 +51,18 @@ public class NoticeServiceImpl implements NoticeService{
 		System.out.println(n);
 		return noticeDao.updateNotice(sqlSession, n);
 	}
+
+	// 공지사항 개수 Service
+	@Override
+	public int noticeCount() {
+		return noticeDao.noticeCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Notice> noticetListView(PageInfo pi) {
+		return noticeDao.noticetListView(sqlSession, pi);
+	}
+	
+	
 
 }

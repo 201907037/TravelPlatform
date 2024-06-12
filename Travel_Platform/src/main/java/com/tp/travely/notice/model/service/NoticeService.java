@@ -2,6 +2,7 @@ package com.tp.travely.notice.model.service;
 
 import java.util.ArrayList;
 
+import com.tp.travely.common.model.vo.PageInfo;
 import com.tp.travely.notice.model.vo.Notice;
 
 public interface NoticeService {
@@ -16,5 +17,9 @@ public interface NoticeService {
 	Notice detailNotice(int num);
 
 	int updateNotice(Notice n);
+
+	int noticeCount();
+
+	ArrayList<Notice> noticetListView(PageInfo pi);
 
 }

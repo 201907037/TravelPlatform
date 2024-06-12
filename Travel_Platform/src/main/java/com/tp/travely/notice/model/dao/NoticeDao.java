@@ -2,9 +2,11 @@ package com.tp.travely.notice.model.dao;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Component;
 
+import com.tp.travely.common.model.vo.PageInfo;
 import com.tp.travely.notice.model.vo.Notice;
 
 @Component
@@ -39,5 +41,21 @@ public class NoticeDao {
 	public int updateNotice(SqlSessionTemplate sqlSession, Notice n) {
 		return sqlSession.update("noticeMapper.updateNotice", n);
 	}
+
+
+	// 공지사항 개수 Dao
+	public int noticeCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("noticeMapper.noticeCount");
+	}
+
+
+	public ArrayList<Notice> noticetListView(SqlSessionTemplate sqlSession, PageInfo pi) {
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return (ArrayList)sqlSession.selectList("noticeMapper.adminNoticeListView", null, rowBounds);
+	}
+	
 
 }

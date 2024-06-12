@@ -13,9 +13,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tp.travely.common.model.vo.PageInfo;
+import com.tp.travely.common.template.Pagination;
 import com.tp.travely.notice.model.service.NoticeService;
 import com.tp.travely.notice.model.vo.Notice;
 
@@ -91,14 +94,17 @@ public class NoticeController {
 		return mv;
 	}
 	
-	// 공지사항 상세보기 Controller(작업중)
-	@GetMapping(value="detailNotice.ad")
-	public void detailNotice(int num,
+	// 공지사항 상세보기 Controller
+	@GetMapping(value="detailNotice.bo")
+	public String detailNotice(int num,
 							Model model) {
 		
 		Notice n = noticeService.detailNotice(num);
-		System.out.println(n);
-
+		// System.out.println(n);
+		
+		model.addAttribute("n", n);
+		
+		return "notice/detailNotice";
 	}
 	
 	// 공지사항 수정 페이지 이동 Controller
@@ -126,7 +132,7 @@ public class NoticeController {
 		}
 		
 		int result = noticeService.updateNotice(n);
-		System.out.println(result);
+		// System.out.println(result);
 		if(result > 0) {
 			session.setAttribute("alertMsg", "성공적으로 게시글이 추가되었습니다.");
 			
@@ -138,6 +144,31 @@ public class NoticeController {
 		return mv;
 		
 	}
+	
+	// 공지사항 리스트뷰(일반 사용자) Controller
+	@GetMapping(value="noticeList.bo")
+	public String noticeList(@RequestParam(value="cpage", defaultValue="1") int currentPage,
+								Model model) {
+		
+//		ArrayList<Notice> nList = noticeService.adminNoticeListView();
+		
+		int listCount = noticeService.noticeCount();
+		int pageLimit = 10;
+		int boardLimit = 10;
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		
+		ArrayList<Notice> nList = noticeService.noticetListView(pi);
+		
+//		System.out.println(pi);
+//		System.out.println(nList);
+		
+		model.addAttribute("pi", pi);
+		model.addAttribute("nList", nList);
+		
+		return "notice/noticeList";
+	}
+	
 	
 	
 	// 첨부파일 업로드 및 수정파일명 리턴 메서드
@@ -183,4 +214,17 @@ public class NoticeController {
 		// 수정파일명 문자열을 리턴
 		return changeName;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

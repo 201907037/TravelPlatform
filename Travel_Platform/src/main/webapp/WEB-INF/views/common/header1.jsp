@@ -65,7 +65,8 @@
     
         <ul id="nav" class="nav">
             <li><a class="yellow underline" href="./">HOME</a></li>
-            <li><a class="yellow underline" href="">NOTICE</a></li>
+            <!-- Notice 경로 추가(나현성) -->
+            <li><a class="yellow underline" href="noticeList.bo">NOTICE</a></li>
             <li><a class="yellow underline" href="selectList.bo">COMUNITY</a></li>
             <li><a class="yellow underline" href="">SERVICE</a></li>
         </ul>

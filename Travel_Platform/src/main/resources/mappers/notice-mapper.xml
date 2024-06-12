@@ -17,6 +17,7 @@
 SELECT *
   FROM NOTICE
  WHERE STATUS = 'Y'
+ ORDER BY NOTICE_NO DESC
 </select>
 
 <!-- 공지사항 isnert -->
@@ -63,5 +64,18 @@ SET NOTICE_TITLE = #{noticeTitle},
 WHERE NOTICE_NO = #{noticeNo}
 AND STATUS = 'Y'
 </update>
+
+<!-- 공지사항 개수 -->
+<select id="noticeCount"
+		resultType="_int">
+
+SELECT COUNT(*) AS COUNT
+FROM NOTICE
+WHERE STATUS = 'Y'
+</select>
+
+
+
+
 
 </mapper>
