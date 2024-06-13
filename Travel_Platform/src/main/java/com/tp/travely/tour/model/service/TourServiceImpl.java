@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tp.travely.tour.model.dao.TourDao;
 import com.tp.travely.tour.model.vo.City;
+import com.tp.travely.tour.model.vo.Districts;
 import com.tp.travely.tour.model.vo.LeportsData;
 import com.tp.travely.tour.model.vo.LodgingData;
 import com.tp.travely.tour.model.vo.RestaurantData;
@@ -44,6 +45,16 @@ public class TourServiceImpl implements TourService {
 	@Transactional
 	public int insertTour(TourSpotData tsd, LodgingData lod, RestaurantData rd, LeportsData led, TourImg ti) {
 		return tourDao.insertTour(sqlSession, tsd, lod, rd, led, ti);
+	}
+
+	@Override
+	public City getLocationCity(int sigunguCodeNo) {
+		return tourDao.getLocationCity(sqlSession,sigunguCodeNo);
+	}
+
+	@Override
+	public Districts getLocationArea(int areaCode) {
+		return tourDao.getLocationArea(sqlSession,areaCode);
 	}
 
 }

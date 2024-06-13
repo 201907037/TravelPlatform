@@ -33,7 +33,7 @@
 	}
 	#city td>div:hover{
 		cursor: pointer;
-		background-color : gray;
+		
 		
 	}
 </style>
@@ -50,12 +50,11 @@
 <script>
 	var container = document.getElementById('map');
 	var options = {
-		center: new kakao.maps.LatLng(33.450701, 126.570667),
-		level: 10
+		center: new kakao.maps.LatLng(36.9881805555555,127.928144444444),
+		level: 12
 	};
 	var map = new kakao.maps.Map(container, options); // 지도 생성
-	map.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC); 	//교통량 표시
-	map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);  //지형 표시
+	
 
 </script>
 
@@ -123,113 +122,142 @@ let areaName;
 let sigunguCode;
 let sigunguCodenNo;
 let sigunguName;
-$(function() {
-	let today = new Date();
-	let nextday = new Date(new Date().setDate(today.getDate()+1));
-	//console.log(today);	
-	//console.log(nextday)
-  
-  $('#daterange').daterangepicker({
-	 	locale: {
-	      format: 'YYYY/MM/DD'
-	    },
-	    opens : 'center',
-	    startDate : today,
-	    endDate : nextday
-  }, function(start, end, label) {
-    //console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-   	
-    $('#changeDate').on('apply.daterangepicker', function(ev, picker) {
-  	  $("#daterange").val(start.format('YYYY/MM/DD')+" - "+end.format('YYYY/MM/DD'));
-  	});
-    $("#daterange").on('showCalendar.daterangepicker',function(){
-    	
-    });
-  });
-	$(".btn-default").html("취소");
-	$(".btn-primary").html("적용");
-  var drp = $('#daterange').data('daterangepicker');
-  tstart = drp.startDate._d;
-  tend = drp.endDate._d;
-  
-  $("select[name=areaCode]").change(function(){
-	  //console.log($(this).val());
-	  let code = $(this).val();
-	  if(Number(code)>30){
-		  $("#city tbody").html("");
-		  $.ajax({
-			  url : "cityList.to",
-			  method : "get",
-			  async : true,
-			  data : {areaCode : code},
-			  success : function(e){
-				  //console.log(e);
-				  for(let i=0;i<e.length;i++){
-					  if(i%3==0){
-						  let tr = $("<tr>").attr("id","tr"+Math.floor(i/3));
-						  $("#city tbody").append(tr);
+let locationXX;
+let locationYY;
+		$(function() {
+			let today = new Date();
+			let nextday = new Date(new Date().setDate(today.getDate()+1));
+			//console.log(today);	
+			//console.log(nextday)
+		  
+		  $('#daterange').daterangepicker({
+			 	locale: {
+			      format: 'YYYY/MM/DD'
+			    },
+			    opens : 'center',
+			    startDate : today,
+			    endDate : nextday
+		  }, function(start, end, label) {
+		    //console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+		   	
+		    $('#changeDate').on('apply.daterangepicker', function(ev, picker) {
+		  	  $("#daterange").val(start.format('YYYY/MM/DD')+" - "+end.format('YYYY/MM/DD'));
+		  	});
+		    $("#daterange").on('showCalendar.daterangepicker',function(){
+		    	
+		    });
+		  });
+			$(".btn-default").html("취소");
+			$(".btn-primary").html("적용");
+		  var drp = $('#daterange').data('daterangepicker');
+		  tstart = drp.startDate._d;
+		  tend = drp.endDate._d;
+		  
+		  $("select[name=areaCode]").change(function(){
+			  //console.log($(this).val());
+			  let code = $(this).val();
+			  if(Number(code)>30){
+				  $("#city tbody").html("");
+				  $.ajax({
+					  url : "cityList.to",
+					  method : "get",
+					  async : true,
+					  data : {areaCode : code},
+					  success : function(e){
+						  //console.log(e);
+						  for(let i=0;i<e.length;i++){
+							  if(i%3==0){
+								  let tr = $("<tr>").attr("id","tr"+Math.floor(i/3));
+								  $("#city tbody").append(tr);
+							  }
+						  }
+						  $.each(e,function(i,v){
+							  //console.log(v.sigunguName);
+							  let td = $("<td>").css({"width" : "100px","height" : "40px"});
+							  let div = $("<div>").attr("class","cityEl").html(v.sigunguName).css({"border-radius" : "15px","border" : "1px solid skyblue"});
+							  let hidden1 = $("<input>").attr({"type":"hidden","name" : "sigunguCodeNo","value" : v.sigunguCodeNo});
+							  let hidden2 = $("<input>").attr({"type":"hidden","name" : "sigunguCode", "value" : v.sigunguCode});
+							  div.append(hidden1,hidden2);
+							  td.append(div);
+							  let tra =$("#tr"+Math.floor(i/3)).append(td);  
+						  });
+					  },
+					  error : function(){
+							console.log("실패");  
 					  }
-				  }
-				  $.each(e,function(i,v){
-					  //console.log(v.sigunguName);
-					  let td = $("<td>").css({"width" : "100px","height" : "40px"});
-					  let div = $("<div>").attr("class","cityEl").html(v.sigunguName).css({"border-radius" : "15px","border" : "1px solid skyblue"});
-					  let hidden1 = $("<input>").attr({"type":"hidden","name" : "sigunguCodeNo","value" : v.sigunguCodeNo});
-					  let hidden2 = $("<input>").attr({"type":"hidden","name" : "sigunguCode", "value" : v.sigunguCode});
-					  div.append(hidden1,hidden2);
-					  td.append(div);
-					  let tra =$("#tr"+Math.floor(i/3)).append(td);  
 				  });
-			  },
-			  error : function(){
-					console.log("실패");  
 			  }
 		  });
-	  }
-  });
-  
-  $("#city").on("click","td",function(){
-	  //console.log($(this).html());
-	  $("#city td>div").attr("class","cityEl");
-	  $(this).children().attr("class","choose");
-  });
-  
-  $("button[class^=btn-right]").click(function(){
-	  if($("#areaCode").val()!=0){
-		  tstart = drp.startDate._d; // 여행시작일
-		  tend = drp.endDate._d;	 // 여행종료일
-		  tDate = tend.getDate()-tstart.getDate()+1; // 여행일수
-		  areaCode = $("#areaCode").val(); // 여행지역코드
 		  
-		  if(Number(areaCode)>30){
-			  sigunguCodeNo = $(".choose").children().eq(0).val();
-			  sigunguCode = $(".choose").children().eq(1).val();
-			  areaName = $(".choose").text();
-		  }else{
-			  areaName = $("#areaCode option:checked").text();
-		  }
+		  $("#city").on("click","td",function(){
+			  //console.log($(this).html());
+			  $("#city td>div").attr("class","cityEl");
+			  $(this).children().attr("class","choose");
+		  });
 		  
-		 
-		  /* console.log(tstart.getDate());
-		  console.log(tend.getDate());
-		  console.log(tDate);
-		  console.log(areaCode);
-		  console.log(areaName);
-		  if(Number(areaCode)>30){
-			  console.log(sigunguCodeNo);
-			  console.log(sigunguCode);
-			  console.log(sigunguName);
-		  } */
-		  let yn = confirm(moment(tstart).format("YYYY/MM/DD")+"~"+moment(tend).format("YYYY/MM/DD")+" "+areaName+" 맞으면 확인을 누르세요.");
-		  if(yn==true){
-			  $("#DATEPICK").modal("hide");
-		  }
-	  }else{
-		  alert("여행 지역을 선택하세요.");
-	  }
-	  
-  });
-  $("#DATEPICK").modal("show");
+		  $("button[class^=btn-right]").click(function(){
+			  if($("#areaCode").val()!=0){
+				  tstart = drp.startDate._d; // 여행시작일
+				  tend = drp.endDate._d;	 // 여행종료일
+				  tDate = tend.getDate()-tstart.getDate()+1; // 여행일수
+				  areaCode = $("#areaCode").val(); // 여행지역코드
+				  sigunguCodeNo=0;
+				  if(Number(areaCode)>30){
+					  sigunguCodeNo = $(".choose").children().eq(0).val();
+					  sigunguCode = $(".choose").children().eq(1).val();
+					  areaName = $(".choose").text();
+				  }else{
+					  areaName = $("#areaCode option:checked").text();
+				  }
+				  
+				  $.ajax({
+					  url : "getLocation.to",
+					  method : "GET",
+					  async : false,
+					  data : {areaCode : areaCode,
+						  	  sigunguCodeNo : sigunguCodeNo},
+					  success : function(e){
+						  console.log(e);
+						  locationXX = e.locationXX;
+						  locationYY = e.locationYY;
+					  },
+					  error : function(){
+						  console.log("실패");
+					  }
+				  });
+				 
+				  /* console.log(tstart.getDate());
+				  console.log(tend.getDate());
+				  console.log(tDate);
+				  console.log(areaCode);
+				  console.log(areaName);
+				  if(Number(areaCode)>30){
+					  console.log(sigunguCodeNo);
+					  console.log(sigunguCode);
+					  console.log(sigunguName);
+				  } */
+				  if(areaName!=""){
+					  let yn = confirm(moment(tstart).format("YYYY/MM/DD")+"~"+moment(tend).format("YYYY/MM/DD")+" "+areaName+" 맞으면 확인을 누르세요.");
+					  if(yn==true){
+						  console.log(locationXX);
+						  console.log(locationYY);
+						  var newloc =new kakao.maps.LatLng(locationYY,locationXX);
+						  $("#DATEPICK").modal("hide");
+						  map.setCenter(newloc);
+						  map.setLevel(8);
+					  }
+				  }else{
+					  alert("여행지를 선택하세요.");
+				  }
+			  }else{
+				  alert("여행 지역을 선택하세요.");
+			  }
+			  
+		  });
+	  		$("#DATEPICK").modal("show");
+	  	 $("#changeDate").click(function(){
+	  		  $("#DATEPICK").modal("show");	
+	  	  });
 });
 
 

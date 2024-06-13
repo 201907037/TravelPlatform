@@ -72,7 +72,7 @@
 	}
 	
 	.nav__link:hover {
-	    background-color: var(--first-color);
+	    background-color: cyan;
 	}
 	
 	.nav__icon {
@@ -242,6 +242,41 @@
         background-color: white;
         border: 0px;
     }
+    .under-tool>{
+    	position : relative;
+    }
+    #save-plan{
+    	height : 40px;
+    	background-color : var(--first-color);
+    	position : absolute;
+    	right : 20px;
+    	bottom : 10px;
+    	color : white;
+    	text-aling : center;
+    }
+    #changeDate{
+    	height : 40px;
+    	background-color : var(--first-color);
+    	position : absolute;
+    	left : 20px;
+    	bottom : 10px;
+    	color : white;
+    	text-aling : center;
+    }
+    #save-plan:hover,#changeDate:hover{
+    	background-color : #0036B5;
+    }
+    #save-plan>span,#changeDate>span{
+    	padding-bottm : 0px;
+    }
+	.material-symbols-outlined {
+	  font-variation-settings:
+	  'FILL' 0,
+	  'wght' 5000,
+	  'GRAD' 0,
+	  'opsz' 48
+	}
+
 </style>
 <!--  <link rel="stylesheet" href="resources/css/styles.css">-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -254,10 +289,18 @@
 	    <nav class="nav">
 	        <div>
 	            <div class="nav__brand">
-	                <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
+					<span class="material-symbols-outlined">
+					travel_explore
+					</span>
 	                <a id="plan" class="nav__logo">플래너</a>
 	            </div>
 	            <div class="nav__list">
+	            	<a id="plan" class="nav__link active">
+		   				<span class="material-symbols-outlined">
+							edit_calendar
+						</span>	
+	   					<span class="nav_name">일정 수정</span>
+	   				</a>
 	                <a id="station" class="nav__link active">
 	                    <span class="material-symbols-outlined">
 						map
@@ -280,6 +323,18 @@
 	            
 	        </div>
 	    </nav>
+	    </div>
+	    <div class="under-tool">
+	    	<button class="btn" id="changeDate">
+	    		<span class="material-symbols-outlined">
+					edit_location_alt
+				</span>
+	    	</button>
+	    	<button class="btn" id="save-plan">
+	    		<span class="material-symbols-outlined" >
+				save
+				</span>
+	    	</button>
 	    </div>
 	</div>
 	
@@ -330,11 +385,15 @@
 			},400);
 			
 		});
+		$("#save-plan").click(function(){
+			alert("저장");
+		});
+		
 	});
+	
 </script>
  <!-- IONICONS -->
  <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
- <!-- JS -->
 
 </body>
 </html>

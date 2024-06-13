@@ -8,4 +8,6 @@ public class City {
 	private int sigunguCode;
 	private String sigunguName;
 	private String refLcode;
+	private double locationXX;
+	private double locationYY;
 }

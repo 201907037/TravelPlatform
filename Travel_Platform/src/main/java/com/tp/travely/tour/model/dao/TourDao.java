@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.tp.travely.tour.model.vo.City;
+import com.tp.travely.tour.model.vo.Districts;
 import com.tp.travely.tour.model.vo.LeportsData;
 import com.tp.travely.tour.model.vo.LodgingData;
 import com.tp.travely.tour.model.vo.RestaurantData;
@@ -38,5 +39,13 @@ public class TourDao {
 		result += sqlSession.insert("tourMapper.insertTourImg", ti);
 		
 		return result;
+	}
+	
+	public City getLocationCity(SqlSessionTemplate sqlSession, int sigunguCodeNo) {
+		return sqlSession.selectOne("tourMapper.getLocationCity",sigunguCodeNo);
+	}
+	
+	public Districts getLocationArea(SqlSessionTemplate sqlSession, int areaCode) {
+		return sqlSession.selectOne("tourMapper.getLocationArea",areaCode);
 	}
 }

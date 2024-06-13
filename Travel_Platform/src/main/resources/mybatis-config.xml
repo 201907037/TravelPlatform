@@ -24,6 +24,7 @@
 		<typeAlias type="com.tp.travely.board.model.vo.BoardImg" alias="boardImg" />
 		<!-- 김동현 -->
 		<typeAlias type="com.tp.travely.tour.model.vo.City" alias="city"/>
+		<typeAlias type="com.tp.travely.tour.model.vo.Districts" alias="area"/>
 
 		<!-- alias 추가 (전유진) - 2024.06.11 -->
 		<typeAlias type="com.tp.travely.tour.model.vo.Leports" alias="leports" />

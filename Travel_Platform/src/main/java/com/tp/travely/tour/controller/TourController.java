@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.tp.travely.tour.model.service.TourService;
 import com.tp.travely.tour.model.vo.City;
+import com.tp.travely.tour.model.vo.Districts;
 import com.tp.travely.tour.model.vo.LeportsData;
 import com.tp.travely.tour.model.vo.LodgingData;
 import com.tp.travely.tour.model.vo.RestaurantData;
@@ -107,6 +108,22 @@ public class TourController {
 		return new Gson().toJson(list);
 	}
 	
+	@GetMapping(value="getLocation.to", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getLocation(String areaCode, String sigunguCodeNo) {
+		System.out.println(areaCode);
+		System.out.println(sigunguCodeNo);
+		if(Integer.parseInt(areaCode)>30) {
+			City c = tourService.getLocationCity(Integer.parseInt(sigunguCodeNo));
+			return new Gson().toJson(c);
+			//System.out.println(c);
+		}else {
+			Districts d = tourService.getLocationArea(Integer.parseInt(areaCode));
+			return new Gson().toJson(d);
+			//System.out.println(d);
+		}
+		
+	}
 	//------------------ 일반 메서드 영역 ------------------------------------------------------
 	
 	// 유진 - 파일 처리용 메서드 작성 (2024.06.12)

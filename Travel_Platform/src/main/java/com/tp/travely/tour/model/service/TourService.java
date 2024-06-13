@@ -4,6 +4,7 @@ package com.tp.travely.tour.model.service;
 import java.util.ArrayList;
 
 import com.tp.travely.tour.model.vo.City;
+import com.tp.travely.tour.model.vo.Districts;
 import com.tp.travely.tour.model.vo.LeportsData;
 import com.tp.travely.tour.model.vo.LodgingData;
 import com.tp.travely.tour.model.vo.RestaurantData;
@@ -21,4 +22,8 @@ public interface TourService {
 
 	// 유진 - 관리자 여행지 추가 서비스 (2024.06.12)
 	int insertTour(TourSpotData tsd, LodgingData lod, RestaurantData rd, LeportsData led, TourImg ti);
+	
+	City getLocationCity(int sigunguCodeNo);
+	
+	Districts getLocationArea(int areaCode);
 }
