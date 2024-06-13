@@ -187,6 +187,13 @@
 		    <artifactId>mail</artifactId>
 		    <version>1.4.7</version>
 		</dependency>
+		
+		 <!-- 이메일 타임리프 (템플릿사용) -->
+	    <dependency>
+		    <groupId>org.thymeleaf</groupId>
+		    <artifactId>thymeleaf-spring5</artifactId>
+		    <version>3.0.12.RELEASE</version>
+		</dependency>
 		<!-- jackson 라이브러리 3개 -->
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>

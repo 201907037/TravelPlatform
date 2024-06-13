@@ -117,6 +117,8 @@ public class MemberController {
 		} else {
 			// 로그인 실패
 			
+			session.setAttribute("alertMsg", "로그인에 실패했습니다.");
+			
 			mv.addObject("errorMsg", "로그인 실패");
 			
 			mv.setViewName("common/errorPage");
@@ -148,6 +150,13 @@ public class MemberController {
 		mv.setViewName("redirect:/");
 		
 		return mv;
+	}
+	
+	@GetMapping("loginPage.me")
+	public String loginPage() {
+		
+		
+		return "member/loginForm";
 	}
 	
 	@GetMapping("enrollForm.me")

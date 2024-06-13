@@ -28,8 +28,8 @@
 	<beans:bean class="org.springframework.mail.javamail.JavaMailSenderImpl" id="mailSender">
 		<beans:property name="host" value="smtp.gmail.com" />
 		<beans:property name="port" value="25" />
-		<beans:property name="username" value="kimssy1121@gmail.com" />
-		<beans:property name="password" value="wafuirucqseeuibt" />
+		<beans:property name="username" value="rhdrjsgml0307@gmail.com" />
+		<beans:property name="password" value="ogjpxrjsfqdsbhfm" />
 		
 		<!-- 
 			email 전송 시 필요한 SMTP 관련 설정값 
@@ -44,6 +44,31 @@
 			</beans:props>
 		</beans:property>
 	</beans:bean>
+	
+	<beans:bean id="templateResolver" class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+		<beans:property name="prefix" value="/WEB-INF/templates/" />
+		<beans:property name="suffix" value=".html" />
+		<beans:property name="templateMode" value="HTML5" />
+	</beans:bean>
+
+	<!-- Thymeleaf Template Engine -->
+	<beans:bean id="templateEngine" class="org.thymeleaf.spring5.SpringTemplateEngine">
+		<beans:property name="templateResolver" ref="templateResolver" />
+	</beans:bean>
+
+	<!-- Thymeleaf View Resolver -->
+	<beans:bean id="viewResolver" class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+		<beans:property name="templateEngine" ref="templateEngine" />
+		<beans:property name="characterEncoding" value="UTF-8" />
+	</beans:bean>
+	
+	
+	
+	
+	
+	
+	
+	
 	<!-- 웹소켓 빈 추가 -->
 	
 	<!-- 인턴셉터 필요시 추가 -->
