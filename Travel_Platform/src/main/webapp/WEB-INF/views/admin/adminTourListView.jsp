@@ -64,7 +64,22 @@
 	                <c:forEach var="t" items="${requestScope.tList}">
 	                    <tr>
 	                        <th>${t.tourName}</th>
-	                        <th>${t.tourType}</th>
+	                        <th>
+	                        	<c:choose>
+								      <c:when test="${t.tourType.equals('tourSpot')}">
+								      		관광지
+								      </c:when>
+								      <c:when test="${t.tourType.equals('lodging')}">
+								      		숙박시설
+								      </c:when>
+								      <c:when test="${t.tourType.equals('restaurant')}">
+								      		식당/카페
+								      </c:when>
+								      <c:otherwise>
+								      		레포츠
+								      </c:otherwise>
+								</c:choose>
+	                        </th>
 	                        <th>${t.address}</th>
 	                        <th>${t.addDate}</th>
 	                    </tr>
@@ -83,7 +98,9 @@
 							        		</button>
 							      		</div>
 							      		<div class="modal-body">
-							        		모달 내용을 여기에 작성하세요.
+							        		<div>
+							        			<img src="${requestScope.t.thumbImg}">
+							        		</div>
 							      		</div>
 							      		<div class="modal-footer">
 						      				<button type="button" class="btn btn-primary">수정</button>
