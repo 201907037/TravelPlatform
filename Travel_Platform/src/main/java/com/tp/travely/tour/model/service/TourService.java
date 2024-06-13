@@ -21,7 +21,10 @@ public interface TourService {
 	ArrayList<City> selectCity(int code);
 
 	// 유진 - 관리자 여행지 추가 서비스 (2024.06.12)
-	int insertTour(TourSpotData tsd, LodgingData lod, RestaurantData rd, LeportsData led, TourImg ti);
+	int insertTour(TourSpotData tsd, TourImg ti);
+	int insertTour(LodgingData lod, TourImg ti);
+	int insertTour(RestaurantData rd, TourImg ti);
+	int insertTour(LeportsData led, TourImg ti);
 	
 	City getLocationCity(int sigunguCodeNo);
 	

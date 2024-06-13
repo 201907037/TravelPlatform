@@ -43,10 +43,29 @@ public class TourServiceImpl implements TourService {
 	// 유진 - 관리자 여행지 추가 서비스  (2024.06.12)
 	@Override
 	@Transactional
-	public int insertTour(TourSpotData tsd, LodgingData lod, RestaurantData rd, LeportsData led, TourImg ti) {
-		return tourDao.insertTour(sqlSession, tsd, lod, rd, led, ti);
+	public int insertTour(TourSpotData tsd, TourImg ti) {
+		return tourDao.insertTour(sqlSession, tsd, ti);
+	}
+	
+	@Override
+	@Transactional
+	public int insertTour(LodgingData lod, TourImg ti) {
+		return tourDao.insertTour(sqlSession, lod, ti);
+	}
+	
+	@Override
+	@Transactional
+	public int insertTour(RestaurantData rd, TourImg ti) {
+		return tourDao.insertTour(sqlSession, rd, ti);
+	}
+	
+	@Override
+	@Transactional
+	public int insertTour(LeportsData led, TourImg ti) {
+		return tourDao.insertTour(sqlSession, led, ti);
 	}
 
+	
 	@Override
 	public City getLocationCity(int sigunguCodeNo) {
 		return tourDao.getLocationCity(sqlSession,sigunguCodeNo);

@@ -1,6 +1,7 @@
 <!-- 유진 - 관리자 여행지 목록 (2024.06.10) -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +9,27 @@
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
 <style>
-	#datatablesSimple>tbody>tr { cursor: pointer; }
+	.tour-table>tbody>tr { cursor: pointer; }
+	
+	/*
+	.tour-table {
+		table-layout: fixed;
+		width: 100%;
+	}
+	
+	tr > :first-child {
+		width: 30%; !important;
+	}
+	tr > :second-child {
+		width: 10%; !important;
+	}
+	tr > :third-child {
+		width: 50%; !important;
+	}
+	tr > :forth-child {
+		width: 10%; !important;
+	}
+	*/
 </style>
 </head>
 <body>
@@ -30,17 +51,13 @@
         </div>
         
         <div class="card-body">
-            <table id="datatablesSimple">
+            <table id="datatablesSimple" class="tour-table">
                 <thead>
                     <tr>
                         <th>여행지명</th>
                         <th>분류</th>
                         <th>주소</th>
-                        <!-- <th>연락처</th>
-                        <th>오픈시간</th>
-                        <th>휴무일</th> -->
-                        <th>최초생성일</th> <!-- 해당 여행지 추가한 날 -->
-                        <!-- <th>수정 / 삭제</th> -->
+                        <th>최초생성일</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,8 +66,13 @@
 	                        <th>${t.tourName}</th>
 	                        <th>${t.tourType}</th>
 	                        <th>${t.address}</th>
-
-	                        <!-- 여행지정보 모달창 -->
+	                        <th>${t.addDate}</th>
+	                    </tr>
+	                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+        	                        <!-- 여행지정보 모달창 -->
 	                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 								<div class="modal-dialog modal-lg" role="document">
 									<div class="modal-content">
@@ -70,33 +92,19 @@
 							    	</div>
 							  	</div>
 							</div>
-							
-							<script>
-								$(document).ready(function(){
-							    	$("#datatablesSimple>tbody>tr").click(function(){
-							      		$("#myModal").modal("show");
-							    	});
-							  	});
-								
-								$(document).ready(function(){
-							    	$(".modal-header>button").click(function(){
-							      		$("#myModal").modal("hide");
-							    	});
-							  	});
-							</script>
-	                        
-	                        <th>${t.addDate}</th>
-	                        <%-- <c:if test="${t.status eq 'Y'}">
-		                        <th>
-		                        	<button>수정</button>
-		                        	<button>삭제</button>
-		                        </th>
-	                        </c:if> --%>
-	                    </tr>
-	                </c:forEach>
-                </tbody>
-            </table>
-        </div>
+			<script>
+				$(document).ready(function(){
+			    	$("#datatablesSimple>tbody>tr").click(function(){
+			      		$("#myModal").modal("show");
+			    	});
+			  	});
+				
+				$(document).ready(function(){
+			    	$(".modal-header>button").click(function(){
+			      		$("#myModal").modal("hide");
+			    	});
+			  	});
+			</script>
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">

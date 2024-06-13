@@ -40,11 +40,7 @@
 	<!-- 유진 - 관리자 여행지 목록 조회 쿼리문 (2024.06.10) -->
 	<select id="adminTourList" 
 			resultMap="tourResultSet">
-		SELECT TOUR_NAME, 
-			   TOUR_TYPE, 
-			   ADDRESS, 
-			   CONTENT_ID, 
-			   ADD_DATE 
+		SELECT *
 		  FROM TOUR 
 		 WHERE STATUS= 'Y'
 	</select>
@@ -58,6 +54,7 @@
 	</select>
 	
 	<!-- 유진 - 관리자 여행지 추가 쿼리문 (2024.06.12) -->
+	<!--
 	<insert id="insertTourSpotData" 
 			parameterType="tsd">
 		INSERT INTO TOUR (TOUR_NO, TOUR_NAME, ADDRESS, THUMB_IMG, TOUR_TYPE, SEASON, USE_TIME, TEL, PET) 
@@ -99,6 +96,102 @@
 		                     , TOUR_DNO.CURRVAL
 		                     , ?)
 	</insert>
+	-->
+	<!-- 
+	<insert id="insertTourSpotData" 
+	        parameterType="tsd">
+	    INSERT INTO TOUR (TOUR_NO, TOUR_NAME, ADDRESS, THUMB_IMG, TOUR_TYPE) 
+	    	      VALUES (TOUR_DNO.CURRVAL, #{tourName}, #{address}, #{thumbImg}, #{tourType})
+	</insert>
+	 -->
+	 <!--
+	<insert id="insertTourSpotData" 
+	        parameterType="tsd">
+		INSERT INTO TOURSPOT (SPOT_NO, SEASON, USE_TIME, TEL, PET) 
+	    	      	  VALUES (DETAIL_NO.CURRVAL, #{season}, #{useTime}, #{tel}, #{pet})
+	</insert>
+	-->
+	<insert id="insertTourSpotData" 
+	        parameterType="tsd">
+		INSERT ALL 
+			   INTO TOUR (TOUR_NO, 
+					 	  TOUR_NAME, 
+					 	  ADDRESS, 
+					 	  THUMB_IMG, 
+					 	  TOUR_TYPE) 
+					VALUES(TOUR_DNO.CURRVAL, 
+						   #{tourName}, 
+						   #{address}, 
+						   #{thumbImg}, 
+						   #{tourtype}) 
+			   INTO TOUR_SPOT (SPOT_NO, 
+					 	  	   SEASON, 
+					 	  	   USE_TIME, 
+					 	  	   TEL, 
+					 	  	   PET, 
+					 	  	   REF_TNO) 
+					VALUES(A_DNO.NEXTVAL, 
+						   #{season}, 
+						   #{useTime}, 
+						   #{tel}, 
+						   #{pet}, 
+						   TOUR_DNO.NEXTVAL)
+				SELECT * FROM DUAL
+	</insert>
+	
+	<insert id="insertLodgingData" 
+			parameterType="lod">
+		INSERT INTO TOUR (TOUR_NO, TOUR_NAME, ADDRESS, THUMB_IMG, TOUR_TYPE, ROOM_TYPE, CHECK_IN, CHECK_OUT, COOK, TEL, PARKING) 
+		SELECT T.TOUR_NO, T.TOUR_NAME, T.ADDRESS, T.THUMB_IMG, T.TOUR_TYPE, 
+			   (SELECT LO.ROOM_TYPE FROM LODGING LO WHERE LO.REF_TNO = T.TOUR_NO) AS ROOM_TYPE, 
+			   (SELECT LO.CHECK_IN FROM LODGING LO WHERE LO.REF_TNO = T.TOUR_NO) AS CHECK_IN, 
+			   (SELECT LO.CHECK_OUT FROM LODGING LO WHERE LO.REF_TNO = T.TOUR_NO) AS CHECK_OUT, 
+			   (SELECT LO.COOK FROM LODGING LO WHERE LO.REF_TNO = T.TOUR_NO) AS COOK, 
+			   (SELECT LO.TEL FROM LODGING LO WHERE LO.REF_TNO = T.TOUR_NO) AS TEL, 
+			   (SELECT LO.PARKING FROM LODGING LO WHERE LO.REF_TNO = T.TOUR_NO) AS PARKING 
+		FROM TOUR T 
+		WHERE T.STATUS = 'Y'
+	</insert>
+	<insert id="insertRestaurantData" 
+			parameterType="rd">
+		INSERT INTO TOUR (TOUR_NO, TOUR_NAME, ADDRESS, THUMB_IMG, TOUR_TYPE, KID_ROOM, FIRST_MENU, TREAT_MENU, TEL, OPEN_TIME, REST_DATE) 
+		SELECT T.TOUR_NO, T.TOUR_NAME, T.ADDRESS, T.THUMB_IMG, T.TOUR_TYPE, 
+			   (SELECT R.KID_ROOM FROM RESTAURANT R WHERE R.REF_TNO = T.TOUR_NO) AS KID_ROOM, 
+			   (SELECT R.FIRST_MENU FROM RESTAURANT R WHERE R.REF_TNO = T.TOUR_NO) AS FIRST_MENU, 
+			   (SELECT R.TREAT_MENU FROM RESTAURANT R WHERE R.REF_TNO = T.TOUR_NO) AS TREAT_MENU, 
+			   (SELECT R.TEL FROM RESTAURANT R WHERE R.REF_TNO = T.TOUR_NO) AS TEL, 
+			   (SELECT R.OPEN_TIME FROM RESTAURANT R WHERE R.REF_TNO = T.TOUR_NO) AS OPEN_TIME, 
+			   (SELECT R.REST_DATE FROM RESTAURANT R WHERE R.REF_TNO = T.TOUR_NO) AS REST_DATE 
+		FROM TOUR T 
+		WHERE T.STATUS = 'Y'
+	</insert>
+	<insert id="insertLeportsData" 
+			parameterType="led">
+		INSERT INTO TOUR (TOUR_NO, TOUR_NAME, ADDRESS, THUMB_IMG, TOUR_TYPE, USE_TIME, PARKING, PET, TEL) 
+		SELECT T.TOUR_NO, T.TOUR_NAME, T.ADDRESS, T.THUMB_IMG, T.TOUR_TYPE, 
+			   (SELECT LE.USE_TIME FROM LEPORTS LE WHERE LE.REF_TNO = T.TOUR_NO) AS USE_TIME, 
+			   (SELECT LE.PARKING FROM LEPORTS LE WHERE LE.REF_TNO = T.TOUR_NO) AS PARKING, 
+			   (SELECT LE.PET FROM LEPORTS LE WHERE LE.REF_TNO = T.TOUR_NO) AS PET, 
+			   (SELECT LE.TEL FROM LEPORTS LE WHERE LE.REF_TNO = T.TOUR_NO) AS TEL 
+		FROM TOUR T 
+		WHERE T.STATUS = 'Y'
+	</insert>
+	<insert id="insertTourImg" 
+			parameterType="tourImg">
+		INSERT INTO TOUR_IMG(TIMG_NO 
+							 , REF_TNO 
+		                     , CHANGE_NO)
+		                VALUES(TIMG_NO.NEXTVAL
+		                     , TOUR_DNO.CURRVAL
+		                     , #{changeNo})
+	</insert>
+	
+	<!-- <insert id="insertTourImgs" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="tourImgList.timgNo">
+	    <foreach collection="tourImgList" item="tourImg" separator=";">
+	        INSERT INTO TOUR_IMG (TIMG_NO, REF_TNO, CHANGE_NO)
+	        VALUES (TIMG_NO.NEXTVAL, #{tourImg.refTno}, #{tourImg.changeNo})
+	    </foreach>
+	</insert> -->
 	
 	<!-- 김동현 - 지역 좌표 호출 SQL문 -->
 	<select id="getLocationCity"

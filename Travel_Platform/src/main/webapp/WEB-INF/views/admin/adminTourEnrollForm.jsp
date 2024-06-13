@@ -33,7 +33,7 @@
         	<div class="form-group">
 	        	<form id="tourEnroll" action="adminTourInsert.ad" method="post"  enctype="multipart/form-data">
 	        		<label>대표이미지 (필수) :</label>
-                    <input type="file" class="form-control" name="thumbImg" id="thumbImgInput" required>
+                    <input type="file" class="form-control" name="thumbImgFile" id="thumbImgInput" required>
                     <div id="checkResult" class="imgInputCheck">
 					</div>
 					
@@ -67,16 +67,16 @@
 					<table id="imgInput-holder">
 						<tr>
 							<td>
-								<input type="file" class="form-control" name="changeNo" id="imgInput">
+								<input type="file" class="form-control" name="changeNoFiles" id="imgInput">
 							</td>
 							<td>
-								<input type="file" class="form-control" name="changeNo" id="imgInput2">
+								<input type="file" class="form-control" name="changeNoFiles" id="imgInput2">
 							</td>
 							<td>
-								<input type="file" class="form-control" name="changeNo" id="imgInput3">
+								<input type="file" class="form-control" name="changeNoFiles" id="imgInput3">
 							</td>
 							<td>
-								<input type="file" class="form-control" name="changeNo" id="imgInput4">
+								<input type="file" class="form-control" name="changeNoFiles" id="imgInput4">
 							</td>
 						</tr>
 						<tr>
@@ -198,11 +198,9 @@
 				    <input type="text" class="form-control" name="tourName" required> <br>
 				    <label>주소 :</label>
 				    <input type="text" class="form-control" name="address" required> <br>
-				    <label>전화번호 :</label>
-				    <input type="text" class="form-control" name="tel" required> <br>
 	   				
 					<label for="tourType">여행지 분류 :</label>
-				  	<select class="form-control" id="tourType">
+				  	<select class="form-control" id="tourType" name="tourType">
 				  		<option>-- 선택 --</option>
 				    	<option value="tourSpot">관광지</option>
 				    	<option value="lodging">숙박시설</option>
@@ -231,20 +229,24 @@
 	                // 선택된 옵션에 따라 다른 폼이 뜸
 	                switch(selectedOption) {
                     case "tourSpot":
-                        $("#tourEnrollForm").html("<label>이용시간 :</label>" + 
+                        $("#tourEnrollForm").html("<label>전화번호 :</label>" + 
+    				    						  "<input type='text' class='form-control' name='tel' required>" + "<br>" + 
+                        						  "<label>이용시간 :</label>" + 
 												  "<input type='text' class='form-control' name='useTime' required>" + "<br>" + 
 												  "<label>운영시기 :</label>" + 
 												  "<input type='text' class='form-control' name='season' required>" + "<br>" + 
 												  "<label>애견 동반 가능 여부 :</label>" + "<br>" + 
-												  "<input type='radio' id='petY' name='pet' value='petY' style='cursor: pointer;' checked><label for='petY' style='cursor: pointer;'>&nbsp;예</label>" + 
+												  "<input type='radio' id='petY' name='pet' value='Y' style='cursor: pointer;' checked><label for='petY' style='cursor: pointer;'>&nbsp;예</label>" + 
 												  "&nbsp;&nbsp;&nbsp;" + 
-												  "<input type='radio' id='petN' name='pet' value='petN' style='cursor: pointer;'><label for='petN' style='cursor: pointer;'>&nbsp;아니오</label>" + "<br>" + 
+												  "<input type='radio' id='petN' name='pet' value='N' style='cursor: pointer;'><label for='petN' style='cursor: pointer;'>&nbsp;아니오</label>" + "<br>" + 
 												  "<div align='center'><button type='submit' class='btn btn-success'>등록하기</button>" + 
 												  "&nbsp;&nbsp;&nbsp;" + 
 												  "<button type='reset' class='btn btn-danger'>초기화</button></div>");
                         break;
                     case "lodging":
-                        $("#tourEnrollForm").html("<label>체크인시간 :</label>" + 
+                        $("#tourEnrollForm").html("<label>전화번호 :</label>" + 
+	    						  				  "<input type='text' class='form-control' name='tel' required>" + "<br>" + 
+                        						  "<label>체크인시간 :</label>" + 
 												  "<input type='text' class='form-control' name='checkIn' required>" + "<br>" + 
 												  "<label>체크아웃시간 :</label>" + 
 												  "<input type='text' class='form-control' name='checkOut' required>" + "<br>" + 
@@ -253,19 +255,21 @@
 												  "&nbsp;&nbsp;&nbsp;" + 
 												  "<input type='radio' id='hanok' name='roomType' value='hanok' style='cursor: pointer;'><label for='hanok' style='cursor: pointer;'>&nbsp;한옥</label>" + "<br><br>" + 
 												  "<label>취사 가능 여부 :</label>" + "<br>" + 
-												  "<input type='radio' id='cookY' name='cook' value='cookY' style='cursor: pointer;' checked><label for='cookY' style='cursor: pointer;'>&nbsp;예</label>" + 
+												  "<input type='radio' id='cookY' name='cook' value='Y' style='cursor: pointer;' checked><label for='cookY' style='cursor: pointer;'>&nbsp;예</label>" + 
 												  "&nbsp;&nbsp;&nbsp;" + 
-												  "<input type='radio' id='cookN' name='cook' value='cookN' style='cursor: pointer;'><label for='cookN' style='cursor: pointer;'>&nbsp;아니오</label>" + "<br><br>" + 
+												  "<input type='radio' id='cookN' name='cook' value='N' style='cursor: pointer;'><label for='cookN' style='cursor: pointer;'>&nbsp;아니오</label>" + "<br><br>" + 
 												  "<label>주차 가능 여부 :</label>" + "<br>" + 
-												  "<input type='radio' id='parkingY' name='parking' value='parkingY' style='cursor: pointer;' checked><label for='parkingY' style='cursor: pointer;'>&nbsp;예</label>" + 
+												  "<input type='radio' id='parkingY' name='parking' value='Y' style='cursor: pointer;' checked><label for='parkingY' style='cursor: pointer;'>&nbsp;예</label>" + 
 												  "&nbsp;&nbsp;&nbsp;" + 
-												  "<input type='radio' id='parkingN' name='parking' value='parkingN' style='cursor: pointer;'><label for='parkingN' style='cursor: pointer;'>&nbsp;아니오</label>" + "<br>" + 
+												  "<input type='radio' id='parkingN' name='parking' value='N' style='cursor: pointer;'><label for='parkingN' style='cursor: pointer;'>&nbsp;아니오</label>" + "<br>" + 
 												  "<div align='center'><button type='submit' class='btn btn-success'>등록하기</button>" + 
 												  "&nbsp;&nbsp;&nbsp;" + 
 												  "<button type='reset' class='btn btn-danger'>초기화</button></div>");
                         break;
                     case "restaurant":
-                        $("#tourEnrollForm").html("<label>오픈시간 :</label>" + 
+                        $("#tourEnrollForm").html("<label>전화번호 :</label>" + 
+				  				  				  "<input type='text' class='form-control' name='tel' required>" + "<br>" + 
+                        						  "<label>오픈시간 :</label>" + 
 												  "<input type='text' class='form-control' name='openTime' required>" + "<br>" + 
 												  "<label>휴무일 :</label>" + 
 												  "<input type='text' class='form-control' name='restDate' required>" + "<br>" + 
@@ -274,24 +278,26 @@
 												  "<label>전체메뉴 :</label>" + 
 												  "<input type='text' class='form-control' name='treatMenu' required>" + "<br>" + 
 												  "<label>유아놀이방 유무 :</label>" + "<br>" + 
-												  "<input type='radio' id='kidRoomY' name='kidRoom' value='kidRoomY' style='cursor: pointer;' checked><label for='kidRoomY' style='cursor: pointer;'>&nbsp;예</label>" + 
+												  "<input type='radio' id='kidRoomY' name='kidRoom' value='Y' style='cursor: pointer;' checked><label for='kidRoomY' style='cursor: pointer;'>&nbsp;예</label>" + 
 												  "&nbsp;&nbsp;&nbsp;" + 
-												  "<input type='radio' id='kidRoomN' name='kidRoom' value='kidRoomN' style='cursor: pointer;'><label for='kidRoomN' style='cursor: pointer;'>&nbsp;아니오</label>" + "<br>" + 
+												  "<input type='radio' id='kidRoomN' name='kidRoom' value='N' style='cursor: pointer;'><label for='kidRoomN' style='cursor: pointer;'>&nbsp;아니오</label>" + "<br>" + 
 												  "<div align='center'><button type='submit' class='btn btn-success'>등록하기</button>" + 
 												  "&nbsp;&nbsp;&nbsp;" + 
 												  "<button type='reset' class='btn btn-danger'>초기화</button></div>");
                         break;
                     case "leports":
-                        $("#tourEnrollForm").html("<label>이용시간 :</label>" + 
+                        $("#tourEnrollForm").html("<label>전화번호 :</label>" + 
+				  				  				  "<input type='text' class='form-control' name='tel' required>" + "<br>" + 
+                        						  "<label>이용시간 :</label>" + 
 												  "<input type='text' class='form-control' name='useTime' required>" + "<br>" + 
 												  "<label>애견 동반 가능 여부 :</label>" + "<br>" + 
-												  "<input type='radio' id='petY' name='pet' value='petY' style='cursor: pointer;' checked><label for='petY' style='cursor: pointer;'>&nbsp;예</label>" + 
+												  "<input type='radio' id='petY' name='pet' value='Y' style='cursor: pointer;' checked><label for='petY' style='cursor: pointer;'>&nbsp;예</label>" + 
 												  "&nbsp;&nbsp;&nbsp;" + 
-												  "<input type='radio' id='petN' name='pet' value='petN' style='cursor: pointer;'><label for='petN' style='cursor: pointer;'>&nbsp;아니오</label>" + "<br><br>" + 
+												  "<input type='radio' id='petN' name='pet' value='N' style='cursor: pointer;'><label for='petN' style='cursor: pointer;'>&nbsp;아니오</label>" + "<br><br>" + 
 												  "<label>주차 가능 여부 :</label>" + "<br>" + 
-												  "<input type='radio' id='parkingY' name='parking' value='parkingY' style='cursor: pointer;' checked><label for='parkingY' style='cursor: pointer;'>&nbsp;예</label>" + 
+												  "<input type='radio' id='parkingY' name='parking' value='Y' style='cursor: pointer;' checked><label for='parkingY' style='cursor: pointer;'>&nbsp;예</label>" + 
 												  "&nbsp;&nbsp;&nbsp;" + 
-												  "<input type='radio' id='parkingN' name='parking' value='parkingN' style='cursor: pointer;'><label for='parkingN' style='cursor: pointer;'>&nbsp;아니오</label>" + "<br>" + 
+												  "<input type='radio' id='parkingN' name='parking' value='N' style='cursor: pointer;'><label for='parkingN' style='cursor: pointer;'>&nbsp;아니오</label>" + "<br>" + 
 												  "<div align='center'><button type='submit' class='btn btn-success'>등록하기</button>" + 
 												  "&nbsp;&nbsp;&nbsp;" + 
 												  "<button type='reset' class='btn btn-danger'>초기화</button></div>");
