@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,13 +14,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.tp.travely.board.model.service.BoardService;
 import com.tp.travely.board.model.vo.Board;
 import com.tp.travely.board.model.vo.BoardImg;
+import com.tp.travely.board.model.vo.BoardLike;
+import com.tp.travely.board.model.vo.Reply;
 import com.tp.travely.common.model.vo.PageInfo;
 import com.tp.travely.common.template.Pagination;
 import com.tp.travely.member.model.vo.Member;
@@ -56,6 +62,21 @@ public class BoardController {
 		ArrayList<Member> list3 = boardService.selectMember();
 		// 회원 목록조회 메소드도 사용해야함
 		
+		// 각 게시글번호당 좋아요 수 가져오기
+		ArrayList<Integer> list4 = new ArrayList<>();
+		// > 10칸짜리 빈 ArrayList 객체 
+		//   int 형으로 받아오기 때문에 Integer 타입으로 제네릭 설정
+		
+		for(int i=0; i<list1.size(); i++) {
+			list4.add(boardService.likeListCount(list1.get(i).getBoardNo())); 
+		}
+		// > 이 시점부터 list4에 각 게시글 번호당 좋아요 총 갯수가 담겨있을 것임
+		
+		/*
+		for(Integer i : list4) {
+			System.out.println(i);
+		}
+		*/
 		// System.out.println(list1);
 		// System.out.println(list2);
 		// System.out.println(pi);
@@ -65,7 +86,7 @@ public class BoardController {
 		model.addAttribute("bList", list1);
 		model.addAttribute("biList", list2);
 		model.addAttribute("mList", list3);
-		
+		model.addAttribute("likeCount", list4);
 		
 		
 		return "board/boardListView";
@@ -126,10 +147,11 @@ public class BoardController {
 	
 	// 게시글 상세조회
 	@GetMapping("detail.bo")
-	public String detailBoard(int bno,	
+	public String detailBoard(@RequestParam(value="bno") int bno,
 							  Model model) {
 		
 		// System.out.println(bno);
+		
 		int result = boardService.increaseCount(bno);
 		
 		if(result > 0) { // 성공적으로 조회수가 증가되었다면
@@ -139,10 +161,10 @@ public class BoardController {
 			Board b = boardService.selectBoard(bno);
 			
 			ArrayList<BoardImg> biList = boardService.selectBoardImg(bno);
-			
 			model.addAttribute("m", m);
 			model.addAttribute("b", b);
 			model.addAttribute("biList", biList);
+			
 			
 			
 			return "board/boardDetailView";
@@ -156,23 +178,140 @@ public class BoardController {
 	}
 	
 	
-	/*
-	 * 좋아요기능 로그인 session 완성후 구현
-	@GetMapping("likeCheck.bo")
+	// 좋아요 체크
+	@ResponseBody
+	@GetMapping(value="likeCheck.bo", produces="text/html; charset=UTF-8")
 	public String ajaxLikeCheck(int bno,
 								HttpSession session,
 								Model model) {
 		
-		return 
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		
+		BoardLike bl = new BoardLike(userNo, bno);
+		
+		int checkResult = boardService.likeCheck(bl);
+		
+		// System.out.println(checkResult);
+		
+		return String.valueOf(checkResult);
+		
 	}
-	*/
 	
+	// 좋아요 추가
+	@ResponseBody
+	@GetMapping(value="linsert.bo", produces="text/html; charset=UTF-8")
+	public String ajaxLikeInsert(int bno,
+								HttpSession session,
+								Model model) {
+		
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		
+		BoardLike bl = new BoardLike(userNo, bno);
+		
+		int result = boardService.insertLike(bl);
+		
+		return String.valueOf(result);
+		
+	}
 	
+	// 좋아요 삭제
+	@ResponseBody
+	@GetMapping(value="ldelete.bo", produces="text/html; charset=UTF-8")
+	public String ajaxLikeDelete(int bno,
+								HttpSession session,
+								Model model) {
+		
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		
+		BoardLike bl = new BoardLike(userNo, bno);
+		
+		int result = boardService.deleteLike(bl);
+		
+		return String.valueOf(result);
+		
+	}
 	
+	// 댓글 작성
+	@ResponseBody
+	@PostMapping(value="rinsert.bo",  produces = "text/html; charset=UTF-8")
+	public String ajaxReplyInsert(Reply r,
+								  HttpSession session,
+								  Model model) {
+		
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		r.setUserNo(String.valueOf(userNo)); 
+		
+		int result = boardService.insertReply(r);
+		
 	
+		Member m = boardService.selectDetailMember(Integer.parseInt(r.getBoardNo()));
+		
+		model.addAttribute("m", m);
 	
+		
+		
+		return (result > 0) ? "success" : "fail";
+	}
 	
+	// 댓글 조회
+	@ResponseBody
+	@RequestMapping(value="rlist.bo", produces = "application/json; charset=UTF-8")
+	public String ajaxSelectReplyList(int bno) {
+		
+		ArrayList<Reply> list1 = boardService.selectReplyList(bno);
+		/*
+		for(Reply r : list) {
+			
+			System.out.println(r);
+		}
+		*/
+		
+		ArrayList<Member> list2 = new ArrayList<> ();
+		
+		Reply r = new Reply();
+		
+		for(int i=0; i<list1.size(); i++) {
+			
+			r.setBoardNo(String.valueOf(bno));
+			r.setReplyNo(list1.get(i).getReplyNo());
+			list2.add(boardService.selectReplyMember(r));
+		}
+								// 제네릭 와일드카드 어느 제네릭이나 사용 가능
+		HashMap<String, ArrayList<?>> Map = new HashMap<> ();
+		
+		Map.put("rList",list1);
+		Map.put("mList",list2);
+		
+		return new Gson().toJson(Map);
+	}
 	
+	// 댓글 수정
+	@ResponseBody
+	@PostMapping(value="rUpdate.bo", produces = "application/json; charset=UTF-8")
+	public void ajaxUpdateReply(Reply r) {
+		
+		//System.out.println(r);
+		
+		int result = boardService.updateReply(r);
+		
+		
+		
+	}
+
+	// 댓글 삭제
+	@ResponseBody
+	@PostMapping(value="rDelete.bo", produces = "application/json; charset=UTF-8")
+	public void ajaxDeleteReply(Reply r) {
+		
+		//System.out.println(r);
+		
+		int result = boardService.deleteReply(r);
+		
+		
+		
+	}
+	
+
 	
 	
 	

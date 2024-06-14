@@ -16,7 +16,7 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr); /* 가로로 4줄 */
             grid-template-rows: repeat(4, auto); /* 세로로 4줄 */
-            gap: 125px; /* 게시글 간의 간격 */
+            gap: 50px; /* 게시글 간의 간격 */
             padding: 20px;
             margin: 50px;
         }
@@ -101,7 +101,7 @@
             <img src="${requestScope.biList.get(i).changeName }">
             <div class="info">
                 <h3>${requestScope.bList.get(i).boardTitle}</h3>
-                <span>좋아요: 0</span><span>, 조회수: ${requestScope.bList.get(i).count}</span>
+                <span>좋아요: ${ requestScope.likeCount.get(i) }</span><span>, 조회수: ${requestScope.bList.get(i).count}</span>
                 <div style="display: inline-block; text-align: right; width: 55%;" >
                 	<span> ${requestScope.bList.get(i).createDate}</span>
                 </div>

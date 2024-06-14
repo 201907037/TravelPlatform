@@ -16,6 +16,12 @@
     <!-- Add Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.0/dist/sweetalert2.min.css">
+    <!-- Bootstrap 5 JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
     <style>
 
         .item {
@@ -29,11 +35,12 @@
 
         .swiper-container {
             width: 800px; /* 필요에 따라 조정 */
-            height: 700px;
+            height: 650px;
             margin: auto;
             overflow: hidden;
             position: relative; /* 컨테이너에 상대적 위치 설정 */
         }
+        
 		
         .swiper-slide img {
         	
@@ -45,6 +52,8 @@
 		  width: 100%;
 		  height: 100%;
           display: block;
+          
+          border-radius: 15px;
         }
 
         /* 버튼 색상 변경 및 애니메이션 추가 */
@@ -76,6 +85,7 @@
 
         .swiper-pagination-bullet-active {
             background: black; /* 활성화된 점의 색상 변경 */
+            
         }
 
         /* 슬라이드 번호 표시 */
@@ -97,7 +107,6 @@
         /* 프로필 헤더영역 */
         .item .header {
             padding: 10px;
-            border-bottom: 1px solid #dbdbdb;
             display: flex;
             align-items: center;
             font-size: 20px;
@@ -121,11 +130,7 @@
 
         }
 
-        .icons {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 10px 0 10px;
-        }
+    
 
 		/* 좋아요 css 영역 */
         .heart {
@@ -133,16 +138,25 @@
 		}
 		
         .heart-icon {
-        	float : right;
             cursor: pointer;
         }
         .heart-icon .heart {
-            color: #c7c6c6;
+            color: white;
+            text-shadow: 
+                -1px -1px 0 #000,  
+                 1px -1px 0 #000,
+                -1px  1px 0 #000,
+                 1px  1px 0 #000; /* 테두리 효과를 위한 그림자 */
             transition: color 0.1s;
             font-size: 25px;
         }
+
+        .heart-icon:hover {
+            font-weight: bolder;
+        }
+
         .heart-icon .heart.active {
-            color: red;
+            color: rgb(248, 82, 82);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5),
                         1px 1px 0 #000, 
                         -1px -1px 0 #000, 
@@ -178,12 +192,73 @@
             display: flex;
             align-items: flex-start;
             margin-bottom: 15px;
+            position: relative; /* 댓글 내의 버튼 위치를 조정하기 위해 추가 */
         }
+        
+        .comment.active {
+            border: 2px solid rgb(102, 102, 102);
+            border-radius : 10px;
+            padding: 5px;
+        }
+
+        .edit-delete-buttons {
+            display: none;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+        
+        /* 댓글 수정, 삭제버튼용 */
+        .edit-button,
+		.delete-button {
+		    border: 1px solid #ddd;
+		    background-color: #f0f0f0;
+		    border-radius: 10px;
+		    font-size: 16px;
+		    font-weight: bold;
+		    padding: 8px 14px;
+		    color: #333;
+		    cursor: pointer;
+		    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+		    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+		
+		.edit-button:hover,
+		.delete-button:hover {
+		    background-color: #007bff;
+		    color: #fff;
+		    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+		}
+		
+		.edit-button:active,
+		.delete-button:active {
+		    background-color: #0056b3;
+		    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+		}
+		
+		.edit-button:focus,
+		.delete-button:focus {
+		    outline: none;
+		    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+		}
+		/* 댓글 버튼 영역 끝*/
+		
+
+        .comment.active .edit-delete-buttons {
+            display: inline-block;
+        }
+        
+        
         .comment img.profile {
             width: 32px;
             height: 32px;
             border-radius: 50%;
             margin-right: 10px;
+            transition: width 0.3s ease, height 0.3s ease; /* 프로필 사진 크기 전환 효과 추가 */
+        }
+        .comment.active img.profile {
+            width: 40px;
+            height: 40px;
         }
         .comment-content {
             flex: 1;
@@ -195,6 +270,7 @@
         .comment-header span.username {
             font-weight: bold;
             margin-right: 5px;
+            transition: font-size 0.3s ease; /* 글씨 크기 전환 효과 추가 */
         }
         .comment-header span.time {
             color: #b0b0b0;
@@ -205,13 +281,14 @@
         }
         
         .add-comment {
-            display: flex;
+            display: none;
             align-items: center;
             margin-top: 20px;
+            
         }
         .add-comment img.profile {
-            width: 32px;
-            height: 32px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             margin-right: 10px;
         }
@@ -220,11 +297,18 @@
             padding: 10px;
             border-radius: 10px;
             border: none;
-            background-color: #3a3a3a;
-            color: #fff;
             outline: none;
-            resize: none; /* 사용자가 크기를 조정하지 못하게 */
+            idth: 300px; /* 고정 가로 크기 */
+            min-height: 40px; /* 최소 높이 */
+            border: 2px solid #9b9b9b;
+            overflow: hidden; /* 스크롤 숨기기 */
+            resize: none; /* 크기 조절 비활성화 */
+            white-space: pre-wrap; /* 줄 바꿈 유지 */
+            word-wrap: break-word; /* 길이가 긴 단어를 줄 바꿈 */
+            font-size: 15px;
+            font-weight: bold;
         }
+        
         .add-comment button {
             padding: 10px 15px;
             border: none;
@@ -242,7 +326,29 @@
             cursor: not-allowed;
             
         }
+        
+        .add-comment textarea::placeholder {
+		    color: lightgray; /* 원하는 색상으로 변경 */
+		    opacity: 1; /* 플레이스홀더 투명도 설정 */
+		}
+		
+		
+		.reply-icon .reply {
+			font-size:33px; 
+			display: inline-block; 
+			transform: scaleX(0.8); /* 가로 길이 조정 (1.5배 확대) */
+			text-shadow: 
+                -1px -1px 0 #000,  
+                 1px -1px 0 #000,
+                -1px  1px 0 #000,
+                 1px  1px 0 #000; /* 테두리 효과를 위한 그림자 */
+            color: white;
+		}
 
+        .reply-icon:hover {
+            font-weight: bolder;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -275,13 +381,16 @@
             <div class="swiper-button-prev"></div>
         </div>
         <div class="content">
-            <div class="icons">
-                <div class="heart-icon" onclick="toggleLike(this)">
-                    <span class="heart">&#10084;</span>
-                </div>
+            
+            <div class="heart-icon" onclick="toggleLike(this)" style="display: inline;">
+                <span class="heart">&#10084;</span>
+            </div>
+            &nbsp;
+            <div class="reply-icon" style="display: inline;">
+                	<span class="reply">&#128488;</span>
             </div>
             <div style="text-align: right;">
-            <span>${ requestScope.b.createDate }</span>
+            <span>작성일: ${ requestScope.b.createDate }</span>
             </div>
             
             <div class="post-text">
@@ -293,61 +402,26 @@
         </div>
 
         <div class="comment-section">
-            <div class="comment">
-                <img class="profile" src="https://via.placeholder.com/32" alt="Profile Picture">
-                <div class="comment-content">
-                    <div class="comment-header">
-                        <span class="username">lil_storyman</span>
-                        <span class="time">1일</span>
-                    </div>
-                    <div class="comment-text">
-                        내일 뉴아 보러가는 지마니🙌
-                    </div>
-                </div>
-            </div>
-            <div class="comment">
-                <img class="profile" src="https://via.placeholder.com/32" alt="Profile Picture">
-                <div class="comment-content">
-                    <div class="comment-header">
-                        <span class="username">yuuuujjuuuu</span>
-                        <span class="time">2일</span>
-                    </div>
-                    <div class="comment-text">
-                        @jjun__0209
-                    </div>
-                </div>
-            </div>
-            <div class="comment">
-                <img class="profile" src="https://via.placeholder.com/32" alt="Profile Picture">
-                <div class="comment-content">
-                    <div class="comment-header">
-                        <span class="username">p_pilseo</span>
-                        <span class="time">3일</span>
-                    </div>
-                    <div class="comment-text">
-                        가여우어어어오옹유유오우우
-                    </div>
-                </div>
-            </div>
-            <div class="comment">
-                <img class="profile" src="https://via.placeholder.com/32" alt="Profile Picture">
-                <div class="comment-content">
-                    <div class="comment-header">
-                        <span class="username">k_hw_._</span>
-                        <span class="time">13시간</span>
-                    </div>
-                    <div class="comment-text">
-                        @mademoi_gella
-                    </div>
-                </div>
+        	<div id="rcount" style="padding-left: 10px; font-size:15px; font-weight: bold;"></div>
+        	<br>
+        	<div id="commentReply">
+            	
+                <!-- 댓글이 들어갈 자리 -->
+             
+         
             </div>
             <div class="add-comment">
-                <img class="profile" src="https://via.placeholder.com/32" alt="Profile Picture">
-                <textarea placeholder="댓글을 작성해주세요..."></textarea>
-                <button disabled><i class="fa-solid fa-arrow-right"></i></button>
+                <img class="profile" src="${sessionScope.loginUser.changeName }" alt="Profile Picture">
+                <textarea placeholder="댓글을 작성해주세요..." id="content"></textarea>
+                <button disabled onclick="addReply();"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
+        
+        </div>
         <script>
+        
+       		const userNo = "${sessionScope.loginUser.userNo}";
+       		
             document.querySelector('.add-comment textarea').addEventListener('input', function() {
                 const button = document.querySelector('.add-comment button');
                 if (this.value.trim() !== '') {
@@ -356,12 +430,181 @@
                     button.disabled = true;
                 }
             });
+            
+			$(function() {
+        		
+        		selectReplyList();
+        		
+        		// 댓글 목록 실시간 불러오기 효과
+        		setInterval(selectReplyList, 60000);
+        		//		 	함수명			 ms단위
+        	});
+            
+			// 댓글 작성용 function
+        	function addReply() {
+        		
+        		// 댓글 작성 시 댓글의 내용은 필수 입력사항임 (NOT NULL)
+        		// > 공백제거 후 길이가 0이 아닌 경우에만 ajax 요청 보내기 
+        		if($("#content").val().trim().length != 0) {
+	        		// 댓글 작성이 가능한 경우
+        			
+        			$.ajax({
+	        			url : "rinsert.bo",
+	        			type : "post",
+	        			data : {
+	        				boardNo : ${ requestScope.b.boardNo },
+        					replyContent : $("#content").val()
+        				},
+        				success : function(result) {
+        					
+        					
+        					console.log(result)
+        					
+        					if(result == "success") {
+        						// 댓글 목록 다시 불러오기
+        						// 댓글 목록 조회기능 구현시 주석해제
+        						selectReplyList();
+        						
+        						// 댓글 작성란에 초기화 해주는 효과
+        						$("#content").val("");
+        						
+        					} 
+        					
+        				}, 
+        				error : function() {
+        					console.log("댓글 작성용 ajax 통신실패!");
+        				}
+	        		});
+	        		
+        		 }
+        		
+        	}
+         	
+         	
+         
+        	// 해당 게시글에 딸린 댓글리스트 조회용 function
+        	function selectReplyList() {
+        		
+        		$.ajax({
+        			url : "rlist.bo",
+        			type : "get",
+        			data : {
+        				bno : ${ requestScope.b.boardNo }
+        			},
+        			success : function(Map) {
+        				
+        				console.log(Map);
+        				
+        				let mList = Map.mList;
+        				let rList = Map.rList;
+        				
+        				
+        				let resultStr = "";
+        				
+        				// console.log(result);
+        				// 댓글 목록 조회
+        				
+        				for (let i = 0; i < rList.length; i++) {
+        					
+        					 let reply = rList[i];
+        			         let member = mList[i];
+        					
+        			        resultStr += '<div class="comment" id="comment'+i+'">';
+       	                    resultStr += '<input type="hidden" class="replyUserNo" value="'+reply.userNo+'">';
+       	                    resultStr += '    <img class="profile" src="'+member.changeName+'" alt="Profile Picture">';
+       	                    resultStr += '    <div class="comment-content">';
+       	                    resultStr += '        <div class="comment-header">';
+       	                    resultStr += '            <span class="username">'+member.nickName+'</span>';
+       	                    resultStr += '            <span class="time">'+reply.createDate+'</span>';
+       	                    resultStr += '        </div>';
+       	                    resultStr += '        <div class="comment-text">';
+       	                    resultStr += '           '+ reply.replyContent +'';
+       	                    resultStr += '        </div>';
+       	                    resultStr += '        <div class="edit-delete-buttons">';
+       	                    resultStr += '            <button class="edit-button btn btn-primary" type="button" id="showModal" data-replyno="'+reply.replyNo+'">수정</button>';
+       	                    resultStr += '            <button class="delete-button btn btn-primary" type="button" id="showModal" data-replyno="'+reply.replyNo+'">삭제</button>';
+       	                    resultStr += '        </div>';
+       	                    resultStr += '    </div>';
+       	                    resultStr += '</div>';
+                    	};	
+        				
+        				$("#commentReply").html(resultStr);			   
+        			
+        				// 댓글 갯수 추가
+        				$("#rcount").text("댓글 "+rList.length +"개");
+        				// 자스에서 list 사이즈 확인하는 메소드는 length 임
+
+                        // 댓글 클릭 이벤트 추가
+                        $(".comment").click(function() {
+                            const isActive = $(this).hasClass("active");
+                            $(".comment").removeClass("active");
+                            $(".edit-delete-buttons").hide();
+                            if (!isActive) {
+                                $(this).addClass("active");
+                                if(userNo != "" && userNo == $(this).children(":first-child").val()) {
+                                	$(this).find(".edit-delete-buttons").show();
+                                }
+                            }
+                        });
+
+                        // 문서 내 다른 부분 클릭 시 이벤트 추가
+                        $(document).click(function(event) {
+                            if (!$(event.target).closest(".comment").length) {
+                                $(".comment").removeClass("active");
+                                $(".edit-delete-buttons").hide();
+                            }
+                        });
+        				
+        			}, 
+        			error : function() {
+        				
+        				console.log("댓글리스트 조회용 ajax 통신 실패!");
+        				
+        			}
+        			
+        		});
+        	}
+        	
+        	
+            
         </script>
-        </div>
+        
+        <c:choose>
+        <c:when test="${sessionScope.loginUser ne null}">
+        <script>
+        $(function() {
+        	$(".reply").click(function() {
+        		 $(".add-comment").css("display") === "none" ? $(".add-comment").css("display", "flex") : $(".add-comment").css("display", "none");
+        		 var $reply = $(".reply");
+                 if ($reply.css("color") === "rgb(255, 255, 255)") {
+                     $reply.css({
+                         "color": "rgb(0, 149, 246)",
+                         "text-shadow": "2px 2px 4px rgba(0, 0, 0, 0.5), 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000"
+                     });
+                 } else {
+                     $reply.css({
+                         "color": "white",
+                         "text-shadow": "text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px  1px 0 #000, 1px  1px 0 #000;" // 기존 text-shadow를 제거하려면 "none"을 사용합니다.
+                     });
+                 }
+        	});
+        }); 
+        </script>
+        </c:when>
+        <c:otherwise>
+        	<script>
+        		$(function() {
+        			$(".reply").click(function() {
+        				alert("로그인후 이용가능합니다.")
+        			});
+        		});
+        	</script>
+        </c:otherwise>
+        </c:choose>
    
 
 
-
+	<!-- 슬라이드 전용 스크립트 -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const slideNumberDisplay = document.querySelector('.slide-number');
@@ -389,12 +632,15 @@
             slideNumberDisplay.textContent = 1+'/'+${requestScope.biList.size()};
 
         });
-
+        
+        </script>
+        
+		<c:choose>
+        <c:when test="${sessionScope.loginUser ne null}">
+        <script>
         /* 이 및 스크립트에서는 좋아요 기능 넣을 것 로그인 session에 정보 담은 후 구현*/
        // 현재 이 게시글에 로그인한 사용자가 좋아요를 눌렀었나 검사
-            /*
 			$(function() {
-                
 				$.ajax({
 					url : "likeCheck.bo",
 					type : "get",
@@ -418,6 +664,7 @@
 					}
 				});
             })
+        
             
 	        function toggleLike(heartIcon) {
                 var heart = heartIcon.querySelector(".heart");
@@ -425,15 +672,14 @@
 	            
 	            	// 클레스에 요소가 있는 지없는지 검사
 	             if(heart.classList.contains("active")) {
-	         	// TB_LIKE 테이블에 좋아요 insert 요청
+	         	// BOARD_LIKE 테이블에 좋아요 insert 요청
 		            $.ajax({
 						url : "linsert.bo",
 						type : "get",
 						data : {bno : ${requestScope.b.boardNo}},
 						success : function() {
 							
-							// likeCheck();
-							// selectLikeCount();
+							
 							console.log("성공");
 						},
 						error : function() {
@@ -443,13 +689,12 @@
 	            } else { 
 	            	console.log("좋아요 delete 요청");
 	            	$.ajax({
-						url : "/ldelete.bo",
+						url : "ldelete.bo",
 						type : "get",
 						data : {bno : ${requestScope.b.boardNo}},
 						success : function(result) { 
 							
-							// likeCheck();
-							//selectLikeCount();
+							
 							console.log("성공");
 						},
 						error : function() {
@@ -459,11 +704,110 @@
 	            } 
 	        	 
 	        }
-        */
-
-            
-    </script>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			</script>
+	        </c:when>
+	        <c:otherwise>
+	        	<script>
+	        		$(function() {
+	        			$(".heart-icon").click(function() {
+	        				alert("로그인후 이용가능합니다.")
+	        			});
+	        		});
+	        	</script>
+	        </c:otherwise>
+	        </c:choose>
+    
+   
+   
+     <!-- SweetAlert2 모달 JS, 스크립트 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.0/dist/sweetalert2.min.js"></script>
+    <script>
+	$(document).on('click', '.edit-button', function () {
+	    var replyNo = $(this).data('replyno'); // 수정하려는 댓글의 replyNo를 가져옵니다.
+	    Swal.fire({
+	        title: '댓글 수정',
+	        html: '<textarea id="editReply" class="swal2-input" style="overflow: hidden;resize: none;white-space: pre-wrap; word-wrap: break-word;" placeholder="댓글을 입력하세요"></textarea>',
+	        showCancelButton: true,
+	        confirmButtonText: '확인',
+	        cancelButtonText: '취소'
+	    }).then((result) => {
+	        if (result.isConfirmed) {
+	            const replyContent = $('#editReply').val();
+	
+	            $.ajax({
+	                url: 'rUpdate.bo', // API 엔드포인트로 변경
+	                type: 'POST',
+	                data: {
+	                    replyNo: replyNo, // 수정할 댓글의 번호
+	                    replyContent: replyContent // 수정할 댓글 내용
+	                },
+	                success: function(response) {
+	                    Swal.fire({
+	                        title: '댓글 수정 성공!',
+	                        icon: 'success',
+	                        confirmButtonText: 'OK'
+	                    }).then(() => {
+	                        // 댓글 목록을 다시 로드
+	                        selectReplyList();
+	                    });
+	                },
+	                error: function(xhr, status, error) {
+	                    Swal.fire({
+	                        title: 'Error!',
+	                        text: 'There was an error saving your changes.',
+	                        icon: 'error',
+	                        confirmButtonText: 'OK'
+	                    });
+	                }
+	            });
+	        }
+	    });
+	});
+	
+	
+	$(document).on('click', '.delete-button', function () {
+	    var replyNo = $(this).data('replyno'); // 수정하려는 댓글의 replyNo를 가져옵니다.
+	    Swal.fire({
+	        title: '댓글 삭제',
+	       	text: '정말 삭제하시겠습니까 ?',
+	        showCancelButton: true,
+	        confirmButtonText: '확인',
+	        cancelButtonText: '취소'
+	    }).then((result) => {
+	        if (result.isConfirmed) {
+	            $.ajax({
+	                url: 'rDelete.bo', // API 엔드포인트로 변경
+	                type: 'POST',
+	                data: {
+	                    replyNo: replyNo, // 수정할 댓글의 번호
+	                },
+	                success: function(response) {
+	                    Swal.fire({
+	                        title: '댓글 삭제 완료!',
+	                        icon: 'success',
+	                        confirmButtonText: 'OK'
+	                    }).then(() => {
+	                        // 댓글 목록을 다시 로드
+	                        selectReplyList();
+	                    });
+	                },
+	                error: function(xhr, status, error) {
+	                    Swal.fire({
+	                        title: 'Error!',
+	                        text: 'There was an error saving your changes.',
+	                        icon: 'error',
+	                        confirmButtonText: 'OK'
+	                    });
+	                }
+	            });
+	        }
+	    });
+	});
+	</script>
+    
+    
+    
+    <br><br><br><br><br><br><br><br><br><br>
     <jsp:include page="../common/footer1.jsp"></jsp:include>
     
 </body>

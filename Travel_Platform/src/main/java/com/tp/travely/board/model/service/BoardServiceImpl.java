@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tp.travely.board.model.dao.BoardDao;
 import com.tp.travely.board.model.vo.Board;
 import com.tp.travely.board.model.vo.BoardImg;
+import com.tp.travely.board.model.vo.BoardLike;
+import com.tp.travely.board.model.vo.Reply;
 import com.tp.travely.common.model.vo.PageInfo;
 import com.tp.travely.member.model.vo.Member;
 
@@ -83,6 +85,65 @@ public class BoardServiceImpl implements BoardService{
 	public Member selectDetailMember(int bno) {
 		
 		return boardDao.selectDetailMember(sqlSession, bno);
+	}
+
+	@Override
+	public int likeCheck(BoardLike bl) {
+		
+		return boardDao.likeCheck(sqlSession, bl);
+	}
+	
+	@Transactional
+	@Override
+	public int insertLike(BoardLike bl) {
+		
+		return boardDao.insertLike(sqlSession, bl);
+	}
+
+	@Transactional
+	@Override
+	public int deleteLike(BoardLike bl) {
+		
+		return boardDao.deleteLike(sqlSession, bl);
+	}
+
+	@Override
+	public Integer likeListCount(int boardNo) {
+		
+		return boardDao.likeListCount(sqlSession, boardNo);
+	}
+
+	@Transactional
+	@Override
+	public int insertReply(Reply r) {
+		
+		return boardDao.insertReply(sqlSession, r);
+	}
+
+	@Override
+	public ArrayList<Reply> selectReplyList(int bno) {
+		
+		return boardDao.selectReplyList(sqlSession, bno);
+	}
+
+	@Override
+	public Member selectReplyMember(Reply r) {
+		
+		return boardDao.selectReplyMember(sqlSession, r);
+	}
+
+	@Transactional
+	@Override
+	public int updateReply(Reply r) {
+		
+		return boardDao.updateReply(sqlSession, r);
+	}
+
+	@Transactional
+	@Override
+	public int deleteReply(Reply r) {
+		
+		return boardDao.deleteReply(sqlSession, r);
 	}
 	
 	

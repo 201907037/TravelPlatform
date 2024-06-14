@@ -22,6 +22,10 @@
 		<!-- 최현호 -->
 		<typeAlias type="com.tp.travely.board.model.vo.Board" alias="board" />
 		<typeAlias type="com.tp.travely.board.model.vo.BoardImg" alias="boardImg" />
+		<typeAlias type="com.tp.travely.board.model.vo.BoardLike" alias="boardLike" />
+		<!-- 최현호 6.12 -->
+		<typeAlias type="com.tp.travely.board.model.vo.Reply" alias="reply" />
+		
 		<!-- 김동현 -->
 		<typeAlias type="com.tp.travely.tour.model.vo.City" alias="city"/>
 		<typeAlias type="com.tp.travely.tour.model.vo.Districts" alias="area"/>

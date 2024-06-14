@@ -28,6 +28,21 @@
  	<result column="CHANGE_NAME" property="changeName"/>
  </resultMap>
  
+ <resultMap type="boardLike" id="boardLikeResultSet">
+ 	<result column="USER_NO" property="userNo"/>
+ 	<result column="BOARD_NO" property="boardNo"/>
+ </resultMap>
+ 
+ <resultMap type="reply" id="replyResultSet">
+ 	<result column="REPLY_NO" property="replyNo"/>
+ 	<result column="REPLY_CONTENT" property="replyContent"/>
+ 	<result column="CREATE_DATE" property="createDate"/>
+ 	<result column="MODIFY_DATE" property="modifyDate"/>
+ 	<result column="STATUS" property="status"/> 	
+ 	<result column="USER_NO" property="userNo"/>
+ 	<result column="BOARD_NO" property="boardNo"/>
+ </resultMap>
+ 
  
  <!-- 게시글 갯수 구하는 쿼리문 -->
 <select id="selectListCount"
@@ -155,6 +170,107 @@ JOIN BOARD USING(USER_NO)
 	
 
 </select>
+
+<!-- 게시글 좋아요 누름 체크 여부 -->
+<select id="likeCheck"
+		resultType="int"
+		parameterType="boardLike">
+	SELECT COUNT(*)
+	  FROM "BOARD_LIKE"
+	 WHERE USER_NO = #{userNo}
+	   AND BOARD_NO = #{boardNo}
+</select>
+
+<!-- 좋아요 insert -->
+<insert id="insertLike"
+		parameterType="boardLike">
+	INSERT INTO "BOARD_LIKE" VALUES(#{userNo},
+							 		#{boardNo})
+</insert>
+
+<!-- 좋아요 delete -->
+<delete id="deleteLike"
+		parameterType="boardLike">
+	DELETE
+	  FROM "BOARD_LIKE"
+	 WHERE USER_NO = #{userNo}
+	   AND BOARD_NO = #{boardNo}
+</delete>
+
+<!-- 좋아요 게시글별 총 갯수 구하기 -->
+<select id="likeListCount"
+		parameterType="_int"
+		resultType="int">
+	SELECT COUNT(*)
+	  FROM BOARD_LIKE
+	 WHERE BOARD_NO = #{boardNo}
+</select>
+
+<!-- 댓글 작성용  -->
+<insert id="insertReply"
+		parameterType="reply">
+	INSERT INTO REPLY(REPLY_NO,
+                  REPLY_CONTENT,
+                  USER_NO,
+                  BOARD_NO)
+            VALUES(SEQ_REPLY_NO.NEXTVAL,
+                   #{replyContent},
+                   #{userNo},
+                   #{boardNo})	
+
+</insert>
+
+<!-- 댓글 목록 조회용 -->
+<select id="selectReplyList"
+		parameterType="_int"
+		resultMap="replyResultSet">
+		SELECT REPLY_NO,
+		       REPLY_CONTENT,
+		       USER_NO,
+		        CASE 
+		        WHEN (SYSDATE - CREATE_DATE) * 24 * 60 &lt; 5 THEN '방금 전'
+		        WHEN (SYSDATE - CREATE_DATE) * 24 &lt; 1 THEN TRUNC((SYSDATE - CREATE_DATE) * 24 * 60) || '분 전'
+		        WHEN (SYSDATE - CREATE_DATE) * 24 &lt; 24 THEN TRUNC((SYSDATE - CREATE_DATE) * 24) || '시간 전'
+		        ELSE TRUNC(SYSDATE - CREATE_DATE) || '일 전'
+		    END AS CREATE_DATE
+		  FROM REPLY
+		 WHERE BOARD_NO = #{boardNo}
+		   AND STATUS = 'Y'
+		 ORDER BY REPLY_NO DESC	
+</select>
+
+<!-- 댓글별 회원 프로필 조회용 -->
+<select id="selectReplyMember"
+		parameterType="reply"
+		resultMap="memberResultSet">
+SELECT MEMBER.NICK_NAME, MEMBER.CHANGE_NAME
+  FROM REPLY
+ JOIN MEMBER USING (USER_NO)
+ JOIN BOARD USING (BOARD_NO)
+ WHERE MEMBER.STATUS = 'Y'
+   AND REPLY.STATUS = 'Y'
+   AND BOARD.STATUS = 'Y'
+   AND BOARD_NO = #{boardNo}
+   AND REPLY_NO = #{replyNo}
+</select>
+
+<!-- 댓글 수정용 -->
+<update id="updateReply"
+		parameterType="reply">
+	UPDATE REPLY
+	   SET REPLY_CONTENT = #{replyContent} , MODIFY_DATE = SYSDATE
+	 WHERE STATUS= 'Y'
+	   AND REPLY_NO = #{replyNo}
+</update>
+
+<!-- 댓글 삭제용 -->
+<update id="deleteReply"
+		parameterType="reply">
+	UPDATE REPLY
+	   SET STATUS = 'N'
+	 WHERE STATUS = 'Y'
+	   AND REPLY_NO = #{replyNo}
+</update>
 
 </mapper>
 
