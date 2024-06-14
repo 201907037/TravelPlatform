@@ -20,6 +20,102 @@
 		<result column="REF_CITY" property="refCity" />
 	</resultMap>
 	
+	<resultMap id="tourSpotResultSet" 
+			   type="ts">
+		<result column="TOUR_NO" property="tourNo" />
+		<result column="TOUR_NAME" property="tourName" />
+		<result column="ADDRESS" property="address" />
+		<result column="ADD_DATE" property="addDate" />
+		<result column="CONTENT_ID" property="contentId" />
+		<result column="THUMB_IMG" property="thumbImg" />
+		<result column="MAP_X" property="mapX" />
+		<result column="MAP_Y" property="mapY" />
+		<result column="TOUR_TYPE" property="tourType" />
+		<result column="STATUS" property="status" />
+		<result column="REF_AREA" property="refArea" />
+		<result column="REF_CITY" property="refCity" />	   
+		
+		<result column="SPOT_NO" property="spotNo" />
+		<result column="SEASON" property="season" />
+		<result column="USE_TIME" property="useTime" />
+		<result column="TEL" property="tel" />
+		<result column="PET" property="pet" />
+		<result column="REF_TNO" property="refTno" />
+	</resultMap>
+	
+	<resultMap id="lodgingResultSet" 
+			   type="lo">
+		<result column="TOUR_NO" property="tourNo" />
+		<result column="TOUR_NAME" property="tourName" />
+		<result column="ADDRESS" property="address" />
+		<result column="ADD_DATE" property="addDate" />
+		<result column="CONTENT_ID" property="contentId" />
+		<result column="THUMB_IMG" property="thumbImg" />
+		<result column="MAP_X" property="mapX" />
+		<result column="MAP_Y" property="mapY" />
+		<result column="TOUR_TYPE" property="tourType" />
+		<result column="STATUS" property="status" />
+		<result column="REF_AREA" property="refArea" />
+		<result column="REF_CITY" property="refCity" />
+			   
+		<result column="L_NO" property="lNo" />
+		<result column="ROOM_TYPE" property="roomType" />
+		<result column="CHECK_IN" property="checkIn" />
+		<result column="CHECK_OUT" property="checkOut" />
+		<result column="COOK" property="cook" />
+		<result column="TEL" property="tel" />
+		<result column="PARKING" property="parking" />
+		<result column="REF_TNO" property="refTno" />
+	</resultMap>
+	
+	<resultMap id="restaurantResultSet" 
+			   type="r">
+		<result column="TOUR_NO" property="tourNo" />
+		<result column="TOUR_NAME" property="tourName" />
+		<result column="ADDRESS" property="address" />
+		<result column="ADD_DATE" property="addDate" />
+		<result column="CONTENT_ID" property="contentId" />
+		<result column="THUMB_IMG" property="thumbImg" />
+		<result column="MAP_X" property="mapX" />
+		<result column="MAP_Y" property="mapY" />
+		<result column="TOUR_TYPE" property="tourType" />
+		<result column="STATUS" property="status" />
+		<result column="REF_AREA" property="refArea" />
+		<result column="REF_CITY" property="refCity" />
+		
+		<result column="RD_NO" property="rdNo" />
+		<result column="KID_ROOM" property="kidRoom" />
+		<result column="FIRST_MENU" property="firstMenu" />
+		<result column="TREAT_MENU" property="treatMenu" />
+		<result column="TEL" property="tel" />
+		<result column="OPEN_TIME" property="openTime" />
+		<result column="REST_DATE" property="restDate" />
+		<result column="REF_TNO" property="refTno" />
+	</resultMap>
+	
+	<resultMap id="leportsResultSet" 
+			   type="le">
+		<result column="TOUR_NO" property="tourNo" />
+		<result column="TOUR_NAME" property="tourName" />
+		<result column="ADDRESS" property="address" />
+		<result column="ADD_DATE" property="addDate" />
+		<result column="CONTENT_ID" property="contentId" />
+		<result column="THUMB_IMG" property="thumbImg" />
+		<result column="MAP_X" property="mapX" />
+		<result column="MAP_Y" property="mapY" />
+		<result column="TOUR_TYPE" property="tourType" />
+		<result column="STATUS" property="status" />
+		<result column="REF_AREA" property="refArea" />
+		<result column="REF_CITY" property="refCity" />
+			   
+		<result column="L_NO" property="lNo" />
+		<result column="USE_TIME" property="useTime" />
+		<result column="PARKING" property="parking" />
+		<result column="PET" property="pet" />
+		<result column="TEL" property="tel" />
+		<result column="REF_TNO" property="refTno" />
+	</resultMap>
+	
 	<!-- City VO 매퍼 -->
 	<resultMap type="city" id="resultSetCity">
 		<result column="SIGUNGU_CODE_NO" property="sigunguCodeNo"/>
@@ -45,7 +141,7 @@
 			   CONTENT_ID, THUMB_IMG, MAP_X, MAP_Y, 
 			   TOUR_TYPE, STATUS, REF_AREA, REF_CITY 
 		  FROM TOUR 
-		 WHERE STATUS= 'Y'
+		 WHERE STATUS = 'Y'
 	</select>
 	<!-- 김동현 -도시 목록 조회 쿼리문(2024.06.10) -->
 	<select id="selectCity"
@@ -210,5 +306,130 @@
 	SELECT *
 	FROM DISTRICTS
 	WHERE LCODE_NO = #{areaCode}
+	</select>
+	
+	<!-- 유진&현성 - 관리자 여행지 상세조회 쿼리문 -->
+	<select id="tourSpotDetail" 
+			parameterType="_int" 
+			resultMap="ts">
+		SELECT 
+		    T.TOUR_NO, 
+		    T.TOUR_NAME, 
+		    T.ADDRESS, 
+		    TO_CHAR(T.ADD_DATE, 'YYYY-MM-DD') AS ADD_DATE, 
+		    T.CONTENT_ID, 
+		    T.THUMB_IMG, 
+		    T.MAP_X, 
+		    T.MAP_Y, 
+		    T.TOUR_TYPE, 
+		    T.STATUS, 
+		    T.REF_AREA, 
+		    T.REF_CITY, 
+		    TS.SPOT_NO, 
+		    TS.SEASON, 
+		    TS.USE_TIME, 
+		    TS.TEL, 
+		    TS.PET, 
+		    TS.REF_TNO
+		FROM 
+		    TOUR T
+		JOIN 
+		    TOUR_SPOT TS ON T.TOUR_NO = TS.REF_TNO
+		WHERE 
+		    T.STATUS = 'Y';
+	</select>
+	
+	<select id="lodgingDetail" 
+			parameterType="_int" 
+			resultMap="lo">
+		SELECT 
+		    T.TOUR_NO, 
+		    T.TOUR_NAME, 
+		    T.ADDRESS, 
+		    TO_CHAR(T.ADD_DATE, 'YYYY-MM-DD') AS ADD_DATE, 
+		    T.CONTENT_ID, 
+		    T.THUMB_IMG, 
+		    T.MAP_X, 
+		    T.MAP_Y, 
+		    T.TOUR_TYPE, 
+		    T.STATUS, 
+		    T.REF_AREA, 
+		    T.REF_CITY, 
+		    LO.L_NO, 
+		    LO.ROOM_TYPE, 
+		    LO.CHECK_IN, 
+		    LO.CHECK_OUT, 
+		    LO.COOK, 
+		    LO.TEL, 
+		    LO.PARKING, 
+		    LO.REF_TNO
+		FROM 
+		    TOUR T
+		JOIN 
+		    LODGING LO ON T.TOUR_NO = LO.REF_TNO
+		WHERE 
+		    T.STATUS = 'Y';
+	</select>
+	
+	<select id="restaurantDetail" 
+			parameterType="_int" 
+			resultMap="r">
+		SELECT 
+		    T.TOUR_NO, 
+		    T.TOUR_NAME, 
+		    T.ADDRESS, 
+		    TO_CHAR(T.ADD_DATE, 'YYYY-MM-DD') AS ADD_DATE, 
+		    T.CONTENT_ID, 
+		    T.THUMB_IMG, 
+		    T.MAP_X, 
+		    T.MAP_Y, 
+		    T.TOUR_TYPE, 
+		    T.STATUS, 
+		    T.REF_AREA, 
+		    T.REF_CITY, 
+		    R.RD_NO, 
+		    R.KID_ROOM, 
+		    R.FIRST_MENU, 
+		    R.TREAT_MENU, 
+		    R.TEL, 
+		    R.OPEN_TIME, 
+		    R.REST_DATE, 
+		    R.REF_TNO
+		FROM 
+		    TOUR T
+		JOIN 
+		    RESTAURANT R ON T.TOUR_NO = R.REF_TNO
+		WHERE 
+		    T.STATUS = 'Y';
+	</select>
+	
+	<select id="leportsDetail" 
+			parameterType="_int" 
+			resultMap="le">
+		SELECT 
+		    T.TOUR_NO, 
+		    T.TOUR_NAME, 
+		    T.ADDRESS, 
+		    TO_CHAR(T.ADD_DATE, 'YYYY-MM-DD') AS ADD_DATE, 
+		    T.CONTENT_ID, 
+		    T.THUMB_IMG, 
+		    T.MAP_X, 
+		    T.MAP_Y, 
+		    T.TOUR_TYPE, 
+		    T.STATUS, 
+		    T.REF_AREA, 
+		    T.REF_CITY, 
+		    LE.L_NO, 
+		    LE.USE_TIME, 
+		    LE.PARKING, 
+		    LE.PET, 
+		    LE.TEL, 
+		    LE.REF_TNO
+		FROM 
+		    TOUR T
+		JOIN 
+		    LEPORTS LE ON T.TOUR_NO = LE.REF_TNO
+		WHERE 
+		    T.STATUS = 'Y';
 	</select>
 </mapper>

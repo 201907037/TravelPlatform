@@ -64,11 +64,30 @@ public class TourDao {
         return result;
 	}
 	
+	
 	public City getLocationCity(SqlSessionTemplate sqlSession, int sigunguCodeNo) {
 		return sqlSession.selectOne("tourMapper.getLocationCity",sigunguCodeNo);
 	}
 	
 	public Districts getLocationArea(SqlSessionTemplate sqlSession, int areaCode) {
 		return sqlSession.selectOne("tourMapper.getLocationArea",areaCode);
+	}
+
+	
+	// 유진&현성 - 관리자 여행지 상세조회 DAO (2024.06.14)
+	public TourSpotData tourSpotDetail(SqlSessionTemplate sqlSession, int tourNo) {
+		return sqlSession.selectOne("tourMapper.tourSpotDetail", tourNo);
+	}
+
+	public LodgingData lodgingDetail(SqlSessionTemplate sqlSession, int tourNo) {
+		return sqlSession.selectOne("tourMapper.lodgingDetail", tourNo);
+	}
+
+	public RestaurantData restaurantDetail(SqlSessionTemplate sqlSession, int tourNo) {
+		return sqlSession.selectOne("tourMapper.restaurantDetail", tourNo);
+	}
+
+	public LeportsData leportsDetail(SqlSessionTemplate sqlSession, int tourNo) {
+		return sqlSession.selectOne("tourMapper.leportsDetail", tourNo);
 	}
 }

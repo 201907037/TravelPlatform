@@ -91,13 +91,7 @@
                 <tbody>
 	                <c:forEach var="t" items="${requestScope.tList}">
 	                    <tr>
-							
-	                        <th>
-	                		    <input type="hidden" name="tourNo" value="${ t.tourNo }">
-		                    	<input type="hidden" name="tourType" value="${ t.tourType }">
-		                    	<input type="hidden" name="thumbImg" value="${ t.thumbImg }">
-	                        	${t.tourName}
-	                        </th>
+	                        <th>${t.tourName}</th>
 	                        <th>
 	                        	<c:choose>
 								      <c:when test="${t.tourType.equals('tourSpot')}">
@@ -119,14 +113,7 @@
 	                    </tr>
 	                    
 	                    
-
-						
-	                </c:forEach>
-                </tbody>
-            </table>
-        </div>
-        
-        				    	<!-- 여행지정보 모달창 -->
+				    	<!-- 여행지정보 모달창 -->
 						<div class="modal fade infoModal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog modal-lg" role="document">
 								<div class="modal-content">
@@ -136,21 +123,50 @@
 						          			<span aria-hidden="true">&times;</span>
 						        		</button>
 						      		</div>
-						      		<!-- 
 						      		<div class="modal-body">
 						        		<div id="tour-thumbImg">
 						        			<img src="${t.thumbImg}" alt="Thumbnail">
 						        		</div>
 						        		
 						        		<div id="tourImg">
-						        			추가이미지들이 있다면 여기에 출력 (여기서 밑의 script 호출)
-						        		</div>			        		
+						        			<!-- 추가이미지들이 있다면 여기에 출력 (여기서 밑의 script 호출) -->
+						        		</div>
+						        		
+						        		<!--
+						        		<script>
+						        			function() {
+						        				var tourNo = ${t.tourNo};
+						        		
+								        		// AJAX 호출로 서버에서 이미지 데이터를 가져옴
+						                        $.ajax({
+						                            url : "getTourImages.ad", 
+						                            method : "get", 
+						                            data : { tourNo : tourNo }, 
+						                            success: function(response) {
+						                                var $tourImg = $("#tourImg");
+						                                $tourImg.empty(); // 기존 이미지 삭제
+		
+						                                // 서버에서 받은 이미지 데이터로 갤러리를 채움
+						                                response.images.forEach(function(image) {
+						                                    var $div = $('<div>', { 'class': 'tourImg-container' });
+						                                    var $img = $('<img>', { src: image.url, alt: 'Dynamic Image' });
+						                                    $div.append($img);
+						                                    $tourImg.append($div);
+						                                });
+		
+						                                // 모달 창 열기
+						                                $("#myModal").modal("show");
+						                            }
+						                        });
+						        			}
+									    </script>
+									   	-->
+						        		
 						        		<br>
 						        		<hr>
 						        		<br>
 						        		
 						      		</div>
-						      		 -->
 						      		<div class="modal-footer">
 					      				<button type="button" class="btn btn-primary">수정</button>
 					      				<button type="button" class="btn btn-danger">삭제</button>
@@ -158,37 +174,19 @@
 						    	</div>
 						  	</div>
 						</div>
+						
+	                </c:forEach>
+                </tbody>
+            </table>
+        </div>
     	
 		<script>
 		
 		
 			// 모달창 열기
 			$(document).ready(function() {
-		    	$("#datatablesSimple>tbody>tr").click(function(e){
+		    	$("#datatablesSimple>tbody>tr").click(function(){
 		      		$(".infoModal").modal("show");
-		      		
-		      		// console.log($(this).children().eq(0).children().eq(0).val());
-		      		// console.log($(this).children().eq(0).children().eq(1).val());
-		      		
-		      		let tourNo = $(this).children().eq(0).children().eq(0).val();
-		      		let tourType = $(this).children().eq(0).children().eq(1).val();
-		      		let thumbImg = $(this).children().eq(0).children().eq(2).val();
-		      		
-		      		$.ajax({
-		      			url : "tourDetailView.to",
-		      			type: "get",
-		      			data : {
-		      				tourNo : tourNo,
-		      				tourType : tourType,
-		      				thumbImg : thumbImg
-		      			},
-		      			success : function(z){
-		      				console.log("ajax성공");
-		      			},
-		      			error: function(){
-		      				console.log("ajax에러");
-		      			}
-		      		});
 		    	});
 		  	});
 			
@@ -196,8 +194,6 @@
 			$(document).ready(function() {
 		    	$(".modal-header>button").click(function(){
 		      		$(".infoModal").modal("hide");
-		      		
-
 		    	});
 		  	});
 		</script>

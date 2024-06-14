@@ -178,6 +178,34 @@ public class TourController {
 		}
 		
 	}
+	
+	// 유진&현성 - 관리자 여행지 상세조회 컨트롤러 (2024.06.14)
+//	@ResponseBody
+	@GetMapping(value="tourDetailView.to")
+	public void tourDetailView(Tour tour) {
+		System.out.println("controller 성공");
+		System.out.println(tour);
+		
+		switch(tour.getTourType()) {
+		case "tourSpot" : 
+			TourSpotData tsd = tourService.tourSpotDetail(tour.getTourNo());
+			break;
+		case "lodging" : 
+			LodgingData lod = tourService.lodgingDetail(tour.getTourNo());
+			break;
+		case "restaurant" : 
+			RestaurantData rd =tourService.restaurantDetail(tour.getTourNo());
+			break;
+		case "leports" : 
+			LeportsData led = tourService.leportsDetail(tour.getTourNo());
+			break;
+		default : 
+			break;
+		}
+		
+		// 사진(썸네일 제외 다른 추가이미지들)들 받을 배열 = service.xml();
+	}
+	
 	//------------------ 일반 메서드 영역 ------------------------------------------------------
 	
 	// 유진 - 파일 처리용 메서드 작성 (2024.06.12)

@@ -29,4 +29,10 @@ public interface TourService {
 	City getLocationCity(int sigunguCodeNo);
 	
 	Districts getLocationArea(int areaCode);
+
+	// 유진&현성 - 관리자 여행지 상세조회 서비스 (2024.06.14)
+	TourSpotData tourSpotDetail(int tourNo);
+	LodgingData lodgingDetail(int tourNo);
+	RestaurantData restaurantDetail(int tourNo);
+	LeportsData leportsDetail(int tourNo);
 }

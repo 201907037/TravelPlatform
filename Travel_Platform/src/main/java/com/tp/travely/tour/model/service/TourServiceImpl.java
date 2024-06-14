@@ -76,4 +76,24 @@ public class TourServiceImpl implements TourService {
 		return tourDao.getLocationArea(sqlSession,areaCode);
 	}
 
+	// 유진&현성 - 관리자 여행지 상세조회 서비스 (2024.06.14)
+	@Override
+	public TourSpotData tourSpotDetail(int tourNo) {
+		return tourDao.tourSpotDetail(sqlSession, tourNo);
+	}
+
+	@Override
+	public LodgingData lodgingDetail(int tourNo) {
+		return tourDao.lodgingDetail(sqlSession, tourNo);
+	}
+
+	@Override
+	public RestaurantData restaurantDetail(int tourNo) {
+		return tourDao.restaurantDetail(sqlSession, tourNo);
+	}
+
+	@Override
+	public LeportsData leportsDetail(int tourNo) {
+		return tourDao.leportsDetail(sqlSession, tourNo);
+	}
 }
