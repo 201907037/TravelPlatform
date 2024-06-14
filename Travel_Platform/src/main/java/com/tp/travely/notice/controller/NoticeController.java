@@ -58,7 +58,10 @@ public class NoticeController {
 							ModelAndView mv) {
 		if(!upfile.getOriginalFilename().equals("")) {
 			String afterName = savePath(upfile, session);
-			n.setChangeName("resources/image/"+afterName);
+			n.setChangeName("resources/noticeUpfiles/"+afterName);
+		}else {
+			// 빈값일 경우 빈문자열
+			n.setChangeName("");
 		}
 
 		int result = noticeService.insertNotice(n);
@@ -128,7 +131,10 @@ public class NoticeController {
 		System.out.println("aaa: "+n);
 		if(!reUpfile.getOriginalFilename().equals("")) {
 			String afterName = savePath(reUpfile, session);
-			n.setChangeName("resources/image/"+afterName);
+			n.setChangeName("resources/noticeUpfiles/"+afterName);
+		}else {
+			// 빈값일 경우 빈문자열
+			n.setChangeName("");
 		}
 		
 		int result = noticeService.updateNotice(n);
@@ -202,7 +208,7 @@ public class NoticeController {
 		// 7. 경로와 수정파일명 합체 후 파일을 업로드해주기
 		// > MultipartFile 객체가 제공하는
 		//   transferTo 메소드를 이용함
-		System.out.println(savePath);
+//		System.out.println(savePath);
 		try {
 
 			upfile.transferTo(new File(savePath + changeName));
