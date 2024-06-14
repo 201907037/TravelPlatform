@@ -356,6 +356,43 @@
 	<jsp:include page="../common/header1.jsp"></jsp:include>
     <br><br><br><br><br><br><br><br><br>
     
+    <div align="center">
+        <!-- 수정하기, 삭제하기 버튼은 이 글이 본인이 작성한 글일 경우에만 보여져야 함 -->
+        <!-- 
+        	* 기존의 수정하기, 삭제하기 요청을 GET 방식으로 보냈었음!!
+        	> 쿼리스트링을 조작하여 내가 쓴 게시글이 아니더라도 수정, 삭제하기가 가능해짐
+        	> 수정하기, 삭제하기 요청을POST 방식으로 보내면 해결 가능함
+         -->
+        <c:if test="${ not empty sessionScope.loginUser && sessionScope.loginUser.userNo eq requestScope.b.userNo }">
+         <button type="button" onclick="postFormSubmit(1);">수정하기</button>
+         <button type="button" onclick="postFormSubmit(2);">삭제하기</button>
+        </c:if>
+    </div>
+    <br><br>
+            
+    <form id="postForm" action="" method="post">
+          	<!-- 수정하기, 삭제하기에 글번호 넘겨주기 -->
+          	<input type="hidden" name="bno" value="${ requestScope.b.boardNo }" >
+    </form>
+
+	<script>
+		function postFormSubmit(i) {
+			
+			// console.log("호출됨" , i);
+			if(i == 1) { // 수정하기
+				
+				// attr 속성 이용해서 action 속성에 조건에 맞게 요청 보내기 
+				$("#postForm").attr("action", "updateForm.bo").submit();
+															// submit(); : submit 버튼을 누른 효과를 줄 수 있다.
+			} else { // 삭제하기
+				
+				$("#postForm").attr("action", "delete.bo").submit();
+			}
+			
+		}
+		
+	</script>
+    
     <div class="item">
     	<div align="center">
     	<div class="header">
@@ -515,7 +552,11 @@
        	                    resultStr += '    <div class="comment-content">';
        	                    resultStr += '        <div class="comment-header">';
        	                    resultStr += '            <span class="username">'+member.nickName+'</span>';
-       	                    resultStr += '            <span class="time">'+reply.createDate+'</span>';
+       	                    						  if(reply.modifyDate == null) {
+       	                    resultStr += '            	<span class="time">'+reply.createDate+'</span>';
+       	                    						  } else {
+       	                    resultStr += '			  	<span class="time">'+reply.modifyDate+'</span>';
+       	                    						  }
        	                    resultStr += '        </div>';
        	                    resultStr += '        <div class="comment-text">';
        	                    resultStr += '           '+ reply.replyContent +'';
@@ -750,6 +791,7 @@
 	                        // 댓글 목록을 다시 로드
 	                        selectReplyList();
 	                    });
+	                    
 	                },
 	                error: function(xhr, status, error) {
 	                    Swal.fire({

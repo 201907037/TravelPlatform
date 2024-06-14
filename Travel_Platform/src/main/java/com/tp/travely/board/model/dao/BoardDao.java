@@ -133,6 +133,23 @@ public class BoardDao {
 		return sqlSession.update("boardMapper.deleteReply", r);
 	}
 
+	public int updateBiStatus(SqlSessionTemplate sqlSession, int boardNo) {
+		
+		return sqlSession.update("boardMapper.updateBiStatus", boardNo);
+	}
+
+	public int updateBoard(SqlSessionTemplate sqlSession, Board b) {
+		
+		return sqlSession.update("boardMapper.updateBoard", b);
+	}
+
+	public int updateBoardImg(SqlSessionTemplate sqlSession, BoardImg boardImg) {
+		
+		return sqlSession.insert("boardMapper.updateBoardImg", boardImg);
+	}
+
+	
+
 	
 
 }

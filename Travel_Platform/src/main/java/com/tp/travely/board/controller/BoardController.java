@@ -108,7 +108,7 @@ public class BoardController {
 		
 		int result = boardService.insertBoard(b);
 		int results = 0;
-		System.out.println(result);
+		// System.out.println(result);
 		for(int i=0; i<upfiles.size(); i++) {
 			if(!upfiles.get(i).getOriginalFilename().equals("")) {
 				// 요청 시 넘어온 첨부파일이 있을 경우
@@ -127,7 +127,9 @@ public class BoardController {
 				// 첨부파일이 있다면 자동으로 b객체 originName, changeName 필드값이 추가됨
 				results = boardService.insertBoard(bi);
 				// System.out.println(results);
-			} 
+			} else {
+				continue;
+			}
 			
 			
 		
@@ -143,6 +145,96 @@ public class BoardController {
 		
 		return mv;
 	}
+	
+	// 게시글 수정페이지로 포워딩
+	@PostMapping("updateForm.bo")
+	public String updateFormBoard(String[] upfiles, int bno, Model model) {
+		
+		
+		
+		ArrayList<BoardImg> biList = boardService.selectBoardImg(bno);
+		/*
+		for(BoardImg bi: biList) {
+			System.out.println(bi);
+		}
+		*/
+		Board b = boardService.selectBoard(bno);
+		
+		model.addAttribute("b", b);
+		model.addAttribute("biList", biList);
+		
+		return "board/boardUpdate";
+	}
+	
+	// 게시글 수정
+	@PostMapping("update.bo")
+	public String updateBoard(Board b, String userNo,
+							  ArrayList<MultipartFile> reupfiles,
+							  HttpSession session,
+							  Model model) {
+		
+		BoardImg bi = new BoardImg();
+		
+		ArrayList<BoardImg> biList = boardService.selectBoardImg(b.getBoardNo());
+		// 4
+		// System.out.println(reupfiles);
+		/*
+		for(BoardImg bis : biList) {
+			System.out.println(bis);
+		}
+		*/
+		int result1 = boardService.updateBoard(b);
+		int result2 = boardService.updateBiStatus(b.getBoardNo());
+		int result3 = 0;
+		int result4 = 0;
+		
+		
+		for(int i=0; i<biList.size(); i++) {
+			if(!reupfiles.get(i).getOriginalFilename().equals("")) {
+				// 넘어온 첨부파일이 있을 경우
+				String changeName = savePath(reupfiles.get(i), session);
+				bi.setChangeName("resources/boardUpfiles/"+changeName);
+			} else if(reupfiles.get(i).getOriginalFilename().equals("")) {
+				bi.setChangeName(biList.get(i).getChangeName());
+			} else {
+				continue;
+			}
+				bi.setBoardNo(String.valueOf(b.getBoardNo()));
+			if(i == 0) {
+				bi.setFileLevel("1");
+			} else {
+				bi.setFileLevel("2");
+			}
+				// System.out.println(bi);
+			
+				 result3 = boardService.updateBoardImg(bi);
+		}
+		
+		for(int i=biList.size(); i<reupfiles.size(); i++) {
+			if(!reupfiles.get(i).getOriginalFilename().equals("")) {
+				// 넘어온 첨부파일이 있을 경우
+				String changeName = savePath(reupfiles.get(i), session);
+				bi.setChangeName("resources/boardUpfiles/"+changeName);
+			} else {
+				continue;
+			}
+				bi.setBoardNo(String.valueOf(b.getBoardNo()));
+				// System.out.println(bi);
+
+				result4 = boardService.updateBoardImg(bi);
+		}
+	
+		
+		// System.out.println(result1);
+		// System.out.println(result2);
+		// System.out.println(result3);
+		// System.out.println(result4);
+		
+		
+		return "";
+	}
+	
+	
 	
 	
 	// 게시글 상세조회
@@ -164,7 +256,6 @@ public class BoardController {
 			model.addAttribute("m", m);
 			model.addAttribute("b", b);
 			model.addAttribute("biList", biList);
-			
 			
 			
 			return "board/boardDetailView";

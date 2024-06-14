@@ -16,7 +16,7 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr); /* 가로로 4줄 */
             grid-template-rows: repeat(4, auto); /* 세로로 4줄 */
-            gap: 50px; /* 게시글 간의 간격 */
+            gap: 70px; /* 게시글 간의 간격 */
             padding: 20px;
             margin: 50px;
         }

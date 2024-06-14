@@ -83,7 +83,7 @@ INSERT INTO BOARD (BOARD_NO,
 		resultMap="boardResultSet">
 		SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT, 
 		 CASE 
-        WHEN (SYSDATE - CREATE_DATE) * 24 * 60 &lt; 5 THEN '방금 전'
+        WHEN (SYSDATE - CREATE_DATE) * 24 * 60 &lt; 1 THEN '방금 전'
         WHEN (SYSDATE - CREATE_DATE) * 24 &lt; 1 THEN TRUNC((SYSDATE - CREATE_DATE) * 24 * 60) || '분 전'
         WHEN (SYSDATE - CREATE_DATE) * 24 &lt; 24 THEN TRUNC((SYSDATE - CREATE_DATE) * 24) || '시간 전'
         ELSE TRUNC(SYSDATE - CREATE_DATE) || '일 전'
@@ -141,6 +141,38 @@ INSERT INTO BOARD (BOARD_NO,
 	 WHERE STATUS = 'Y'
 	   AND BOARD_NO = #{boardNo}
 </select>
+
+<!-- 게시글 수정 board -->
+<update id="updateBoard" 
+		parameterType="board">
+	UPDATE BOARD
+	   SET BOARD_TITLE = #{boardTitle} , BOARD_CONTENT = #{boardContent}
+	  WHERE BOARD_NO = #{boardNo}
+
+</update>
+
+<!-- 게시글 수정 boardImgStatus -->
+<update id="updateBiStatus" 
+		parameterType="_int">
+		UPDATE BOARD_IMG
+		   SET STATUS = 'N'
+		  WHERE BOARD_NO = #{boardNo}
+</update>
+
+
+
+<!-- 게시글 수정 updateBoardImg -->
+<insert id="updateBoardImg" 
+		parameterType="boardImg">
+		INSERT INTO BOARD_IMG (IMG_NO,
+                       CHANGE_NAME,
+                       FILE_LEVEL,
+                       BOARD_NO)
+               VALUES (SEQ_BOARD_IMG_NO.NEXTVAL,
+                       #{changeName},
+                       #{fileLevel},
+                       #{boardNo})
+</insert>
 
 <!-- 게시글 회원 프로필조회 -->
 <select id="selectMember"
@@ -228,11 +260,18 @@ JOIN BOARD USING(USER_NO)
 		       REPLY_CONTENT,
 		       USER_NO,
 		        CASE 
-		        WHEN (SYSDATE - CREATE_DATE) * 24 * 60 &lt; 5 THEN '방금 전'
+		        WHEN (SYSDATE - CREATE_DATE) * 24 * 60 &lt; 1 THEN '방금 전'
 		        WHEN (SYSDATE - CREATE_DATE) * 24 &lt; 1 THEN TRUNC((SYSDATE - CREATE_DATE) * 24 * 60) || '분 전'
 		        WHEN (SYSDATE - CREATE_DATE) * 24 &lt; 24 THEN TRUNC((SYSDATE - CREATE_DATE) * 24) || '시간 전'
 		        ELSE TRUNC(SYSDATE - CREATE_DATE) || '일 전'
-		    END AS CREATE_DATE
+		    END AS CREATE_DATE,
+		    CASE 
+		    WHEN MODIFY_DATE IS NULL THEN NULL
+		    WHEN (SYSDATE - MODIFY_DATE) * 24 * 60 &lt; 1 THEN '방금 전(수정됨)'
+		    WHEN (SYSDATE - MODIFY_DATE) * 24 &lt; 1 THEN TRUNC((SYSDATE - MODIFY_DATE) * 24 * 60) || '분 전(수정됨)'
+		    WHEN (SYSDATE - MODIFY_DATE) * 24 &lt; 24 THEN TRUNC((SYSDATE - MODIFY_DATE) * 24) || '시간 전(수정됨)'
+		    ELSE TRUNC(SYSDATE - MODIFY_DATE) || '일 전(수정됨)'
+			END AS MODIFY_DATE
 		  FROM REPLY
 		 WHERE BOARD_NO = #{boardNo}
 		   AND STATUS = 'Y'

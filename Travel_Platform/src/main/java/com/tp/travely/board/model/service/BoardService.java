@@ -49,6 +49,13 @@ public interface BoardService {
 	int updateReply(Reply r);
 
 	int deleteReply(Reply r);
+
+	int updateBiStatus(int boardNo);
+
+	int updateBoard(Board b);
+
+	int updateBoardImg(BoardImg bi);
+
 	
 	
 	

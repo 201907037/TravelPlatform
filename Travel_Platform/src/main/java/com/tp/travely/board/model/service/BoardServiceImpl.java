@@ -145,6 +145,29 @@ public class BoardServiceImpl implements BoardService{
 		
 		return boardDao.deleteReply(sqlSession, r);
 	}
+
+	@Transactional
+	@Override
+	public int updateBiStatus(int boardNo) {
+		
+		return boardDao.updateBiStatus(sqlSession, boardNo);
+	}
+
+	@Transactional
+	@Override
+	public int updateBoard(Board b) {
+		
+		return boardDao.updateBoard(sqlSession, b);
+	}
+
+	@Transactional
+	@Override
+	public int updateBoardImg(BoardImg bi) {
+		
+		return boardDao.updateBoardImg(sqlSession, bi);
+	}
+
+	
 	
 	
 	
