@@ -2,6 +2,7 @@
 package com.tp.travely.tour.model.service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.tp.travely.tour.model.vo.City;
 import com.tp.travely.tour.model.vo.Districts;
@@ -17,8 +18,11 @@ public interface TourService {
 	// 유진 - 관리자 여행지 목록 조회 서비스 (2024.06.10)
 	ArrayList<Tour> adminTourList();
 	
-	// 김동현-2024.06.11
+	// 김동현 - 2024.06.11
+	// 김동현 - 2024.06.16
 	ArrayList<City> selectCity(int code);
+	int selectTourListCount(Map<String, String> map);
+	ArrayList<Tour> selectTourList(Map<String,String> map);
 
 	// 유진 - 관리자 여행지 추가 서비스 (2024.06.12)
 	int insertTour(TourSpotData tsd, TourImg ti);

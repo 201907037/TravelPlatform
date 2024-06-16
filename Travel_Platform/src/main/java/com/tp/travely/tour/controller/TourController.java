@@ -4,6 +4,7 @@ package com.tp.travely.tour.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.tp.travely.common.model.vo.PageInfo;
 import com.tp.travely.tour.model.service.TourService;
 import com.tp.travely.tour.model.vo.City;
 import com.tp.travely.tour.model.vo.Districts;
@@ -161,12 +163,13 @@ public class TourController {
 //		}
 		return new Gson().toJson(list);
 	}
-	
+	// 김동현 - 2024.06.16
+	// 여행지 리스트 조회
 	@GetMapping(value="getLocation.to", produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String getLocation(String areaCode, String sigunguCodeNo) {
-		System.out.println(areaCode);
-		System.out.println(sigunguCodeNo);
+		//System.out.println(areaCode);
+		//System.out.println(sigunguCodeNo);
 		if(Integer.parseInt(areaCode)>30) {
 			City c = tourService.getLocationCity(Integer.parseInt(sigunguCodeNo));
 			return new Gson().toJson(c);
@@ -177,6 +180,45 @@ public class TourController {
 			//System.out.println(d);
 		}
 		
+	}
+	@GetMapping(value="tourList.to",produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String selectTourList(String type,String areaCode,String areaName,int pno) {
+		System.out.println(type);
+		System.out.println(areaCode);
+		System.out.println(areaName);
+		System.out.println(pno);
+		//System.out.println(areaName);
+		HashMap<String, String> map = new HashMap<>();
+		map.put("type",type);
+		map.put("name",areaName);
+		int listCount=tourService.selectTourListCount(map);
+		int currentPage = pno;
+		int pageLimit = 5;
+		int boardLimit = 5;
+		
+		int maxPage = (int)Math.ceil((double)listCount/boardLimit);
+		int startPage= (((currentPage-1)/pageLimit)*pageLimit)+1;
+		int endPage = startPage+(pageLimit-1);
+		if(maxPage<endPage) {
+			endPage=maxPage;
+		}
+		PageInfo pinfo = new PageInfo(listCount, currentPage, pageLimit, boardLimit, maxPage, startPage, endPage);
+		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
+		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
+		map.put("start", (start+""));
+		map.put("end",(end+""));
+		ArrayList<Tour> list = tourService.selectTourList(map);
+		for(Tour t : list) {
+			System.out.println(t);
+		}
+		System.out.println(pinfo);
+		System.out.println(listCount);
+		//System.out.println(map);
+		HashMap<String, Object> rtMap = new HashMap<String, Object>();
+		rtMap.put("list",list);
+		rtMap.put("page",pinfo);
+		return new Gson().toJson(rtMap);
 	}
 	
 	// 유진&현성 - 관리자 여행지 상세조회 컨트롤러 (2024.06.14)

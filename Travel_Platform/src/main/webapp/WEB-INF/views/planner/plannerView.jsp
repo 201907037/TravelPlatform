@@ -86,7 +86,7 @@
 						<option value="5">광주광역시</option>
 						<option value="6">부산광역시</option>
 						<option value="7">울산광역시</option>
-						<option value="8">세종특별시</option>
+						<option value="8">세종특별자치시</option>
 						<option value="31">경기도</option>
 						<option value="32">강원특별자치도</option>
 						<option value="33">충청북도</option>
@@ -120,10 +120,12 @@ let tDate;
 let areaCode;
 let areaName;
 let sigunguCode;
-let sigunguCodenNo;
+let sigunguCodeNo;
 let sigunguName;
 let locationXX;
 let locationYY;
+let plan = {};
+let planner = [];
 		$(function() {
 			let today = new Date();
 			let nextday = new Date(new Date().setDate(today.getDate()+1));
@@ -199,13 +201,15 @@ let locationYY;
 			  if($("#areaCode").val()!=0){
 				  tstart = drp.startDate._d; // 여행시작일
 				  tend = drp.endDate._d;	 // 여행종료일
-				  tDate = tend.getDate()-tstart.getDate()+1; // 여행일수
+				  //tDate = tend.getDate()-tstart.getDate()+1; // 여행일수
+				  tDate = Math.ceil(Math.abs((tstart.getTime()-tend.getTime())/(1000 * 60 * 60 * 24)));
 				  areaCode = $("#areaCode").val(); // 여행지역코드
 				  sigunguCodeNo=0;
 				  if(Number(areaCode)>30){
 					  sigunguCodeNo = $(".choose").children().eq(0).val();
 					  sigunguCode = $(".choose").children().eq(1).val();
 					  areaName = $(".choose").text();
+					 
 				  }else{
 					  areaName = $("#areaCode option:checked").text();
 				  }
@@ -239,12 +243,36 @@ let locationYY;
 				  if(areaName!=""){
 					  let yn = confirm(moment(tstart).format("YYYY/MM/DD")+"~"+moment(tend).format("YYYY/MM/DD")+" "+areaName+" 맞으면 확인을 누르세요.");
 					  if(yn==true){
-						  console.log(locationXX);
+						  $(".date").remove();
+						  /* console.log(locationXX);
 						  console.log(locationYY);
+						  console.log(tstart);
+						  console.log(tend);
+						  console.log(tDate); */
 						  var newloc =new kakao.maps.LatLng(locationYY,locationXX);
 						  $("#DATEPICK").modal("hide");
 						  map.setCenter(newloc);
-						  map.setLevel(8);
+						  map.setLevel(7);
+						  for(let i=0;i<tDate;i++){
+							  let day;
+							  planner[i] = {date : new Date(new Date().setDate(tstart.getDate()+i)),dayCount:i+1,startTimeH : 10,startTimeM : "00",endTimeH: 20,endTimeM:"00"};
+							  if(i==0){
+								  day = tstart;
+							  }else{
+								  day = new Date(new Date().setDate(tstart.getDate()+i));
+							  }
+							 
+							 let div =  $("<div>").attr("class","date").html((i+1)+"일차 : "+moment(day).format("YYYY/MM/DD"));
+							 let hidden = $("<input>").attr({type:"hidden",name:"plannerIndex",value:(i)});
+							 console.log(i);
+							 div.append(hidden);
+							 $(".d_box").append(div);
+						  }
+						 plan.startDate = tstart;
+						 plan.endDate = tend;
+						 plan.planList = planner;
+						 
+						 
 					  }
 				  }else{
 					  alert("여행지를 선택하세요.");

@@ -2,6 +2,7 @@
 package com.tp.travely.tour.model.dao;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -23,8 +24,17 @@ public class TourDao {
 		return (ArrayList)sqlSession.selectList("tourMapper.adminTourList");
 	}
 	
+	// 김동현
 	public ArrayList<City> selectCity(SqlSessionTemplate sqlSession, int code){
 		return (ArrayList)sqlSession.selectList("tourMapper.selectCity",code);
+	}
+	// 김동현 - 2024.06.16
+	// 여행지 리스트 조회
+	public int selectTourListCount(SqlSessionTemplate sqlSession, Map<String, String> map) {
+		return sqlSession.selectOne("tourMapper.selectTourListCount",map);
+	}
+	public ArrayList<Tour> selectTourList(SqlSessionTemplate sqlSession, Map<String,String> map){
+		return (ArrayList)sqlSession.selectList("tourMapper.selectTourList",map);
 	}
 
 	// 유진 - 관리자 여행지 추가 DAO (2024.06.12)

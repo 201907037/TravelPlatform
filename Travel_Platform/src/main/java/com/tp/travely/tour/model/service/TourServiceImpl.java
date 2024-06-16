@@ -2,6 +2,7 @@
 package com.tp.travely.tour.model.service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,17 @@ public class TourServiceImpl implements TourService {
 	public ArrayList<City> selectCity(int code) {
 		ArrayList<City> list = tourDao.selectCity(sqlSession,code);
 		return list;
+	}
+	// 김동현 - 2024.06.16
+	// 여행지 리스트 조회
+	@Override
+	public int selectTourListCount(Map<String, String> map) {
+		return tourDao.selectTourListCount(sqlSession,map);
+	}
+	
+	@Override
+	public ArrayList<Tour> selectTourList(Map<String, String> map) {
+		return tourDao.selectTourList(sqlSession,map);
 	}
 
 	// 유진 - 관리자 여행지 추가 서비스  (2024.06.12)
