@@ -16,6 +16,7 @@ public class LodgingData {
 	private String address;
 	private String addDate;
 	private String thumbImg;
+	private String contentId; // 추가
 	
 	private String roomType;
 	private String checkIn;
@@ -23,4 +24,6 @@ public class LodgingData {
 	private String cook;
 	private String tel;
 	private String parking;
+	private int lNo; // 추가
+	private int refTno;// 추가
 }

@@ -25,10 +25,10 @@ public interface TourService {
 	ArrayList<Tour> selectTourList(Map<String,String> map);
 
 	// 유진 - 관리자 여행지 추가 서비스 (2024.06.12)
-	int insertTour(TourSpotData tsd, TourImg ti);
-	int insertTour(LodgingData lod, TourImg ti);
-	int insertTour(RestaurantData rd, TourImg ti);
-	int insertTour(LeportsData led, TourImg ti);
+	int insertTour(TourSpotData tsd, ArrayList<TourImg> tourImgList);
+	int insertTour(LodgingData lod, ArrayList<TourImg> tourImgList);
+	int insertTour(RestaurantData rd, ArrayList<TourImg> tourImgList);
+	int insertTour(LeportsData led, ArrayList<TourImg> tourImgList);
 	
 	City getLocationCity(int sigunguCodeNo);
 	
@@ -39,4 +39,9 @@ public interface TourService {
 	LodgingData lodgingDetail(int tourNo);
 	RestaurantData restaurantDetail(int tourNo);
 	LeportsData leportsDetail(int tourNo);
+	// 이미지 list
+	ArrayList<TourImg> tourImgList(int tourNo);
+
+	// 유진 - 관리자 여행지 삭제 서비스 (2024.06.17)
+	int deleteTour(int tourNo);
 }

@@ -33,30 +33,23 @@
 	
 	#tour-thumbImg {
 		border: 1px solid black;
-		width: 500px;
-		height: 350px;
+		width: 400px;
+		height: 250px;
 	}
 	
-	#tour-thumbImg img {
+	#tour-thumbImg img, .tourImgList img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		object-position: center;
 	}
 	
-	.tourImg-container {
-	    width: 100%;
-	    height: 400px; /* 원하는 높이로 조정 */
-	    overflow: hidden;
-	    position: relative;
-	    margin-bottom: 20px; /* 각 이미지 컨테이너 간의 간격 */
-	}
-	
-	.tourImg-container img {
-	    width: 100%;
-	    height: 100%;
-	    object-fit: cover;
-	    object-position: center;
+	.tourImgList {
+		float: left;
+		border: 1px solid black;
+		width: 160px;
+		height: 100px;
+		margin-right: 20px;
 	}
 </style>
 </head>
@@ -96,6 +89,9 @@
 	                		    <input type="hidden" name="tourNo" value="${ t.tourNo }">
 		                    	<input type="hidden" name="tourType" value="${ t.tourType }">
 		                    	<input type="hidden" name="thumbImg" value="${ t.thumbImg }">
+		                    	<input type="hidden" name="tourName" value="${ t.tourName }">
+		                    	<input type="hidden" name="address" value="${ t.address }">
+		                    	<input type="hidden" name="contentId" value="${ t.contentId }">
 	                        	${t.tourName}
 	                        </th>
 	                        <th>
@@ -126,34 +122,22 @@
             </table>
         </div>
         
-        				    	<!-- 여행지정보 모달창 -->
+      				    		<!-- 여행지정보 모달창 -->
 						<div class="modal fade infoModal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog modal-lg" role="document">
 								<div class="modal-content">
 						      		<div class="modal-header" id="tour-detail">
-						        		<h5 class="modal-title" id="exampleModalLabel">${t.tourName}</h5>
+						        		<h5 class="modal-title" id="exampleModalLabel"></h5>
 						        		<button type="button" class="close" aria-label="Close">
 						          			<span aria-hidden="true">&times;</span>
 						        		</button>
 						      		</div>
-						      		<!-- 
 						      		<div class="modal-body">
-						        		<div id="tour-thumbImg">
-						        			<img src="${t.thumbImg}" alt="Thumbnail">
-						        		</div>
-						        		
-						        		<div id="tourImg">
-						        			추가이미지들이 있다면 여기에 출력 (여기서 밑의 script 호출)
-						        		</div>			        		
-						        		<br>
-						        		<hr>
-						        		<br>
-						        		
+										
 						      		</div>
-						      		 -->
 						      		<div class="modal-footer">
-					      				<button type="button" class="btn btn-primary">수정</button>
-					      				<button type="button" class="btn btn-danger">삭제</button>
+					      				<button type="button" class="btn btn-primary" onclick="modifyTour();">수정</button>
+					      				<button type="button" class="btn btn-danger" onclick="deleteTour();">삭제</button>
 						      		</div>
 						    	</div>
 						  	</div>
@@ -162,35 +146,103 @@
 		<script>
 		
 		
-			// 모달창 열기
-			$(document).ready(function() {
-		    	$("#datatablesSimple>tbody>tr").click(function(e){
-		      		$(".infoModal").modal("show");
-		      		
-		      		// console.log($(this).children().eq(0).children().eq(0).val());
-		      		// console.log($(this).children().eq(0).children().eq(1).val());
-		      		
-		      		let tourNo = $(this).children().eq(0).children().eq(0).val();
-		      		let tourType = $(this).children().eq(0).children().eq(1).val();
-		      		let thumbImg = $(this).children().eq(0).children().eq(2).val();
-		      		
-		      		$.ajax({
-		      			url : "tourDetailView.to",
-		      			type: "get",
-		      			data : {
-		      				tourNo : tourNo,
-		      				tourType : tourType,
-		      				thumbImg : thumbImg
-		      			},
-		      			success : function(z){
-		      				console.log("ajax성공");
-		      			},
-		      			error: function(){
-		      				console.log("ajax에러");
-		      			}
-		      		});
-		    	});
-		  	});
+		// 모달창 열기
+		$(document).ready(function() {
+	    	$("#datatablesSimple>tbody>tr").click(function(e){
+	      		$(".infoModal").modal("show");
+	      		
+	      		// console.log($(this).children().eq(0).children().eq(0).val());
+	      		// console.log($(this).children().eq(0).children().eq(1).val());
+	      		
+	      		let tourNo = $(this).children().eq(0).children().eq(0).val();
+	      		let tourType = $(this).children().eq(0).children().eq(1).val();
+	      		let thumbImg = $(this).children().eq(0).children().eq(2).val();
+	      		let tourName = $(this).children().eq(0).children().eq(3).val();
+	      		let address = $(this).children().eq(0).children().eq(4).val();
+	      		let contentId = $(this).children().eq(0).children().eq(5).val();
+	      		// console.log(tourNo);
+	      		// console.log(tourType);
+	      		// console.log(thumbImg);
+
+	      		$.ajax({
+	      			url : "tourDetailView.to",
+	      			type: "get",
+	      			data : {
+	      				tourNo : tourNo,
+	      				tourName : tourName,
+	      				address : address,
+	      				contentId : contentId,
+	      				thumbImg : thumbImg,
+	      				tourType : tourType 
+	      			},
+	      			success : function(z){
+	      				console.log("ajax성공");
+	      				console.log(z);
+	      				// console.log(z["list"]["thumbImg"]);
+	      				
+	      				let b = $(".modal-body");
+	      				let result = "";
+	      				result += "<div id='tour-thumbImg'>"
+	      							+ "<img src="+z["list"]["thumbImg"]+" alt='Thumbnail'>"
+	      							+ "</div><br>"
+	      							+ "<div id='tourImg'>";
+	      				
+	      				// console.log(z["img"].length);
+	      				// console.log(z["img"][0]["changeNo"]);
+	      				
+	      				
+	      				
+	      				if(z["img"].length != null && z["img"].length > 0){
+	      					
+	      					for(let i =0; i < z["img"].length; i++){
+	      						result += "<div class='tourImgList'>"
+	      								+ "<img src="+z["img"][i]["changeNo"]+" alt='images'>"
+	      								+ "</div>"
+	      					}
+	      					
+	      				}
+	      				result += "<br clear='both'></div><hr>"
+	      						+ "장소 : "+z["list"]["address"]+"<br>"
+	      						+"연락처 : "+ z["list"]["tel"]+"<br>";
+	      				
+	      				
+	      				switch(z["list"]["tourtype"]){
+	      				case "tourSpot":
+	      					result += "이용시간 : "+ z["list"]["useTime"] +"<br>"
+		        				+ "운영시기 : "+ z["list"]["season"] +"<br>"
+		        				+ "애견 동반 : "+ z["list"]["pet"] +"<br>";
+	      					break;
+	      				case "restaurant":
+	      					result += "운영시간 : "+ z["list"]["openTime"] +"<br>"
+	        				+ "휴무일 : "+ z["list"]["restDate"] +"<br>"
+	        				+ "대표메뉴 : "+ z["list"]["firstMenu"] +"<br>"
+	        				+ "전체메뉴 : "+ z["list"]["treatMenu"] +"<br>"
+	        				+ "아이들 놀이방 : "+ z["list"]["kidRoom"] +"<br>";
+	      					break;
+	      				case "lodging":
+	      					result += "객실타입 : "+ z["list"]["roomType"] +"<br>"
+	        				+ "체크인 : "+ z["list"]["checkIn"] +"<br>"
+	        				+ "체크아웃 : "+ z["list"]["checkOut"] +"<br>"
+	        				+ "취사 : "+ z["list"]["cook"] +"<br>"
+	        				+ "주차 : "+ z["list"]["parking"] +"<br>";
+	      					break;
+	      				case "leports":
+	      					result += "운영시간  : "+ z["list"]["useTime"] +"<br>"
+	        				+ "애견 동반 : "+ z["list"]["pet"] +"<br>"
+	        				+ "주차 : "+ z["list"]["parking"] +"<br>";
+	      					break;
+	      				}
+	      				
+						$("#exampleModalLabel").text(z["list"]["tourName"]);
+	      				b.html(result);
+
+	      			},
+	      			error: function(){
+	      				console.log("ajax에러");
+	      			}
+	      		});
+	    	});
+	  	});
 			
 			// 모달창 닫기
 			$(document).ready(function() {
@@ -200,6 +252,26 @@
 
 		    	});
 		  	});
+			
+			// 여행지 삭제
+			function deleteTour() {
+		        let tourNo = $("#datatablesSimple>tbody>tr").children().eq(0).children().eq(0).val();
+		        if(confirm("정말 삭제하시겠습니까?")) {
+		            $.ajax({
+		                url: "deleteTour.to",
+		                type: "post",
+		                data: {
+		                    tourNo: tourNo
+		                },
+		                success: function(response) {
+		                    console.log("삭제 성공");
+		                },
+		                error: function() {
+		                    console.log("ajax에러");
+		                }
+		            });
+		        }
+		    }
 		</script>
 		
         <footer class="py-4 bg-light mt-auto">

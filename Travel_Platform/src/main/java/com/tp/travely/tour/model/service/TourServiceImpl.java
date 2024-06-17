@@ -55,26 +55,54 @@ public class TourServiceImpl implements TourService {
 	// 유진 - 관리자 여행지 추가 서비스  (2024.06.12)
 	@Override
 	@Transactional
-	public int insertTour(TourSpotData tsd, TourImg ti) {
-		return tourDao.insertTour(sqlSession, tsd, ti);
+	public int insertTour(TourSpotData tsd, ArrayList<TourImg> tourImgList) {	
+		// TourSpotData 저장
+	    int result = tourDao.insertTour(sqlSession, tsd);
+
+	    // TourImg 리스트 저장
+	    for (TourImg tourImg : tourImgList) {
+	        result += tourDao.insertTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
+	    }
+	    return result;
 	}
 	
 	@Override
 	@Transactional
-	public int insertTour(LodgingData lod, TourImg ti) {
-		return tourDao.insertTour(sqlSession, lod, ti);
+	public int insertTour(LodgingData lod, ArrayList<TourImg> tourImgList) {
+		// TourSpotData 저장
+	    int result = tourDao.insertTour(sqlSession, lod);
+
+	    // TourImg 리스트 저장
+	    for (TourImg tourImg : tourImgList) {
+	        result += tourDao.insertTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
+	    }
+	    return result;
 	}
 	
 	@Override
 	@Transactional
-	public int insertTour(RestaurantData rd, TourImg ti) {
-		return tourDao.insertTour(sqlSession, rd, ti);
+	public int insertTour(RestaurantData rd, ArrayList<TourImg> tourImgList) {
+		// TourSpotData 저장
+	    int result = tourDao.insertTour(sqlSession, rd);
+
+	    // TourImg 리스트 저장
+	    for (TourImg tourImg : tourImgList) {
+	        result += tourDao.insertTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
+	    }
+	    return result;
 	}
 	
 	@Override
 	@Transactional
-	public int insertTour(LeportsData led, TourImg ti) {
-		return tourDao.insertTour(sqlSession, led, ti);
+	public int insertTour(LeportsData led, ArrayList<TourImg> tourImgList) {
+		// TourSpotData 저장
+	    int result = tourDao.insertTour(sqlSession, led);
+
+	    // TourImg 리스트 저장
+	    for (TourImg tourImg : tourImgList) {
+	        result += tourDao.insertTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
+	    }
+	    return result;
 	}
 
 	
@@ -107,5 +135,17 @@ public class TourServiceImpl implements TourService {
 	@Override
 	public LeportsData leportsDetail(int tourNo) {
 		return tourDao.leportsDetail(sqlSession, tourNo);
+	}
+	
+	@Override
+	public ArrayList<TourImg> tourImgList(int tourNo) {
+		return tourDao.tourImgList(sqlSession, tourNo);
+	}
+
+	// 유진 - 관리자 여행지 삭제 서비스 (2024.06.17)
+	@Override
+	@Transactional
+	public int deleteTour(int tourNo) {
+		return tourDao.deleteTour(sqlSession, tourNo);
 	}
 }

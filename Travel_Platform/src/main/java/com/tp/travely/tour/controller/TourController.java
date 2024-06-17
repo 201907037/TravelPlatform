@@ -45,6 +45,7 @@ public class TourController {
 		// 게시글 목록 조회
 		ArrayList<Tour> list = tourService.adminTourList();
 		System.out.println(list);
+		// System.out.println("-------------------");
 		// 응답데이터 담기
 		model.addAttribute("tList", list);
 		
@@ -75,13 +76,13 @@ public class TourController {
 		// System.out.println(changeNoFiles);
 		// System.out.println("----------");
 		
-		System.out.println("----------1");
-		System.out.println(tsd);
-		System.out.println(lod);
-		System.out.println(rd);
-		System.out.println(led);
-		System.out.println(ti);
-		System.out.println("----------");
+		// System.out.println("----------1");
+		// System.out.println(tsd);
+		// System.out.println(lod);
+		// System.out.println(rd);
+		// System.out.println(led);
+		// System.out.println(ti);
+		// System.out.println("----------");
 		
 		// 파일 업로드 및 경로 설정
 		String thumbImg = savePath(thumbImgFile, session, "thumbImg"); // 썸네일
@@ -98,7 +99,6 @@ public class TourController {
 		lod.setThumbImg(fullThumbImgPath);
 		rd.setThumbImg(fullThumbImgPath);
 		led.setThumbImg(fullThumbImgPath);
-		
 
 		// 다중 파일(참고이미지들)은 원래 따로 있었던 TourImg 객체에 담기
 		for(String changeNo : changeNos) {
@@ -106,39 +106,40 @@ public class TourController {
 			tourImg.setChangeNo(fileBasePath + changeNo);
 			tourImgList.add(tourImg);
 		}
-		System.out.println("tourType: "+tourType);
-		System.out.println(tsd);
+		// System.out.println("tourType: "+tourType);
+		// System.out.println(tsd);
 		// 서비스 호출
 		int result = 0;
 		
 		switch(tourType) {
 		case "tourSpot" : 
 			tsd.setTourtype(tourType);
-			result = tourService.insertTour(tsd, ti);
+			result = tourService.insertTour(tsd, tourImgList);
 			break;
 		case "lodging" : 
 			lod.setTourtype(tourType);
-			result = tourService.insertTour(lod, ti);
+			result = tourService.insertTour(lod, tourImgList);
 			break;
 		case "restaurant" : 
 			rd.setTourtype(tourType);
-			result = tourService.insertTour(rd, ti);
+			result = tourService.insertTour(rd, tourImgList);
 			break;
 		case "leports" : 
 			led.setTourtype(tourType);
-			result = tourService.insertTour(led, ti);
+			result = tourService.insertTour(led, tourImgList);
 			break;
 		default : 
 			break;
 		}
 		
-		System.out.println("----------2");
-		System.out.println(tsd);
-		System.out.println(lod);
-		System.out.println(rd);
-		System.out.println(led);
-		System.out.println(ti);
-		System.out.println("----------");
+		 System.out.println("----------2");
+		 System.out.println(tsd);
+		 System.out.println(lod);
+		 System.out.println(rd);
+		 System.out.println(led);
+		 System.out.println(ti);
+		 System.out.println(tourImgList);
+		 System.out.println("----------");
 
 		// 결과에 따른 처리
 		if(result > 0) {
@@ -222,30 +223,77 @@ public class TourController {
 	}
 	
 	// 유진&현성 - 관리자 여행지 상세조회 컨트롤러 (2024.06.14)
-//	@ResponseBody
-	@GetMapping(value="tourDetailView.to")
-	public void tourDetailView(Tour tour) {
-		System.out.println("controller 성공");
-		System.out.println(tour);
-		
-		switch(tour.getTourType()) {
-		case "tourSpot" : 
-			TourSpotData tsd = tourService.tourSpotDetail(tour.getTourNo());
-			break;
-		case "lodging" : 
-			LodgingData lod = tourService.lodgingDetail(tour.getTourNo());
-			break;
-		case "restaurant" : 
-			RestaurantData rd =tourService.restaurantDetail(tour.getTourNo());
-			break;
-		case "leports" : 
-			LeportsData led = tourService.leportsDetail(tour.getTourNo());
-			break;
-		default : 
-			break;
+		@ResponseBody
+		@GetMapping(value="tourDetailView.to",produces="application/json; charset=UTF-8")
+		public String tourDetailView(Tour tour) {
+//			System.out.println("controller 성공");
+//			System.out.println(tour);
+			HashMap<String, Object> rtMap = new HashMap<String, Object>();
+			switch(tour.getTourType()) {
+			case "tourSpot" : 
+				
+				TourSpotData tsd = tourService.tourSpotDetail(tour.getTourNo());
+				tsd.setTourName(tour.getTourName());
+				tsd.setAddress(tour.getAddress());
+				tsd.setContentId(tour.getContentId());
+				tsd.setThumbImg(tour.getThumbImg());
+				tsd.setTourtype(tour.getTourType());
+				rtMap.put("list",tsd);
+				// 다른 이미지들도 가져와야한다.
+				break;
+			case "lodging" : 
+				LodgingData lod = tourService.lodgingDetail(tour.getTourNo());
+				lod.setTourName(tour.getTourName());
+				lod.setAddress(tour.getAddress());
+				lod.setContentId(tour.getContentId());
+				lod.setThumbImg(tour.getThumbImg());
+				lod.setTourtype(tour.getTourType());
+				rtMap.put("list",lod);
+				break;
+			case "restaurant" : 
+				RestaurantData rd =tourService.restaurantDetail(tour.getTourNo());
+				rd.setTourName(tour.getTourName());
+				rd.setAddress(tour.getAddress());
+				rd.setContentId(tour.getContentId());
+				rd.setThumbImg(tour.getThumbImg());
+				rd.setTourtype(tour.getTourType());
+				rtMap.put("list",rd);
+				break;
+			case "leports" : 
+				LeportsData led = tourService.leportsDetail(tour.getTourNo());
+				led.setTourName(tour.getTourName());
+				led.setAddress(tour.getAddress());
+				led.setContentId(tour.getContentId());
+				led.setThumbImg(tour.getThumbImg());
+				led.setTourtype(tour.getTourType());
+				rtMap.put("list",led);
+				break;
+			default : 
+				break;
+			}
+			ArrayList<TourImg> imgList = tourService.tourImgList(tour.getTourNo());
+			rtMap.put("img",imgList);
+
+
+			return new Gson().toJson(rtMap);
+			// 사진(썸네일 제외 다른 추가이미지들)들 받을 배열 = service.xml();
 		}
 		
-		// 사진(썸네일 제외 다른 추가이미지들)들 받을 배열 = service.xml();
+	// 유진 - 관리자 여행지 삭제 컨트롤러 (2024.06.17)
+	@PostMapping(value="deleteTour.to")
+	public ModelAndView deleteTour(int tourNo, HttpSession session, ModelAndView mv) {
+		int result = 0;
+		result = tourService.deleteTour(tourNo);
+		
+		// 결과에 따른 처리
+		if(result > 0) {
+			session.setAttribute("alertMsg", "성공적으로 여행지가 삭제되었습니다.");
+			mv.setViewName("redirect:/adminTour.ad");
+		} else {
+			mv.addObject("errorMsg", "삭제 실패").setViewName("common/errorPage");
+		}
+		
+		return mv;
 	}
 	
 	//------------------ 일반 메서드 영역 ------------------------------------------------------

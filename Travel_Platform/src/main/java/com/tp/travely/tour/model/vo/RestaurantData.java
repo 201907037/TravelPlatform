@@ -16,6 +16,7 @@ public class RestaurantData {
 	private String address;
 	private String addDate;
 	private String thumbImg;
+	private String contentId;
 	
 	private String kidRoom;
 	private String firstMenu;
@@ -23,4 +24,6 @@ public class RestaurantData {
 	private String tel;
 	private String openTime;
 	private String restDate;
+	private int rdNo; // 추가
+	private int refTno;// 추가
 }

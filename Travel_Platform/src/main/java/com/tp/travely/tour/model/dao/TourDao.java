@@ -37,41 +37,30 @@ public class TourDao {
 		return (ArrayList)sqlSession.selectList("tourMapper.selectTourList",map);
 	}
 
+	
 	// 유진 - 관리자 여행지 추가 DAO (2024.06.12)
-	public int insertTour(SqlSessionTemplate sqlSession, TourSpotData tsd, TourImg ti) {
-		int result = 0;
+	public int insertTourImg(SqlSessionTemplate sqlSession, TourImg tourImg) {
+	    return sqlSession.insert("tourMapper.insertTourImg", tourImg);
+	}
+	
+	public int insertTour(SqlSessionTemplate sqlSession, TourSpotData tsd) {
         System.out.println("TourSpotData");
-        result += sqlSession.insert("tourMapper.insertTourSpotData", tsd);
-        result += sqlSession.insert("tourMapper.insertTourImg", ti);
-        
-        return result;
+        return sqlSession.insert("tourMapper.insertTourSpotData", tsd);
 	}
 
-	public int insertTour(SqlSessionTemplate sqlSession, LodgingData lod, TourImg ti) {
-		int result = 0;
+	public int insertTour(SqlSessionTemplate sqlSession, LodgingData lod) {
 		System.out.println("LodgingData");
-        result += sqlSession.insert("tourMapper.insertLodgingData", lod);
-        result += sqlSession.insert("tourMapper.insertTourImg", ti);
-        
-        return result;
+        return sqlSession.insert("tourMapper.insertLodgingData", lod);
 	}
 
-	public int insertTour(SqlSessionTemplate sqlSession, RestaurantData rd, TourImg ti) {
-		int result = 0;
+	public int insertTour(SqlSessionTemplate sqlSession, RestaurantData rd) {
 		System.out.println("RestaurantData");
-        result += sqlSession.insert("tourMapper.insertRestaurantData", rd);
-        result += sqlSession.insert("tourMapper.insertTourImg", ti);
-        
-        return result;
+        return sqlSession.insert("tourMapper.insertRestaurantData", rd);
 	}
 
-	public int insertTour(SqlSessionTemplate sqlSession, LeportsData led, TourImg ti) {
-		int result = 0;
+	public int insertTour(SqlSessionTemplate sqlSession, LeportsData led) {
 		System.out.println("LeportsData");
-        result += sqlSession.insert("tourMapper.insertLeportsData", led);
-        result += sqlSession.insert("tourMapper.insertTourImg", ti);
-        
-        return result;
+		return sqlSession.insert("tourMapper.insertLeportsData", led);
 	}
 	
 	
@@ -99,5 +88,14 @@ public class TourDao {
 
 	public LeportsData leportsDetail(SqlSessionTemplate sqlSession, int tourNo) {
 		return sqlSession.selectOne("tourMapper.leportsDetail", tourNo);
+	}
+
+	public ArrayList<TourImg> tourImgList(SqlSessionTemplate sqlSession, int tourNo) {
+		return (ArrayList)sqlSession.selectList("tourMapper.tourImgList", tourNo);
+	}
+	
+	// 유진 - 관리자 여행지 삭제 DAO (2024.06.17)
+	public int deleteTour(SqlSessionTemplate sqlSession, int tourNo) {
+		return sqlSession.update("tourMapper.deleteTour", tourNo);
 	}
 }

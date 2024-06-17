@@ -16,9 +16,12 @@ public class LeportsData {
 	private String address;
 	private String addDate;
 	private String thumbImg;
+	private String contentId; // 추가
 	
 	private String useTime;
 	private String parking;
 	private String pet;
 	private String tel;
+	private int lNo; // 추가
+	private int refTno;// 추가
 }
