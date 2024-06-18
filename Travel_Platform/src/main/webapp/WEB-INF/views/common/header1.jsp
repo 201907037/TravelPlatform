@@ -69,6 +69,8 @@
             <li><a class="yellow underline" href="noticeList.bo">NOTICE</a></li>
             <li><a class="yellow underline" href="selectList.bo">COMUNITY</a></li>
             <li><a class="yellow underline" href="eventList.bo">SERVICE</a></li>
+            <!-- 채팅경로 추가 (최현호) -->
+            <li><a class="yellow underline" href="msgPage.mg">GROUP MESSAGE</a></li>
         </ul>
         
         <div class="h3">

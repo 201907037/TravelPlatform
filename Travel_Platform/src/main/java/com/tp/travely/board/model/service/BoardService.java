@@ -56,6 +56,10 @@ public interface BoardService {
 
 	int updateBoardImg(BoardImg bi);
 
+	int ajaxUpdate(int imgNo);
+
+	int deleteBoard(int bno);
+
 	
 	
 	

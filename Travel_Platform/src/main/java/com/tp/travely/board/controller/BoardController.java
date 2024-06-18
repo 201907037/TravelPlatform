@@ -231,9 +231,30 @@ public class BoardController {
 		// System.out.println(result4);
 		
 		
-		return "";
+		return "redirect:/detail.bo?bno="+b.getBoardNo()+"";
 	}
 	
+	// 게시글 버블링 이미지 수정
+	@ResponseBody
+	@PostMapping("ajaxUpdate.bo")
+	public String ajaxUpdateBoardImg(int imgNo) {
+	
+		
+		int result = boardService.ajaxUpdate(imgNo);
+		
+		System.out.println(imgNo);
+		return "성공";
+	}
+	
+	// 게시글 삭제
+	@ResponseBody
+	@PostMapping("delete.bo")
+	public String deleteBoard(int bno, Model model) {
+		
+		int result = boardService.deleteBoard(bno);
+		// System.out.println(bno);
+		return "success";
+	}
 	
 	
 	
@@ -264,7 +285,7 @@ public class BoardController {
 			
 		
 		
-		return "board/boardDetailView";
+		return "board/boardDetailView";  
 		}
 	}
 	

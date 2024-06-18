@@ -148,6 +148,16 @@ public class BoardDao {
 		return sqlSession.insert("boardMapper.updateBoardImg", boardImg);
 	}
 
+	public int ajaxUpdate(SqlSessionTemplate sqlSession, int imgNo) {
+		
+		return sqlSession.update("boardMapper.ajaxUpdate", imgNo);
+	}
+
+	public int deleteBoard(SqlSessionTemplate sqlSession, int boardNo) {
+		
+		return sqlSession.update("boardMapper.deleteBoard", boardNo);
+	}
+
 	
 
 	

@@ -26,6 +26,8 @@
  	<result column="USER_NO" property="userNo"/>
  	<result column="NICK_NAME" property="nickName"/>
  	<result column="CHANGE_NAME" property="changeName"/>
+ 	<result column="AGE" property="age"/>
+ 	<result column="GENDER" property="gender"/>
  </resultMap>
  
  <resultMap type="boardLike" id="boardLikeResultSet">
@@ -43,6 +45,12 @@
  	<result column="BOARD_NO" property="boardNo"/>
  </resultMap>
  
+ <resultMap type="msg" id="msgResultSet">
+ 	<result column="MSG_NO" property="msgNo"/>
+ 	<result column="MSG_CONTENT" property="msgContent"/>
+ 	<result column="MSG_TIME" property="msgTime"/>
+ 	<result column="USER_NO" property="userNo"/>
+ </resultMap>
  
  <!-- 게시글 갯수 구하는 쿼리문 -->
 <select id="selectListCount"
@@ -91,7 +99,6 @@ INSERT INTO BOARD (BOARD_NO,
 	  FROM BOARD
 	 WHERE STATUS = 'Y'
 	 ORDER BY BOARD_NO DESC
-
 </select>
 
 <!-- 조회수 증가용 쿼리문 -->
@@ -108,11 +115,13 @@ INSERT INTO BOARD (BOARD_NO,
 <!-- 게시글 목록 썸네일 조회 쿼리문 -->
 <select id="selectListBoardImg"
 		resultMap="boardImgResultSet">
-		SELECT *
+		SELECT IMG_NO, CHANGE_NAME, FILE_LEVEL, BOARD_IMG.STATUS, BOARD_NO
 	  FROM BOARD_IMG
-	 WHERE STATUS = 'Y'
+	  JOIN BOARD USING(BOARD_NO)
+	 WHERE BOARD.STATUS = 'Y'
+	   AND BOARD_IMG.STATUS = 'Y'
 	   AND FILE_LEVEL = 1
-	 ORDER BY IMG_NO DESC
+	 ORDER BY BOARD_NO DESC
 </select>
 	
 	
@@ -173,6 +182,25 @@ INSERT INTO BOARD (BOARD_NO,
                        #{fileLevel},
                        #{boardNo})
 </insert>
+
+<!-- 게시글 버블링 이미지수정 -->
+<update id="ajaxUpdate"
+		parameterType="_int">
+		UPDATE BOARD_IMG
+		   SET STATUS = 'N'
+		   WHERE IMG_NO = #{imgNo}
+		     AND STATUS= 'Y'
+</update>
+
+<!-- 게시글 삭제 -->
+<update id="deleteBoard"
+		parameterType="_int">
+		UPDATE BOARD
+		   SET STATUS = 'N'
+		   WHERE BOARD_NO = #{boardNo}
+		     AND STATUS= 'Y'
+</update>
+
 
 <!-- 게시글 회원 프로필조회 -->
 <select id="selectMember"
@@ -310,6 +338,18 @@ SELECT MEMBER.NICK_NAME, MEMBER.CHANGE_NAME
 	 WHERE STATUS = 'Y'
 	   AND REPLY_NO = #{replyNo}
 </update>
+
+<!-- Msg 전용 insert -->
+<insert id="insertMsg" parameterType="msg">
+       INSERT INTO MSG (MSG_NO, MSG_CONTENT, MSG_TIME, USER_NO)
+    VALUES (
+        SEQ_MSG_NO.NEXTVAL, 
+        #{msgContent},
+        SYSDATE,
+        #{userNo}
+    )
+    </insert>
+
 
 </mapper>
 

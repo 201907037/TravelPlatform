@@ -23,6 +23,25 @@
 			box-sizing: border-box;
 		}
 
+		.image-container {
+			position: relative;
+			display: inline-block;
+		}
+		.remove-btn {
+			position: absolute;
+			top: 5px;
+			right: 5px;
+			background-color: gray;
+			color: white;
+			border: none;
+			border-radius: 50%;
+			width: 20px;
+			height: 20px;
+			text-align: center;
+			line-height: 20px;
+			cursor: pointer;
+			font-size: 14px;
+		}
 		
 
 		
@@ -65,7 +84,9 @@
 								<th>썸네일 이미지</th>
 								<td colspan="3" align="center">
 									<!-- 이미지를 업로드 (미리보기 기능) -->
-									<img id="titleImg" src="${ biList.get(0).changeName }" width="250" height="250">
+									<div class="image-container">
+										<img id="titleImg" src="${ biList.get(0).changeName }" width="250" height="250">
+									</div>
 								</td>
 
 							</tr>
@@ -78,10 +99,15 @@
 							                    <!-- 이미지를 업로드 (미리보기 기능) -->
 							                    <c:choose>
 							                        <c:when test="${requestScope.biList.size() > i}">
-							                            <img id="contentImg${i}" src="${requestScope.biList.get(i).changeName}" width="250" height="250">
+							                        	<div class="image-container">
+								                            <img id="contentImg${i}" src="${requestScope.biList.get(i).changeName}" width="250" height="250">
+								                            <button class="remove-btn" type="button" data-imgno="${ requestScope.biList.get(i).imgNo}" onclick="removeImage(event, 'file${i+1}', 'contentImg${i}')">x</button>
+							                            </div>
 							                        </c:when>
 							                        <c:otherwise>
+							                        	<div>
 							                            <img id="contentImg${i}" src="" width="250" height="250">
+							                            </div>
 							                        </c:otherwise>
 							                    </c:choose>
 							                </td>
@@ -91,7 +117,9 @@
 							            <c:forEach var="i" begin="1" end="3">
 							                <td>
 							                    <!-- 이미지를 업로드 (미리보기 기능) -->
+							                    <div>
 							                    <img id="contentImg${i}" src="" width="250" height="250">
+							                    </div>
 							                </td>
 							            </c:forEach>
 							        </c:otherwise>
@@ -105,10 +133,15 @@
 							                    <!-- 이미지를 업로드 (미리보기 기능) -->
 							                    <c:choose>
 							                        <c:when test="${requestScope.biList.size() > i}">
-							                            <img id="contentImg${i}" src="${requestScope.biList.get(i).changeName}" width="250" height="250">
+							                        	<div class="image-container">
+							                            	<img id="contentImg${i}" src="${requestScope.biList.get(i).changeName}" width="250" height="250">
+							                            	<button class="remove-btn" type="button" data-imgno="${ requestScope.biList.get(i).imgNo}" onclick="removeImage(event, 'file${i+1}', 'contentImg${i}')">x</button>
+							                            </div>
 							                        </c:when>
 							                        <c:otherwise>
+							                        	<div>
 							                            <img id="contentImg${i}" src="" width="250" height="250">
+							                            </div>
 							                        </c:otherwise>
 							                    </c:choose>
 							                </td>
@@ -118,16 +151,17 @@
 							            <c:forEach var="i" begin="4" end="6">
 							                <td>
 							                    <!-- 이미지를 업로드 (미리보기 기능) -->
+							                    <div>
 							                    <img id="contentImg${i}" src="" width="250" height="250">
+							                    </div>
 							                </td>
 							            </c:forEach>
 							        </c:otherwise>
 							    </c:choose>
 							</tr>
-
-
-
 						</table>
+						
+						
 						
 						<br><br>
 
@@ -143,6 +177,27 @@
 						</div>
 
 						<script>
+							function removeImage(event, inputId, imgId) {
+								event.stopPropagation();
+								$("#" + inputId).val(""); // input[type="file"] 값을 빈 문자열로 설정
+								$("#" + imgId).attr("src", ""); // 이미지 src 속성을 빈 문자열로 설정
+
+								var imgNo = $(event.target).data("imgno"); // this 대신 event.target 사용
+								
+								$.ajax({
+									url : "ajaxUpdate.bo",
+									type : "post",
+									data : { imgNo : imgNo },
+									success : function(result) {
+										console.log("ajax요청 성공");
+										console.log(imgNo);
+										
+									}, error : function() {
+										console.log("ajax요청 실패");	
+									}
+								})
+								
+							}
 
 							$(function () {
 								/* display : none 이랑 비슷함 */

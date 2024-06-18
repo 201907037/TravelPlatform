@@ -4,10 +4,13 @@
     xmlns:beans="http://www.springframework.org/schema/beans"
     xmlns:context="http://www.springframework.org/schema/context"
     xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:websocket="http://www.springframework.org/schema/websocket"
     xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/task https://www.springframework.org/schema/task/spring-task.xsd">
+        http://www.springframework.org/schema/task https://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd">
+
 
     <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
     
@@ -76,4 +79,43 @@
         <beans:property name="threadNamePrefix" value="async-task-" />
     </beans:bean>
 
+
+	
+	
+	
+	<!-- 웹소켓 빈 추가 -->
+    <context:component-scan base-package="com.tp.travely.websocket" />
+    
+    <!-- 웹소켓 서버를 빈으로 등록하기 -->
+    <beans:bean class="com.tp.travely.websocket.server.WebSocketMemberServer" id="memberServer"/>
+    
+    <!-- 추가적으로 websocket 관련 설정 태그가 필요 Namespaces에서 설정해줘야함-->
+    <websocket:handlers>
+        <!-- 사용자가 어느 주소로 요청할 때, 어느 웹소켓 서버를 처리기로 쓰겠다. -->
+        <websocket:mapping handler="memberServer" path="/ws/msgPage.mg"/>
+        <!-- 
+            HttpSession의 정보를 WebSocketSession 으로 가져오기 위한 설정 추가 
+            (HandShake 악수) 
+        -->
+        <websocket:handshake-interceptors>
+            <beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
+        </websocket:handshake-interceptors>
+    </websocket:handlers>
+    
+    <!-- 인턴셉터 필요시 추가 -->
 </beans:beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -91,8 +91,7 @@
     <div class="container">
     	
     	<!-- 게시글 데이터 추출 -->
-    	
-    	<c:forEach var="i" begin="0" end="${requestScope.bList.size() - 1}">
+    	<c:forEach var="i" begin="0" end="${requestScope.bList.size() -1}">
         <div class="item" onclick="location.href='detail.bo?bno=${requestScope.bList.get(i).boardNo}'">
             <div class="header">
                 <img src="${ requestScope.mList.get(i).changeName }" alt="Profile Picture">
@@ -108,7 +107,6 @@
             </div>
         </div>
         </c:forEach>
-    	 
 	    
         <!-- 게시글 1 -->
         <div class="item">

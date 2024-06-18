@@ -365,7 +365,7 @@
          -->
         <c:if test="${ not empty sessionScope.loginUser && sessionScope.loginUser.userNo eq requestScope.b.userNo }">
          <button type="button" onclick="postFormSubmit(1);">수정하기</button>
-         <button type="button" onclick="postFormSubmit(2);">삭제하기</button>
+         <button type="button" class="deleteBoard-button" data-boardbno="${ requestScope.b.boardNo }" onclick="postFormSubmit(2);">삭제하기</button>
         </c:if>
     </div>
     <br><br>
@@ -385,8 +385,45 @@
 				$("#postForm").attr("action", "updateForm.bo").submit();
 															// submit(); : submit 버튼을 누른 효과를 줄 수 있다.
 			} else { // 삭제하기
-				
-				$("#postForm").attr("action", "delete.bo").submit();
+			
+				$(document).on('click', '.deleteBoard-button', function () {
+		            var bno = $(this).data('boardbno'); // 게시물 번호
+		            Swal.fire({
+		                title: '게시물 삭제',
+		                text: '삭제 후 더 이상 복구되지 않습니다. 정말 삭제하시겠습니까?',
+		                showCancelButton: true,
+		                confirmButtonText: '확인',
+		                cancelButtonText: '취소'
+		            }).then((result) => {
+		                if (result.isConfirmed) {
+		                    $.ajax({
+		                        url: 'delete.bo', // API 엔드포인트로 변경
+		                        type: 'POST',
+		                        data: {
+		                            bno: bno, // 삭제할 게시물 번호
+		                        },
+		                        success: function(response) {
+		                            Swal.fire({
+		                                title: '게시글 삭제 완료!',
+		                                icon: 'success',
+		                                confirmButtonText: 'OK'
+		                            }).then(() => {
+		                                
+		                                    location.href = "selectList.bo";
+		                            });
+		                        },
+		                        error: function(xhr, status, error) {
+		                            Swal.fire({
+		                                title: 'Error!',
+		                                text: 'There was an error deleting the post.',
+		                                icon: 'error',
+		                                confirmButtonText: 'OK'
+		                            });
+		                        }
+		                    });
+		                }
+		            });
+		        });
 			}
 			
 		}

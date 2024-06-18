@@ -167,6 +167,20 @@ public class BoardServiceImpl implements BoardService{
 		return boardDao.updateBoardImg(sqlSession, bi);
 	}
 
+	@Transactional
+	@Override
+	public int ajaxUpdate(int imgNo) {
+		
+		return boardDao.ajaxUpdate(sqlSession, imgNo);
+	}
+
+	@Transactional
+	@Override
+	public int deleteBoard(int bno) {
+		
+		return boardDao.deleteBoard(sqlSession, bno);
+	}
+
 	
 	
 	
