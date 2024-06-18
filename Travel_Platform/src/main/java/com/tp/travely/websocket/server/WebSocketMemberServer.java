@@ -115,7 +115,6 @@ public class WebSocketMemberServer extends TextWebSocketHandler {
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		
 		// 사용자가 접속을 종료할 때 마다 userList 에서 해당 사용자 정보 제거
-		    
 		    userList.remove(session);
 			   
 	}

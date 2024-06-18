@@ -74,6 +74,52 @@
             margin-right: 20px; /* 항목 간 간격 */
          }
          
+             /* 검색창 관련 스타일 */
+		#search_form {
+			width: 400px;
+			height: 40px;
+			margin: auto;
+		}
+
+		#search_form>div {
+			height: 100%;
+			float: left;
+		}
+
+		#search_text {
+			width: 90%;
+		}
+
+		#search_btn {
+			width: 10%;
+		}
+
+		#search_form input,
+        #search_form button {
+			width: 100%;
+			height: 100%;
+			border: 1px solid #F7F7F7;
+            box-sizing: border-box;
+            outline: none;
+		}
+
+
+		#search_text>#search {
+			border-top-left-radius: 12px;
+			border-bottom-left-radius: 12px;
+			background-color: #F7F7F7;
+			border-left-color: #F7F7F7;
+            padding-left : 10px;
+		}
+
+		#search_btn>#submit {
+			border-top-right-radius: 12px;
+			border-bottom-right-radius: 12px;
+			background-color: #F7F7F7;
+			border-right-color: #F7F7F7;
+			font-size: 15px;
+			font-weight: bold;
+		}
         
          
     </style>
@@ -85,6 +131,15 @@
 
     <br><br><br><br><br><br><br><br><br>
     <div align="center" style="font-size: 30px; font-weight: bold;">자유게시판</div>
+    <br><br>
+    <form id="search_form" action="search.ad" method="get">
+                <div id="search_text">
+                    <input id="search" type="search" name="keyword" placeholder="검색..">
+                </div>
+                <div id="search_btn">
+                    <button type="submit" id="submit" class="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </form>
     <div align="right" style="margin-right: 100px">
         <button type="button" onclick="location.href='enrollForm.bo'">글작성임시버튼</button>
     </div>

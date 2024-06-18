@@ -6,10 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- 온라인 방식 -->
     <style>
@@ -244,7 +240,7 @@
     
     <div class="msg-wrap">
         <div id="webSocket">
-            <div id="webSocketContent1" style="text-align: center;">
+            <div id="webSocketContent1" style="text-align: center; margin-top: 100px;">
                 <h2>채팅방 가이드 라인 </h2>
                 <br>
                 <h5><b>오픈채팅방 운영 시간 : 오전 9시~오후 8시</b> <br><br>
@@ -262,14 +258,14 @@
                 </h5>
                 
             </div>
-            <div id="webSocketContent2">
-            	<div align="center">
+            <div id="webSocketContent2" >
+            	<div align="center" style="padding-right: 300px;">
 	            	<button onclick="connect();">접속</button>	
 					<button onclick="disconnect();">종료</button>
 				</div>
                 <div id="message_wrap">
                     <br><br>
-                    <div id="message_text">
+                    <div id="message_text" style="margin-left: 200px;">
                         <div class="msg_view">
 
                             <br>
@@ -516,70 +512,10 @@
 
 
     
-    
-      <!-- The Modal -->
-      <div class="modal" id="profile">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            
-            <!-- Modal body -->
-            <div class="modal-body">
-                <br>
-                <div style="text-align: center;">
-                <h3 class="modal-title">프로필 정보</h3>
-                </div>
-                <br>
-                <div id="profile_img">
-                    <img src="https://i.namu.wiki/i/LcDH2U_aJZzFaTNE6pNoRsSFZ-DgCc0C0fnh-9OQ5sIZ2ra  Vrp5kcxr4D4zaW91sIXrIzZe4MZ8v74qMUEsloA.webp" width="100%" height="100%">
-                </div>
-                <br><br><br>
-                <div id="profile_name">
-                    <table align="center">
-                        <tr>
-                            <td width="70">마징징</td>
-                            <td width="10">24</td>
-                            <td width="10">(남)</td>
-                        </tr>         
-                    </table>
-                    <br>          
-                </div>
-                <div style="text-align: right;">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
 
 
 
 
-
-    <!--  
-        모달창 대체
-                <span style="font-size: large; font-weight: 600;"><b>프로필 정보</b></span>
-                <br><br>
-                <div id="profile_img">
-                    <img src="https://i.pinimg.com/474x/56/26/9b/56269b5717ec3860eb8d75452860bd75.jpg" width="100%" height="100%">
-                </div>
-                <br><br><br>
-                <div id="profile_name">
-                    <table >
-                        <tr>
-                            <th height="40">이름:</th>
-                            <td width="100">마동석</td>
-                        </tr>           
-                        <tr>
-                            <th height="40">나이:</th>
-                            <td>24</td>
-                        </tr>          
-                        <tr>
-                            <th height="40">성별:</th>
-                            <td>남</td>
-                        </tr>              
-                    </table>                    
-                </div>
-                -->
 </body>
 </html>

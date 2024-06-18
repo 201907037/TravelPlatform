@@ -18,6 +18,16 @@
   		<result column="MODIFY_DATE" property="modifyDate"/>
   		<result column="STATUS" property="status"/>  
   </resultMap>
+  
+  <resultMap type="board" id="adminBoardResultSet">
+	 	<result column="BOARD_NO" property="boardNo"/>
+	 	<result column="BOARD_TITLE" property="boardTitle"/>
+	 	<result column="BOARD_CONTENT" property="boardContent"/>
+	 	<result column="CREATE_DATE" property="createDate"/>
+	 	<result column="COUNT" property="count"/>
+	 	<result column="STATUS" property="status"/>
+	 	<result column="USER_NO" property="userNo"/>
+ 	</resultMap>
 
 <select id="adminMemberList"
 		resultMap="memberResultSet">
@@ -25,6 +35,27 @@ SELECT *
   FROM MEMBER
  WHERE STATUS = 'Y'
 </select>
+
+
+<select id="adminBoardListView"
+		resultMap="adminBoardResultSet">
+SELECT *
+	FROM BOARD
+</select>
+
+<update id="boardSafe"
+		parameterType="_int">
+UPDATE BOARD
+SET STATUS='Y'
+WHERE BOARD_NO = #{boardNo}
+</update>
+
+<update id="boardDelate"
+		parameterType="_int">
+UPDATE BOARD
+SET STATUS='N'
+WHERE BOARD_NO = #{boardNo}
+</update>
 
 
 </mapper>
