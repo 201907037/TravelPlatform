@@ -165,46 +165,56 @@
         
         // var email = document.getElementById("userEmail1") + document.getElementById("userEmail2");
         
-        $('#mail-Check-Btn').click(function() {
-    		// const email = $('#email').val(); // 이메일 주소값 얻어오기!
-    		const email = document.getElementById("userEmail1").value + document.getElementById("userEmail2").value;
-    		console.log('완성된 이메일 : ' + email); // 이메일 오는지 확인
-    		const checkInput = $('.mail-check-input') // 인증번호 입력하는곳 
-    		
-    		$.ajax({
-    			type : 'get',
-    			url : 'mailCheck.do?email=' + email, // GET방식이라 Url 뒤에 email을 뭍힐수있다.
-    			success : function (data) {
-    				console.log("data : " +  data);
-    				checkInput.attr('disabled',false);
-    				code =data;
-    				alert('인증번호가 전송되었습니다.')
-    			}			
-    		}); // end ajax
-    	}); // end send eamil
-    	
-    	// 인증번호 비교 
-    	// blur -> focus가 벗어나는 경우 발생
-    	$('.mail-check-input').blur(function () {
-    		const inputCode = $(this).val();
-    		const $resultMsg = $('#mail-check-warn');
-    		
-    		if(inputCode === code){
-    			$resultMsg.html('인증번호가 일치합니다.');
-    			$resultMsg.css('color','green');
-    			$('#mail-Check-Btn').attr('disabled',true);
-    			$('#userEamil1').attr('readonly',true);
-    			$('#userEamil2').attr('readonly',true);
-    			$('#userEmail2').attr('onFocus', 'this.initialSelect = this.selectedIndex');
-    	         $('#userEmail2').attr('onChange', 'this.selectedIndex = this.initialSelect');
-    	         $("#enrollForm button[type=submit]").attr("disabled", false);
-    		}else{
-    			$resultMsg.html('인증번호가 불일치 합니다. 다시 확인해주세요!.');
-    			$resultMsg.css('color','red');
-    			$("#enrollForm button[type=submit]").attr("disabled", true);
-    		}
-    	});
+        function generateRandomNumber() {
+	    // Math.random()은 0 (포함)과 1 (제외) 사이의 부동 소수점 난수를 반환합니다.
+	    // 이 값을 888888으로 곱한 후, 111111을 더하여 111111 ~ 999999 범위의 난수를 생성합니다.
+	    return Math.floor(Math.random() * 888888) + 111111;
+	}
         
+        
+	    $('#mail-Check-Btn').click(function() {
+	    const email = document.getElementById("userEmail1").value + document.getElementById("userEmail2").value;
+	    console.log('완성된 이메일 : ' + email); // 이메일 확인
+	    
+	    const checkInput = $('.mail-check-input'); // 인증번호 입력란
+	    const randomNumber = generateRandomNumber();
+	    $.ajax({
+	        type: 'GET',
+	        url: '/travely/mailCheck.do',
+	        data: { email: email,
+	        		randomNumber : randomNumber}, // 이메일을 파라미터로 전달
+	        success: function(data) {
+	            console.log("data : " +  randomNumber); // 서버에서 받은 데이터 출력
+	            checkInput.prop('disabled', false); // 입력란 활성화
+	            code = data; // 받은 데이터를 코드 변수에 저장
+	            alert('인증번호가 전송되었습니다.');
+	        },
+	        error: function(xhr, status, error) {
+	            console.error("에러 발생: " + error); // 오류 메시지 출력
+	        }
+	    });
+	});
+
+// 인증번호 비교
+$('.mail-check-input').blur(function () {
+    const inputCode = $(this).val(); // 입력된 인증번호
+    const $resultMsg = $('#mail-check-warn'); // 결과 메시지 영역
+    
+    if (inputCode === code) {
+        $resultMsg.html('인증번호가 일치합니다.');
+        $resultMsg.css('color', 'green');
+        $('#mail-Check-Btn').prop('disabled', true); // 버튼 비활성화
+        $('#userEmail1').prop('readonly', true); // 이메일 입력란 읽기 전용 처리
+        $('#userEmail2').prop('readonly', true); // 이메일 입력란 읽기 전용 처리
+        $('#userEmail2').attr('onFocus', 'this.initialSelect = this.selectedIndex');
+        $('#userEmail2').attr('onChange', 'this.selectedIndex = this.initialSelect');
+        $("#enrollForm button[type=submit]").prop("disabled", false); // 폼 제출 버튼 활성화
+    } else {
+        $resultMsg.html('인증번호가 일치하지 않습니다. 다시 확인해주세요.');
+        $resultMsg.css('color', 'red');
+        $("#enrollForm button[type=submit]").prop("disabled", true); // 폼 제출 버튼 비활성화
+    }
+});
 		$(function() {
 			const $idInput = $("#enrollForm input[name=userId]");
 

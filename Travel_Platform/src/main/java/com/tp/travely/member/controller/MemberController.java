@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -157,6 +158,13 @@ public class MemberController {
 		
 		
 		return "member/loginForm";
+	}
+	
+	@GetMapping("searchId.me")
+	public String searchId() {
+		
+		
+		return "member/search_id";
 	}
 	
 	@GetMapping("enrollForm.me")
@@ -344,13 +352,24 @@ public class MemberController {
 		public void userJoin() {}
 	
 	//이메일 인증
-		@GetMapping("mailCheck.do")
+		@GetMapping("/mailCheck.do")
 		@ResponseBody
-		public String mailCheck(String email) {
-			System.out.println("이메일 인증 요청이 들어옴!");
-			System.out.println("이메일 인증 이메일 : " + email);
-			return mailService.joinEmail(email);
+		public String mailCheck(String email, String randomNumber) {
+			log.debug("이메일 인증 요청: " + email);
+		    String authNumber = mailService.joinEmail(email, randomNumber);
+		    log.debug("생성된 인증번호: " + authNumber);
+		    return randomNumber;
 		}
+		
+	
+		// 아이디 찾기
+		@PostMapping("findId.me")
+	    public String findId(@RequestParam("email") String email, Model model) {
+	        String userId = memberService.findUserIdByEmail(email);
+	        model.addAttribute("userId", userId);
+	        return "member/showUserId"; // 아이디를 보여주는 페이지로 이동
+	    }
+	
 	
 	
 

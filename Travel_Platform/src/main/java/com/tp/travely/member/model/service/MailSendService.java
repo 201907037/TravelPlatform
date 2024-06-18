@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -27,6 +28,8 @@ public class MailSendService {
 	
 	
 	
+	
+	
 		public void makeRandomNumber() {
 			// 난수의 범위 111111 ~ 999999 (6자리 난수)
 			Random r = new Random();
@@ -37,7 +40,8 @@ public class MailSendService {
 		
 		
 		//이메일 보낼 양식! 
-		public String joinEmail(String email) {
+		@Async
+		public String joinEmail(String email, String randomNumber) {
 			
 			
 			makeRandomNumber();
@@ -45,7 +49,7 @@ public class MailSendService {
 			String toMail = email;
 			String title = "회원 가입 인증 이메일 입니다."; // 이메일 제목 
 			Context context = new Context();
-			context.setVariable("authNumber", authNumber); // 예시로 인증 번호 변수 설정
+			context.setVariable("authNumber", randomNumber); // 예시로 인증 번호 변수 설정
 			String content = 
 					templateEngine.process("emailTemplate", context);
 			mailSend(setFrom, toMail, title, content);

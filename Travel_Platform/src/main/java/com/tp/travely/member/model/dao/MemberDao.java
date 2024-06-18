@@ -34,6 +34,15 @@ public Member loginMember(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.selectOne("memberMapper.idCheck", checkId);
 	}
 	
+	public String findUserIdByEmail(SqlSessionTemplate sqlSession, String email) {
+        return sqlSession.selectOne("memberMapper.findUserIdByEmail", email);
+    }
+	
+	
+	
+	
+
+	
 	
 
 }

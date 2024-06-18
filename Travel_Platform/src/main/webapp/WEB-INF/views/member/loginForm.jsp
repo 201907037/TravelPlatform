@@ -1,101 +1,128 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
 
-	<style>
-	*{
-    padding: 0;
-    margin: 0;
-    border: none;
-}
-body{
-    font-size: 14px;
-    font-family: 'Roboto', sans-serif;
-}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-.login-wrapper{
-    width: 400px;
-    height: 350px;
-    padding: 40px;
-    box-sizing: border-box;
-}
+    <title>SB Admin 2 - Login</title>
 
-.login-wrapper > h2{
-    font-size: 24px;
-    color: #6A24FE;
-    margin-bottom: 20px;
-}
-#login-form > input{
-    width: 100%;
-    height: 48px;
-    padding: 0 10px;
-    box-sizing: border-box;
-    margin-bottom: 16px;
-    border-radius: 6px;
-    background-color: #F8F8F8;
-}
-#login-form > input::placeholder{
-    color: #D2D2D2;
-}
-#login-form > input[type="submit"]{
-    color: #fff;
-    font-size: 16px;
-    background-color: #6A24FE;
-    margin-top: 20px;
-}
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
 
+    <!-- Custom styles for this template-->
+    <link href="resources/css/sb-admin-2.min.css" rel="stylesheet">
 
-#login-form > label{
-    color: #999999;
-}
-#login-form input[type="checkbox"] + label{
-    cursor: pointer;
-    padding-left: 26px;
-    background-image: url("checkbox.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-}
-#login-form input[type="checkbox"]:checked + label{
-    background-image: url("checkbox-active.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-}
-
-#saveId{
-	width : 10px;
-}
-	</style>
 </head>
-<body>
 
-<div class="login-wrapper">
-        <h2>Login</h2>
-        <form method="post" action="login.me" id="login-form">
-            <input type="text" class="form-control mb-2 mr-sm-2" 
-                        		placeholder="Enter ID" id="userId" name="userId" 
-                        		value="${ cookie.saveId.value }" required>
-            <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="userPwd" name="userPwd" required>
-            <c:choose>
+<body class="bg-gradient-primary">
+
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">환영해요!</h1>
+                                    </div>
+                                    <form class="user" method="post" action="login.me" id="login-form">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user"
+                                                id="userId" name="userId" 
+                        						value="${ cookie.saveId.value }" required aria-describedby="emailHelp"
+                                                placeholder="Enter Id">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user"
+                                                id="userPwd" name="userPwd" required placeholder="Password">
+                                        </div>
+                                        
+                        <c:choose>
                     	<c:when test="${ not empty cookie.saveId }">
                     		<!-- 만약 saveId 라는 쿠키가 있다면 : 체크박스가 체크되게끔 -->
-	                    	<input type="checkbox" id="saveId" 
-	                    			name="saveId" value="y" checked>
-	                    	<label for="saveId">아이디 저장</label>
+	                    	<div class="form-group">
+                                <div class="custom-control custom-checkbox small">
+                                    <input type="checkbox" class="custom-control-input" id="saveId" 
+         							   name="saveId" value="y">
+                                    <label class="custom-control-label" for="saveId">아이디 저장
+                                       	</label>
+                                </div>
+                            </div>
                     	</c:when>
                     	<c:otherwise>
-	                    	<input type="checkbox" id="saveId" 
-	                    			name="saveId" value="y">
-	                    	<label for="saveId">아이디 저장</label>
+	                    	<div class="form-group">
+                                <div class="custom-control custom-checkbox small">
+                                    <input type="checkbox" class="custom-control-input" id="saveId" 
+         							   name="saveId" value="y">
+                                    <label class="custom-control-label" for="saveId">아이디 저장
+                                        </label>
+                               </div>
+                            </div>
                     	</c:otherwise>
                     	</c:choose>
-            <input type="submit" value="Login">
-        </form>
+                                        
+                                        
+                                        
+                                        
+                                        <input type="submit" value="Login" class="btn btn-primary btn-user btn-block">
+                                        
+                                        <hr>
+                                        <a href="searchId.me" class="btn btn-google btn-user btn-block">
+                                            <i class="fab fa-google fa-fw"></i> 아이디 찾기
+                                        </a>
+                                        <a href="index.html" class="btn btn-facebook btn-user btn-block">
+                                            <i class="fab fa-facebook-f fa-fw"></i> 비밀번호 찾기
+                                        </a>
+                                    </form>
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="register.html">Create an Account!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
 </body>
+
 </html>
