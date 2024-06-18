@@ -281,12 +281,21 @@ public class TourController {
 		
 	// 유진 - 관리자 여행지 삭제 컨트롤러 (2024.06.17)
 	@PostMapping(value="deleteTour.to")
-	public ModelAndView deleteTour(int tourNo, HttpSession session, ModelAndView mv) {
+	public ModelAndView deleteTour(int tourNo, String thumbImg, HttpSession session, ModelAndView mv) {
 		int result = 0;
 		result = tourService.deleteTour(tourNo);
 		
 		// 결과에 따른 처리
 		if(result > 0) {
+			if(!thumbImg.equals("")) {
+				String realPath 
+					= session.getServletContext()
+							 .getRealPath(thumbImg);
+				
+				// realPath 가 가리키는 파일 객체 생성 후 delete
+				new File(realPath).delete();
+			}
+			
 			session.setAttribute("alertMsg", "성공적으로 여행지가 삭제되었습니다.");
 			mv.setViewName("redirect:/adminTour.ad");
 		} else {

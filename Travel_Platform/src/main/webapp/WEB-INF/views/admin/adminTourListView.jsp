@@ -133,145 +133,127 @@
 						        		</button>
 						      		</div>
 						      		<div class="modal-body">
-										
 						      		</div>
 						      		<div class="modal-footer">
-					      				<button type="button" class="btn btn-primary" onclick="modifyTour();">수정</button>
-					      				<button type="button" class="btn btn-danger" onclick="deleteTour();">삭제</button>
+					      				<button type="button" class="btn btn-primary" id="tourModify">수정</button>
+  										<form id="deleteTourForm" action="deleteTour.to" method="post">
+  											<input type="hidden" id="tourNo" name="tourNo">
+  											<input type="hidden" id="thumbImg" name="thumbImg">
+					      					<button type="submit" class="btn btn-danger" id="tourDelete">삭제</button>
+					      				</form>
 						      		</div>
 						    	</div>
 						  	</div>
 						</div>
     	
 		<script>
-		
-		
-		// 모달창 열기
-		$(document).ready(function() {
-	    	$("#datatablesSimple>tbody>tr").click(function(e){
-	      		$(".infoModal").modal("show");
-	      		
-	      		// console.log($(this).children().eq(0).children().eq(0).val());
-	      		// console.log($(this).children().eq(0).children().eq(1).val());
-	      		
-	      		let tourNo = $(this).children().eq(0).children().eq(0).val();
-	      		let tourType = $(this).children().eq(0).children().eq(1).val();
-	      		let thumbImg = $(this).children().eq(0).children().eq(2).val();
-	      		let tourName = $(this).children().eq(0).children().eq(3).val();
-	      		let address = $(this).children().eq(0).children().eq(4).val();
-	      		let contentId = $(this).children().eq(0).children().eq(5).val();
-	      		// console.log(tourNo);
-	      		// console.log(tourType);
-	      		// console.log(thumbImg);
-
-	      		$.ajax({
-	      			url : "tourDetailView.to",
-	      			type: "get",
-	      			data : {
-	      				tourNo : tourNo,
-	      				tourName : tourName,
-	      				address : address,
-	      				contentId : contentId,
-	      				thumbImg : thumbImg,
-	      				tourType : tourType 
-	      			},
-	      			success : function(z){
-	      				console.log("ajax성공");
-	      				console.log(z);
-	      				// console.log(z["list"]["thumbImg"]);
-	      				
-	      				let b = $(".modal-body");
-	      				let result = "";
-	      				result += "<div id='tour-thumbImg'>"
-	      							+ "<img src="+z["list"]["thumbImg"]+" alt='Thumbnail'>"
-	      							+ "</div><br>"
-	      							+ "<div id='tourImg'>";
-	      				
-	      				// console.log(z["img"].length);
-	      				// console.log(z["img"][0]["changeNo"]);
-	      				
-	      				
-	      				
-	      				if(z["img"].length != null && z["img"].length > 0){
-	      					
-	      					for(let i =0; i < z["img"].length; i++){
-	      						result += "<div class='tourImgList'>"
-	      								+ "<img src="+z["img"][i]["changeNo"]+" alt='images'>"
-	      								+ "</div>"
-	      					}
-	      					
-	      				}
-	      				result += "<br clear='both'></div><hr>"
-	      						+ "장소 : "+z["list"]["address"]+"<br>"
-	      						+"연락처 : "+ z["list"]["tel"]+"<br>";
-	      				
-	      				
-	      				switch(z["list"]["tourtype"]){
-	      				case "tourSpot":
-	      					result += "이용시간 : "+ z["list"]["useTime"] +"<br>"
-		        				+ "운영시기 : "+ z["list"]["season"] +"<br>"
-		        				+ "애견 동반 : "+ z["list"]["pet"] +"<br>";
-	      					break;
-	      				case "restaurant":
-	      					result += "운영시간 : "+ z["list"]["openTime"] +"<br>"
-	        				+ "휴무일 : "+ z["list"]["restDate"] +"<br>"
-	        				+ "대표메뉴 : "+ z["list"]["firstMenu"] +"<br>"
-	        				+ "전체메뉴 : "+ z["list"]["treatMenu"] +"<br>"
-	        				+ "아이들 놀이방 : "+ z["list"]["kidRoom"] +"<br>";
-	      					break;
-	      				case "lodging":
-	      					result += "객실타입 : "+ z["list"]["roomType"] +"<br>"
-	        				+ "체크인 : "+ z["list"]["checkIn"] +"<br>"
-	        				+ "체크아웃 : "+ z["list"]["checkOut"] +"<br>"
-	        				+ "취사 : "+ z["list"]["cook"] +"<br>"
-	        				+ "주차 : "+ z["list"]["parking"] +"<br>";
-	      					break;
-	      				case "leports":
-	      					result += "운영시간  : "+ z["list"]["useTime"] +"<br>"
-	        				+ "애견 동반 : "+ z["list"]["pet"] +"<br>"
-	        				+ "주차 : "+ z["list"]["parking"] +"<br>";
-	      					break;
-	      				}
-	      				
-						$("#exampleModalLabel").text(z["list"]["tourName"]);
-	      				b.html(result);
-
-	      			},
-	      			error: function(){
-	      				console.log("ajax에러");
-	      			}
-	      		});
-	    	});
-	  	});
+			// 모달창 열기
+			$(document).ready(function() {
+		    	$("#datatablesSimple>tbody>tr").click(function(e){
+		      		$(".infoModal").modal("show");
+		      		
+		      		// console.log($(this).children().eq(0).children().eq(0).val());
+		      		// console.log($(this).children().eq(0).children().eq(1).val());
+		      		
+		      		let tourNo = $(this).children().eq(0).children().eq(0).val();
+		      		let tourType = $(this).children().eq(0).children().eq(1).val();
+		      		let thumbImg = $(this).children().eq(0).children().eq(2).val();
+		      		let tourName = $(this).children().eq(0).children().eq(3).val();
+		      		let address = $(this).children().eq(0).children().eq(4).val();
+		      		let contentId = $(this).children().eq(0).children().eq(5).val();
+		      		// console.log(tourNo);
+		      		// console.log(tourType);
+		      		// console.log(thumbImg);
+		      		
+		      		$("#tourNo").val(tourNo);
+		      		$("#thumbImg").val(thumbImg);
+	
+		      		$.ajax({
+		      			url : "tourDetailView.to",
+		      			type: "get",
+		      			data : {
+		      				tourNo : tourNo,
+		      				tourName : tourName,
+		      				address : address,
+		      				contentId : contentId,
+		      				thumbImg : thumbImg,
+		      				tourType : tourType 
+		      			},
+		      			success : function(z){
+		      				console.log("ajax성공");
+		      				console.log(z);
+		      				// console.log(z["list"]["thumbImg"]);
+		      				
+		      				let b = $(".modal-body");
+		      				let result = "";
+		      				result += "<div id='tour-thumbImg'>"
+		      							+ "<img src="+z["list"]["thumbImg"]+" alt='Thumbnail'>"
+		      							+ "</div><br>"
+		      							+ "<div id='tourImg'>";
+		      				
+		      				// console.log(z["img"].length);
+		      				// console.log(z["img"][0]["changeNo"]);
+		      				
+		      				
+		      				
+		      				if(z["img"].length != null && z["img"].length > 0){
+		      					
+		      					for(let i =0; i < z["img"].length; i++){
+		      						result += "<div class='tourImgList'>"
+		      								+ "<img src="+z["img"][i]["changeNo"]+" alt='images'>"
+		      								+ "</div>"
+		      					}
+		      					
+		      				}
+		      				result += "<br clear='both'></div><hr>"
+		      						+ "장소 : "+z["list"]["address"]+"<br>"
+		      						+"연락처 : "+ z["list"]["tel"]+"<br>";
+		      				
+		      				
+		      				switch(z["list"]["tourtype"]){
+		      				case "tourSpot":
+		      					result += "이용시간 : "+ z["list"]["useTime"] +"<br>"
+			        				+ "운영시기 : "+ z["list"]["season"] +"<br>"
+			        				+ "애견 동반 : "+ z["list"]["pet"] +"<br>";
+		      					break;
+		      				case "restaurant":
+		      					result += "운영시간 : "+ z["list"]["openTime"] +"<br>"
+		        				+ "휴무일 : "+ z["list"]["restDate"] +"<br>"
+		        				+ "대표메뉴 : "+ z["list"]["firstMenu"] +"<br>"
+		        				+ "전체메뉴 : "+ z["list"]["treatMenu"] +"<br>"
+		        				+ "아이들 놀이방 : "+ z["list"]["kidRoom"] +"<br>";
+		      					break;
+		      				case "lodging":
+		      					result += "객실타입 : "+ z["list"]["roomType"] +"<br>"
+		        				+ "체크인 : "+ z["list"]["checkIn"] +"<br>"
+		        				+ "체크아웃 : "+ z["list"]["checkOut"] +"<br>"
+		        				+ "취사 : "+ z["list"]["cook"] +"<br>"
+		        				+ "주차 : "+ z["list"]["parking"] +"<br>";
+		      					break;
+		      				case "leports":
+		      					result += "운영시간  : "+ z["list"]["useTime"] +"<br>"
+		        				+ "애견 동반 : "+ z["list"]["pet"] +"<br>"
+		        				+ "주차 : "+ z["list"]["parking"] +"<br>";
+		      					break;
+		      				}
+		      				
+							$("#exampleModalLabel").text(z["list"]["tourName"]);
+		      				b.html(result);
+	
+		      			},
+		      			error: function(){
+		      				console.log("ajax에러");
+		      			}
+		      		});
+		    	});
+		  	});
 			
 			// 모달창 닫기
 			$(document).ready(function() {
 		    	$(".modal-header>button").click(function(){
 		      		$(".infoModal").modal("hide");
-		      		
-
 		    	});
 		  	});
-			
-			// 여행지 삭제
-			function deleteTour() {
-		        let tourNo = $("#datatablesSimple>tbody>tr").children().eq(0).children().eq(0).val();
-		        if(confirm("정말 삭제하시겠습니까?")) {
-		            $.ajax({
-		                url: "deleteTour.to",
-		                type: "post",
-		                data: {
-		                    tourNo: tourNo
-		                },
-		                success: function(response) {
-		                    console.log("삭제 성공");
-		                },
-		                error: function() {
-		                    console.log("ajax에러");
-		                }
-		            });
-		        }
-		    }
 		</script>
 		
         <footer class="py-4 bg-light mt-auto">
