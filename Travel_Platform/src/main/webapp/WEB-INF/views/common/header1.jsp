@@ -73,15 +73,22 @@
             <li><a class="yellow underline" href="msgPage.mg">GROUP MESSAGE</a></li>
         </ul>
         
+
+        <!-- 로그인 전, 후 구현 (공건희) -->
         <div class="h3">
-            <a href="loginPage.me" class="yellow underline">login</a>
-            <!-- 관리자 페이지 이동 임시버튼 -->
-            <a href="adminPage.ad" class="yellow underline">AdminPage</a>
-            
-            <a href="enrollForm.me" class="yellow underline">회원가입</a>
+            <c:choose>
+                <c:when test="${not empty sessionScope.loginUser}">
+                    <a href="myPage.me" class="yellow underline">My Page</a>
+                    <a href="logout.me" class="yellow underline">Logout</a>
+                </c:when>
+                <c:otherwise>
+                    <a href="loginPage.me" class="yellow underline">Login</a>
+                    <a href="enrollForm.me" class="yellow underline">Sign Up</a>
+                </c:otherwise>
+            </c:choose>
         </div>
         
-        <!-- 로그인 클릭 시 뜨는 모달 (기존에는 안보이다가 위의 a 클릭 시 보임) -->
+        
     
     </header>
 

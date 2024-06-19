@@ -38,6 +38,15 @@
     margin: auto;
    }
    
+   a{
+            color: black;
+        }
+
+   a:hover{
+       color: black;
+       text-decoration: none;
+   }
+   
    
    </style>
 </head>
@@ -54,42 +63,48 @@
 
             <form action="insert.me" method="post" id="enrollForm" name="enrollForm">
                 <div class="form-group">
-                    <label for="userId">ID : </label>
-                    <input type="text" class="form-control" id="userId" placeholder="Please Enter ID" name="userId" maxlength="14" required> <br>
+                    <label for="userId">아이디 : </label>
+                    <input type="text" class="form-control" id="userId" placeholder="6 ~ 14글자로 생성해주세요." name="userId" maxlength="14" required> <br>
 					<div id="checkResult" 
 						 style="font-size : 0.8em; display : none;">
 					</div>
 					<br>
 
-                    <label for="userPwd">Password : </label>
+                    <label for="userPwd">비밀번호 : </label>
                     <input type="password" class="form-control" id="memberPw" placeholder="Please Enter Password" name="userPwd" maxlength="14" required> <br>
 
-                    <label for="memberPwConfirm">Password Check : </label>
+                    <label for="memberPwConfirm">비밀번호 확인 : </label>
                     <input type="password" class="form-control" id="memberPwConfirm" placeholder="Please Enter Password" maxlength="14" required> <br>
                     
                    	<span class="signUp-message" id="pwMessage" name="pwMessage">영어,숫자,특수문자(!,@,#,-,_) 6~14글자 사이로 입력해주세요.</span> <br><br>
 
-                    <label for="userName">Name : </label>
+                    <label for="userName">이름 : </label>
                     <input type="text" class="form-control" id="name" placeholder="Please Enter Name" name="name" required maxlength="30"> <br>
                     
                     <label for="nickName"> &nbsp; 닉네임 :  </label>
-                    <input type="text" class="form-control" id="nickName" placeholder="Please Enter Name" name="nickName" maxlength="8" required> <br>
+                    <input type="text" class="form-control" id="nickName" placeholder="2 ~ 8글자로 생성해주세요." name="nickName" maxlength="8" required> <br>
+                    <div id="checkResult1" 
+						 style="font-size : 0.8em; display : none;">
+					</div>
                     
-                    <span class="signUp-message" id="nickMessage">2~8글자로 생성해주세요.</span> <br><br>
+                    
 
                    
                     
                    <div class="form-group email-form">
 						 <label for="email">이메일</label>
 						 <div class="input-group">
-						<input type="text" class="form-control" name="email" id="userEmail1" placeholder="이메일" required>
-						<select class="form-control" name="userEmail2" id="userEmail2" >
+						<input type="text" class="form-control" name="email1" id="userEmail1" placeholder="이메일" required>
+						<select class="form-control" name="email2" id="userEmail2" >
 						<option>@naver.com</option>
 						<option>@daum.net</option>
 						<option>@gmail.com</option>
 						<option>@hanmail.com</option>
 						 <option>@yahoo.co.kr</option>
 						</select>
+						
+						
+						
 						
 					
 					
@@ -98,6 +113,11 @@
 						<button type="button" class="btn btn-primary" id="mail-Check-Btn">본인인증</button>
 					</div>
 					</div>
+					
+					<div id="checkResult2" 
+						 style="font-size : 0.8em; display : none;">
+						</div>
+					
 					<br>
 					
 						<div class="mail-check-box">
@@ -106,10 +126,10 @@
 						<span id="mail-check-warn"></span>
 					</div>
 
-                    <label for="age"> &nbsp; Age : </label>
+                    <label for="age"> &nbsp; 나이 : </label>
                     <input type="number" class="form-control" id="age" placeholder="Please Enter Age" name="age"> <br>
 
-                    <label for="phone"> &nbsp; Phone : </label>
+                    <label for="phone"> &nbsp; 전화번호 : </label>
                     <input type="tel" class="form-control" id="phone" placeholder="Please Enter Phone (-없이)" name="phone" maxlength="11"> <br>
                     
                     <span class="signUp-message" id="telMessage">전화번호를 입력해주세요.(- 제외)</span> <br><br>
@@ -126,7 +146,7 @@
 					<input type="hidden" id="sample4_engAddress" placeholder="영문주소"  size="60" ><br>
 					
                     
-                    <label for=""> &nbsp; Gender : </label> &nbsp;&nbsp;
+                    <label for=""> &nbsp; 성별 : </label> &nbsp;&nbsp;
                     <input type="radio" id="Male" value="남" name="gender" checked>
                     <label for="Male">남자</label> &nbsp;&nbsp;
                     <input type="radio" id="Female" value="여" name="gender">
@@ -215,6 +235,8 @@ $('.mail-check-input').blur(function () {
         $("#enrollForm button[type=submit]").prop("disabled", true); // 폼 제출 버튼 비활성화
     }
 });
+
+
 		$(function() {
 			const $idInput = $("#enrollForm input[name=userId]");
 
@@ -255,6 +277,103 @@ $('.mail-check-input').blur(function () {
 					$("#checkResult").show()
 												.css("color", "red")
 												.text("사용 할 수 없는 아이디입니다.");
+				}
+			});
+		});
+		
+		
+		
+		$(function() {
+			const $nickInput = $("#enrollForm input[name=nickName]");
+
+			$nickInput.keyup(function() {
+				
+				const regEx = /^[A-Za-z가-힣0-9]{2,8}$/
+				
+				if(regEx.test($nickInput.val())) {
+					
+					$.ajax({
+						url : "nickCheck.me",
+						type : "get",
+						data : {
+							checkNick : $nickInput.val()
+						},
+						success : function(result) {
+							console.log("성공");
+							if(result == "NNNNN") {
+								
+								$("#checkResult1").show()
+												.css("color", "red")
+												.text("이미 사용중인 닉네임입니다.");
+								
+							} else {
+								
+								$("#checkResult1").show().css("color", "green").text("멋진 닉네임이에요!");
+								
+							}
+						},
+						error : function() {
+							console.log("닉네임 중복 체크용 ajax 통신 실패!");
+						}
+					});
+				} else {
+					// 입력된 값이 조건에 맞지 않을 때	
+					$("#enrollForm button[type=submit]").attr("disabled", true);
+					// $("#checkResult").hide(); // 메세지 숨기기
+					$("#checkResult1").show()
+												.css("color", "red")
+												.text("사용 할 수 없는 닉네임입니다");
+				}
+			});
+		});
+		
+		
+		
+		
+		
+		$(function() {
+			const $emailInput = $("#enrollForm input[name=email1]");
+
+			$emailInput.keyup(function() {
+				
+				const regEx = /^[A-Za-z0-9]{4,30}$/
+				
+				if(regEx.test($emailInput.val())) {
+					
+					$.ajax({
+						url : "emailCheck.me",
+						type : "get",
+						data : {
+							checkEmail : $emailInput.val()
+						},
+						success : function(result) {
+							console.log("성공");
+							if(result == "NNNNN") {
+								
+								$("#checkResult2").show()
+												.css("color", "red")
+												.text("이미 사용중인 이메일입니다.");
+								$('#mail-Check-Btn').prop('disabled', true); // 버튼 비활성화
+								
+							} else {
+								
+								$("#checkResult2").show().css("color", "green").text("멋진 이메일이에요!");
+								$('#mail-Check-Btn').prop('disabled', false); // 버튼 활성화
+								
+							}
+						},
+						error : function() {
+							console.log("이메일 중복 체크용 ajax 통신 실패!");
+						}
+					});
+				} else {
+					// 입력된 값이 조건에 맞지 않을 때	
+					$("#enrollForm button[type=submit]").attr("disabled", true);
+					// $("#checkResult").hide(); // 메세지 숨기기
+					$("#checkResult2").show()
+												.css("color", "red")
+												.text("사용 할 수 없는 이메일입니다");
+					$('#mail-Check-Btn').prop('disabled', true); // 버튼 비활성화
 				}
 			});
 		});
@@ -327,7 +446,7 @@ $('.mail-check-input').blur(function () {
             	    
             	    "memberPw": false,
             	    "memberPwConfirm" : false,
-            	    "nickName" : false,
+            	    
             	    "phone" : false
             	}
 
@@ -447,44 +566,7 @@ $('.mail-check-input').blur(function () {
 
             	
 
-            	// 닉네임 유효성 검사 
-            	 const nickName = document.getElementById("nickName");
-            	 const nickMessage = document.getElementById("nickMessage");
-
-            	nickName.addEventListener("input", ()=>{
-
-            	    if(nickName.value.trim().length == 0){
-						$("#nickMessage").css("color", "black");
-
-            	        nickMessage.innerText = "2~8글자로 생성해주세요."
-            	        nickMessage.classList.remove("error", "confirm");
-
-            	        checkObj.nickName=false;
-            	        nickName.value="";
-            	        return;
-            	    }
-            	    
-            	    
-            	    const regEx = /^[A-Za-z가-힣0-9]{2,8}$/
-
-            	    if(regEx.test(nickName.value)){
-						$("#nickMessage").css("color", "green");
-            	        nickMessage.innerText="유효한 닉네임입니다.";
-            	        nickMessage.classList.add("confirm");
-            	        nickMessage.classList.remove("error");
-
-            	        checkObj.nickName=true;
-            	        
-            	    }else{
-						$("#nickMessage").css("color", "red");
-
-            	        nickMessage.innerText="닉네임이 유효하지 않습니다.";
-            	        nickMessage.classList.add("error");
-            	        nickMessage.classList.remove("confirm");
-
-            	        checkObj.nickName=false;
-            	    }
-            	})
+            	
 
 
             	// 전화번호 유효성 검사
@@ -543,7 +625,7 @@ $('.mail-check-input').blur(function () {
             	                
             	                case "memberPw" : alert("비밀번호가 유효하지 않습니다."); break;
             	                case "memberPwConfirm" : alert("비밀번호가 확인되지 않았습니다"); break;
-            	                case "nickName" : alert("닉네임이 유효하지 않습니다.");  break;
+            	                
             	                case "phone" : alert("전화번호가 유효하지 않습니다.");  break;
             	            }
 

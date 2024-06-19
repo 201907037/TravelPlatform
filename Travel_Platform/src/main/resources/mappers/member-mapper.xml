@@ -104,12 +104,38 @@
 		 WHERE USER_ID = #{checkId}
 	</select>
 	
+	<select id="nickCheck"
+			parameterType="string"
+			resultType="_int">
+		SELECT COUNT(*)
+		  FROM MEMBER
+		 WHERE NICK_NAME = #{checkNick}
+	</select>
+	
+	<select id="emailCheck"
+			parameterType="string"
+			resultType="_int">
+		SELECT COUNT(*)
+		  FROM MEMBER
+		 WHERE EMAIL = #{checkEmail}
+	</select>
+	
 	<!-- 아이디 찾기 -->
 	<select id="findUserIdByEmail" parameterType="String" resultType="String">
         SELECT user_id 
         FROM member
         WHERE email = #{email}
     </select>
+    
+    <select id="findMemberByEmail" parameterType="String" resultType="member">
+        SELECT * FROM member WHERE email = #{email}
+    </select>
+
+    <update id="updatePassword" parameterType="com.tp.travely.member.model.vo.Member">
+        UPDATE member
+        SET user_pwd = #{userPwd}
+        WHERE user_id = #{userId}
+    </update>
     
     
 

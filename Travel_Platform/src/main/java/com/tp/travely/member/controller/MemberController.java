@@ -5,11 +5,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -122,7 +125,7 @@ public class MemberController {
 			
 			mv.addObject("errorMsg", "로그인 실패");
 			
-			mv.setViewName("common/errorPage");
+			mv.setViewName("redirect:/");
 		}
 		
 		return mv;
@@ -167,6 +170,20 @@ public class MemberController {
 		return "member/search_id";
 	}
 	
+	@GetMapping("resetPassword.me")
+	public String resetPassword() {
+		
+		
+		return "member/reset_password";
+	}
+	
+	@GetMapping("updatePassword.me")
+	public String updatePassword() {
+		
+		
+		return "member/update_password";
+	}
+	
 	@GetMapping("enrollForm.me")
 	public String enrollForm() {
 		
@@ -178,7 +195,7 @@ public class MemberController {
 	@PostMapping("insert.me")
 	public String insertMember(Member m,
 				  			   Model model,
-				  			   HttpSession session) {
+				  			   HttpSession session, String email1, String email2) {
 		
 		
 		String encPwd 
@@ -189,8 +206,8 @@ public class MemberController {
 		// 커맨드 객체 방식으로 전달받은 m 의 userPwd 필드값을
 		// encPwd 값으로 셋팅
 		m.setUserPwd(encPwd);
-		
-		// System.out.println(m);
+		m.setEmail(email1.concat(email2));
+		System.out.println(m);
 		// > 비밀번호 필드만 암호문으로 대체된 것 확인
 		
 		int result = memberService.insertMember(m);
@@ -343,6 +360,56 @@ public class MemberController {
 		return (count > 0) ? "NNNNN" : "NNNNY";
 	}
 	
+	@ResponseBody // 리턴하는 문자열이 응답데이터임을 알려줌
+	@GetMapping(value="nickCheck.me", produces="text/html; charset=UTF-8")
+	public String nickCheck(String checkNick) {
+		
+		// System.out.println(checkId);
+		// > 중복확인할 아이디값이 전달됨
+		
+		int count = memberService.nickCheck(checkNick);
+		
+		// count 가 1일 경우 : 이미 존재하는 아이디 (사용 불가)
+		// count 가 0일 경우 : 존재하지 않는 아이디 (사용 가능)
+		/*
+		if(count > 0) { // 사용불가능 "NNNNN"
+			
+			return "NNNNN";
+			
+		} else { // 사용가능 "NNNNY"
+			
+			return "NNNNY";
+		}
+		*/
+		
+		return (count > 0) ? "NNNNN" : "NNNNY";
+	}
+	
+	@ResponseBody // 리턴하는 문자열이 응답데이터임을 알려줌
+	@GetMapping(value="emailCheck.me", produces="text/html; charset=UTF-8")
+	public String emailCheck(String checkEmail) {
+		
+		// System.out.println(checkId);
+		// > 중복확인할 아이디값이 전달됨
+		
+		int count = memberService.emailCheck(checkEmail);
+		
+		// count 가 1일 경우 : 이미 존재하는 아이디 (사용 불가)
+		// count 가 0일 경우 : 존재하지 않는 아이디 (사용 가능)
+		/*
+		if(count > 0) { // 사용불가능 "NNNNN"
+			
+			return "NNNNN";
+			
+		} else { // 사용가능 "NNNNY"
+			
+			return "NNNNY";
+		}
+		*/
+		
+		return (count > 0) ? "NNNNN" : "NNNNY";
+	}
+	
 	
 	@Autowired
 	private MailSendService mailService;
@@ -362,13 +429,57 @@ public class MemberController {
 		}
 		
 	
-		// 아이디 찾기
-		@PostMapping("findId.me")
-	    public String findId(@RequestParam("email") String email, Model model) {
-	        String userId = memberService.findUserIdByEmail(email);
-	        model.addAttribute("userId", userId);
-	        return "member/showUserId"; // 아이디를 보여주는 페이지로 이동
-	    }
+	// 아이디 찾기
+	@PostMapping("findId.me")
+    public String findId(@RequestParam("email") String email, Model model) {
+        String userId = memberService.findUserIdByEmail(email);
+        model.addAttribute("userId", userId);
+        return "member/showUserId"; // 아이디를 보여주는 페이지로 이동
+    }
+	
+	
+	// 비밀번호 재설정 이메일 보내기
+    @PostMapping("/resetPassword.me")
+    @ResponseBody
+    public String resetPassword(@RequestParam("email") String userEmail) {
+        memberService.sendResetPasswordEmail(userEmail);
+        return "Reset password email sent successfully!";
+    }
+    
+    @PostMapping("/updatePassword.me")
+    public ResponseEntity<String> updatePassword(
+            @RequestParam("userId") String userId,
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword, HttpSession session) {
+
+        boolean result = memberService.updatePassword(userId, currentPassword, newPassword);
+
+        if (result) {
+        	session.setAttribute("alertMsg", "성공적으로 비밀번호가 변경되었습니다.");
+            String successScript = "<script>window.location.href='';</script>"; // 메인 페이지 경로로 변경하세요
+            return ResponseEntity.ok(successScript);
+        	
+
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update password");
+        }
+    }
+	// 다른 컨트롤러 메서드들...
+
+
+
+class UpdatePasswordRequest {
+	private String userId;
+	private String currentPassword;
+	private String newPassword;
+	
+	// getters, setters, toString 메서드 생략
+}
+    
+ 
+	
+		
+		
 	
 	
 	

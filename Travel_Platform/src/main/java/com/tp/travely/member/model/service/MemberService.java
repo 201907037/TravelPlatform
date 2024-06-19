@@ -19,7 +19,19 @@ public interface MemberService {
 		// 아이디 중복체크 서비스 (select) - ajax
 		int idCheck(String checkId);
 		
+		int nickCheck(String checkNick);
+		
+		int emailCheck(String checkEmail);
+		
 		// 아이디 찾기
 		String findUserIdByEmail(String email);
+		
+		// 비번찾기
+		void sendResetPasswordEmail(String userEmail);
+		
+		// 비번변경
+		boolean updatePassword(String userId, String currentPassword, String newPassword);
+		
+		
 
 }

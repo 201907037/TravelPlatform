@@ -1,6 +1,7 @@
 package com.tp.travely.member.model.service;
 
 import java.util.Random;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -10,9 +11,13 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import com.tp.travely.member.model.dao.MemberDao;
+import com.tp.travely.member.model.vo.Member;
 
 
 
@@ -26,7 +31,15 @@ public class MailSendService {
 	@Autowired
 	private TemplateEngine templateEngine;
 	
+	@Autowired
+    private MemberDao memberDao;
+
+    @Autowired
+    private BCryptPasswordEncoder bcryptPasswordEncoder;
 	
+	
+	
+	 
 	
 	
 	
@@ -81,5 +94,32 @@ public class MailSendService {
 				e.printStackTrace();
 			}
 		}
+		
+		// 비밀번호 재설정 이메일 전송 메서드
+	    public void sendResetPasswordEmail(String userEmail, String tempPassword) {
+	        String setFrom = "rhdrjsgml0307@gmail.com"; // 발신자 이메일 주소 설정
+	        String subject = "비밀번호 재설정 안내"; // 이메일 제목 설정
+	        String content = "안녕하세요. 비밀번호가 임시로 변경되었습니다. 새로운 비밀번호: " + tempPassword; // 이메일 내용 설정
+
+	        sendEmail(setFrom, userEmail, subject, content); // 이메일 전송
+	    }
+
+	    // 이메일 전송 메서드
+	    private void sendEmail(String fromEmail, String toEmail, String subject, String content) {
+	        MimeMessage message = mailSender.createMimeMessage();
+	        try {
+	            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+	            helper.setFrom(fromEmail); // 발신자 설정
+	            helper.setTo(toEmail); // 수신자 설정
+	            helper.setSubject(subject); // 이메일 제목 설정
+	            helper.setText(content, true); // 이메일 내용 설정 (HTML 형식)
+
+	            mailSender.send(message); // 이메일 전송
+	        } catch (MessagingException e) {
+	            e.printStackTrace();
+	        }
+	    }
+		
+		
 
 }
