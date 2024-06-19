@@ -94,6 +94,11 @@ public class TourDao {
 		return (ArrayList)sqlSession.selectList("tourMapper.tourImgList", tourNo);
 	}
 	
+	// 유진 - 관리자 여행지 조회 DAO (Tour 객체에서만) (2024.06.19)
+	public Tour findTourByNo(SqlSessionTemplate sqlSession, int tourNo) {
+        return sqlSession.selectOne("getTourByNo", tourNo);
+    }
+	
 	// 유진 - 관리자 여행지 삭제 DAO (2024.06.17)
 	public int deleteTour(SqlSessionTemplate sqlSession, int tourNo) {
 		return sqlSession.update("tourMapper.deleteTour", tourNo);

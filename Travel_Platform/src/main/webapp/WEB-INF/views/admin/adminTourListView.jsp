@@ -135,9 +135,13 @@
 						      		<div class="modal-body">
 						      		</div>
 						      		<div class="modal-footer">
-					      				<button type="button" class="btn btn-primary" id="tourModify">수정</button>
+						      			<form id="modifyTourForm" action="adminTourUpdate.ad" method="post">
+						      				<input type="hidden" class="tourNo" name="tourNo">
+						      				<!-- <input type="hidden" id="tourType" name="tourType"> -->
+						      				<button type="submit" class="btn btn-primary" id="tourModify">수정</button>
+						      			</form>
   										<form id="deleteTourForm" action="deleteTour.to" method="post">
-  											<input type="hidden" id="tourNo" name="tourNo">
+  											<input type="hidden" class="tourNo" name="tourNo">
   											<input type="hidden" id="thumbImg" name="thumbImg">
 					      					<button type="submit" class="btn btn-danger" id="tourDelete">삭제</button>
 					      				</form>
@@ -165,7 +169,8 @@
 		      		// console.log(tourType);
 		      		// console.log(thumbImg);
 		      		
-		      		$("#tourNo").val(tourNo);
+		      		$(".tourNo").val(tourNo);
+		      		$("#tourType").val(tourType);
 		      		$("#thumbImg").val(thumbImg);
 	
 		      		$.ajax({

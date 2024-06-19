@@ -41,6 +41,8 @@ public interface TourService {
 	LeportsData leportsDetail(int tourNo);
 	// 이미지 list
 	ArrayList<TourImg> tourImgList(int tourNo);
+	// 유진 - 관리자 여행지 조회 DAO (Tour 객체에서만) (2024.06.19)
+	Tour getTourByNo(int tourNo);
 
 	// 유진 - 관리자 여행지 삭제 서비스 (2024.06.17)
 	int deleteTour(int tourNo);

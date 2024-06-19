@@ -375,7 +375,16 @@
 		FROM TOUR_IMG
 		WHERE REF_TNO=#{tourNo}
 	</select>
-	 
+	
+	<!-- 유진 - 관리자 여행지 조회 쿼리문 (Tour 객체에서만) (2024.06.19) -->
+	<select id="getTourByNo" 
+			parameterType="_int"
+			resultMap="tourResultSet">
+	    SELECT * 
+	    	FROM TOUR 
+	    WHERE TOUR_NO = #{tourNo} 
+	</select>
+	
 	<!-- 유진 - 관리자 여행지 삭제 쿼리문 (2024.06.17) -->
 	<update id="deleteTour" 
 			parameterType="_int">

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,7 +45,7 @@ public class TourController {
 		
 		// 게시글 목록 조회
 		ArrayList<Tour> list = tourService.adminTourList();
-		System.out.println(list);
+		// System.out.println(list);
 		// System.out.println("-------------------");
 		// 응답데이터 담기
 		model.addAttribute("tList", list);
@@ -303,6 +304,76 @@ public class TourController {
 		}
 		
 		return mv;
+	}
+	
+	// 유진 - 관리자 여행지 수정 컨트롤러 (2024.06.18)
+	// 관리자 여행지 추가 (페이지로 이동하는) 컨트롤러
+	@PostMapping(value="adminTourUpdate.ad")
+	public String adminTourUpdateForm(@RequestParam("tourNo") int tourNo, Model model) {
+		
+		// 여행지 한 곳 조회
+		System.out.println("넘어온 글번호는 " + tourNo + "번입니다.");
+		
+		// Tour 객체만 조회
+        Tour tour = tourService.getTourByNo(tourNo);
+        
+        System.out.println("선택한 객체: " + tour);
+        if (tour == null) {
+            throw new NullPointerException("만일 null 이라면 넘어온 tour 객체의 번호: " + tourNo);
+        }
+        
+        model.addAttribute("tour", tour);
+        
+		HashMap<String, Object> rtMap = new HashMap<String, Object>();
+		
+		switch(tour.getTourType()) {
+		case "tourSpot" : 
+			TourSpotData tsd = tourService.tourSpotDetail(tour.getTourNo());
+			tsd.setTourName(tour.getTourName());
+			tsd.setAddress(tour.getAddress());
+			tsd.setContentId(tour.getContentId());
+			tsd.setThumbImg(tour.getThumbImg());
+			tsd.setTourtype(tour.getTourType());
+			rtMap.put("list",tsd);
+			// 다른 이미지들도 가져와야한다.
+			break;
+		case "lodging" : 
+			LodgingData lod = tourService.lodgingDetail(tour.getTourNo());
+			lod.setTourName(tour.getTourName());
+			lod.setAddress(tour.getAddress());
+			lod.setContentId(tour.getContentId());
+			lod.setThumbImg(tour.getThumbImg());
+			lod.setTourtype(tour.getTourType());
+			rtMap.put("list",lod);
+			break;
+		case "restaurant" : 
+			RestaurantData rd =tourService.restaurantDetail(tour.getTourNo());
+			rd.setTourName(tour.getTourName());
+			rd.setAddress(tour.getAddress());
+			rd.setContentId(tour.getContentId());
+			rd.setThumbImg(tour.getThumbImg());
+			rd.setTourtype(tour.getTourType());
+			rtMap.put("list",rd);
+			break;
+		case "leports" : 
+			LeportsData led = tourService.leportsDetail(tour.getTourNo());
+			led.setTourName(tour.getTourName());
+			led.setAddress(tour.getAddress());
+			led.setContentId(tour.getContentId());
+			led.setThumbImg(tour.getThumbImg());
+			led.setTourtype(tour.getTourType());
+			rtMap.put("list",led);
+			break;
+		default : 
+			break;
+		}
+		
+		ArrayList<TourImg> imgList = tourService.tourImgList(tour.getTourNo());
+		rtMap.put("img",imgList);
+		
+		model.addAttribute("rtMap", rtMap);
+		
+		return "admin/adminTourUpdateForm";
 	}
 	
 	//------------------ 일반 메서드 영역 ------------------------------------------------------
