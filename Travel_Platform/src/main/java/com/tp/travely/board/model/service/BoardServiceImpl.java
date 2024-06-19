@@ -181,6 +181,26 @@ public class BoardServiceImpl implements BoardService{
 		return boardDao.deleteBoard(sqlSession, bno);
 	}
 
+	@Override
+	public int searchBoardCount(String keyword) {
+		return boardDao.searchBoardCount(sqlSession, keyword);
+	}
+
+	@Override
+	public ArrayList<Board> searchListBoard(String keyword, PageInfo pi) {
+		return boardDao.searchListBoard(sqlSession, keyword,pi);
+	}
+
+	@Override
+	public ArrayList<BoardImg> searchListBoardImg(String keyword) {
+		return boardDao.searchListBoardImg(sqlSession, keyword);
+	}
+
+	@Override
+	public ArrayList<Member> searchMember(String keyword) {
+		return boardDao.searchMember(sqlSession, keyword);
+	}
+
 	
 	
 	

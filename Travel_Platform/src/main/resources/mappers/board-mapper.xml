@@ -349,7 +349,63 @@ SELECT MEMBER.NICK_NAME, MEMBER.CHANGE_NAME
         #{userNo}
     )
     </insert>
+    
+<select id="searchBoardCount"
+		parameterType="String"
+		resultType="_int">
+SELECT COUNT(*)
+	FROM BOARD
+	WHERE STATUS='Y'
+	AND BOARD_TITLE LIKE '%'||#{keyword}||'%'
+</select>
 
+
+<!-- 게시글 검색목록조회 쿼리문 -->
+<select id="searchListBoard"
+		parameterType="String"
+		resultMap="boardResultSet">
+		SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT, 
+		 CASE 
+        WHEN (SYSDATE - CREATE_DATE) * 24 * 60 &lt; 1 THEN '방금 전'
+        WHEN (SYSDATE - CREATE_DATE) * 24 &lt; 1 THEN TRUNC((SYSDATE - CREATE_DATE) * 24 * 60) || '분 전'
+        WHEN (SYSDATE - CREATE_DATE) * 24 &lt; 24 THEN TRUNC((SYSDATE - CREATE_DATE) * 24) || '시간 전'
+        ELSE TRUNC(SYSDATE - CREATE_DATE) || '일 전'
+    END AS CREATE_DATE, COUNT, STATUS, USER_NO
+	  FROM BOARD
+	 WHERE STATUS = 'Y'
+	 AND BOARD_TITLE LIKE '%'||#{keyword}||'%'
+	 ORDER BY BOARD_NO DESC
+</select>
+
+
+<!-- 게시글 검색 목록 썸네일 조회 쿼리문 -->
+<select id="searchListBoardImg"
+		parameterType="String"
+		resultMap="boardImgResultSet">
+		SELECT IMG_NO, CHANGE_NAME, FILE_LEVEL, BOARD_IMG.STATUS, BOARD_NO
+	  FROM BOARD_IMG
+	  JOIN BOARD USING(BOARD_NO)
+	 WHERE BOARD.STATUS = 'Y'
+	   AND BOARD_IMG.STATUS = 'Y'
+	   AND FILE_LEVEL = 1
+	   AND BOARD.BOARD_TITLE LIKE '%'||#{keyword}||'%'
+	 ORDER BY BOARD_NO DESC
+</select>
+
+<!-- 게시글 회원 프로필조회 -->
+<select id="searchMember"
+		parameterType="String"
+		resultMap="memberResultSet">
+SELECT USER_NO, 
+       NICK_NAME,
+       CHANGE_NAME
+  FROM MEMBER
+JOIN BOARD USING(USER_NO)
+  WHERE MEMBER.STATUS = 'Y'
+    AND BOARD.STATUS = 'Y'
+ 	AND BOARD.BOARD_TITLE LIKE '%'||#{keyword}||'%'
+  ORDER BY BOARD_NO DESC
+</select>
 
 </mapper>
 

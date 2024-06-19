@@ -158,6 +158,32 @@ public class BoardDao {
 		return sqlSession.update("boardMapper.deleteBoard", boardNo);
 	}
 
+	// 검색 목록 게시글 카운트
+	public int searchBoardCount(SqlSessionTemplate sqlSession, String keyword) {
+		return sqlSession.selectOne("boardMapper.searchBoardCount", keyword);
+	}
+
+	// 검색 목록 게시글 리스트
+	public ArrayList<Board> searchListBoard(SqlSessionTemplate sqlSession, String keyword, PageInfo pi) {
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.searchListBoard", keyword, rowBounds);
+	}
+
+	// 검색 목록 썸네일
+	public ArrayList<BoardImg> searchListBoardImg(SqlSessionTemplate sqlSession, String keyword) {
+		return (ArrayList)sqlSession.selectList("boardMapper.searchListBoardImg", keyword);
+	}
+
+	// 검색 목록 게시글 회원 정보
+	public ArrayList<Member> searchMember(SqlSessionTemplate sqlSession, String keyword) {
+		return (ArrayList)sqlSession.selectList("boardMapper.searchMember", keyword);
+	}
+
 	
 
 	

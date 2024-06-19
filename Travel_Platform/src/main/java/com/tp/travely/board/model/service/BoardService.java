@@ -60,6 +60,14 @@ public interface BoardService {
 
 	int deleteBoard(int bno);
 
+	int searchBoardCount(String keyword);
+
+	ArrayList<Board> searchListBoard(String keyword, PageInfo pi);
+
+	ArrayList<BoardImg> searchListBoardImg(String keyword);
+
+	ArrayList<Member> searchMember(String keyword);
+
 	
 	
 	
