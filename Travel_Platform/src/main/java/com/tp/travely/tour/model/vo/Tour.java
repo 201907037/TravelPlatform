@@ -1,4 +1,4 @@
-// 유진 - tour 패키지 생성 (2024.06.10)
+// �쑀吏� - tour �뙣�궎吏� �깮�꽦 (2024.06.10)
 package com.tp.travely.tour.model.vo;
 
 import lombok.Getter;
@@ -17,8 +17,8 @@ public class Tour {
 	private String addDate;
 	private String contentId;
 	private String thumbImg;
-	private int mapX;
-	private int mapY;
+	private double mapX;
+	private double mapY;
 	private String tourType;
 	private String status;
 	private int refArea;

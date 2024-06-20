@@ -328,8 +328,33 @@
 	                AND STATUS = 'Y'
 	                ORDER BY TOUR_NAME ASC) TT)
 	WHERE RN BETWEEN ${start} AND ${end}
-	
 	</select>
+	<select id="searchTourListCount"
+			parameterType="hashmap"
+			resultType="_int">
+	SELECT COUNT(*)
+	FROM TOUR
+	WHERE TOUR_NAME LIKE '%'||#{keyword}||'%'
+	AND TOUR_TYPE = #{type}
+	AND ADDRESS LIKE '%'||#{name}||'%'
+	AND STATUS = 'Y'
+	</select>
+	
+	<select id="selectSearchList"
+			parameterType="hashmap"
+			resultMap="tourResultSet">
+	SELECT *
+	FROM (SELECT ROWNUM RN, TT.*
+	        FROM (SELECT *
+	                FROM TOUR
+	                WHERE TOUR_NAME LIKE '%'||#{keyword}||'%'
+	                AND ADDRESS LIKE '%'||#{name}||'%'
+	                AND TOUR_TYPE = #{type}
+	                AND STATUS = 'Y'
+	                ORDER BY TOUR_NAME ASC) TT)
+	WHERE RN BETWEEN ${start} AND ${end}
+	</select>
+	
 	<!-- 나현성 - 상세보기 06.17 -->
 	<!-- 관광지 -->
 	<select id="tourSpotDetail"

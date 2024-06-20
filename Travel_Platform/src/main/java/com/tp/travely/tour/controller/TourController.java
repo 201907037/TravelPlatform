@@ -1,10 +1,11 @@
-// 유진 - tour 패키지 생성 (2024.06.10)
+// �쑀吏� - tour �뙣�궎吏� �깮�꽦 (2024.06.10)
 package com.tp.travely.tour.controller;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.tp.travely.common.model.vo.PageInfo;
+import com.tp.travely.common.template.Pagination;
 import com.tp.travely.tour.model.service.TourService;
 import com.tp.travely.tour.model.vo.City;
 import com.tp.travely.tour.model.vo.Districts;
@@ -38,32 +40,32 @@ public class TourController {
 	@Autowired
 	private TourService tourService;
 	
-	// 유진 - 2024.06.10
-	// 관리자 여행지 목록 조회 컨트롤러
+	// �쑀吏� - 2024.06.10
+	// 愿�由ъ옄 �뿬�뻾吏� 紐⑸줉 議고쉶 而⑦듃濡ㅻ윭
 	@GetMapping("adminTour.ad")
 	public String adminTourListView(Model model) {
 		
-		// 게시글 목록 조회
+		// 寃뚯떆湲� 紐⑸줉 議고쉶
 		ArrayList<Tour> list = tourService.adminTourList();
 		// System.out.println(list);
 		// System.out.println("-------------------");
-		// 응답데이터 담기
+		// �쓳�떟�뜲�씠�꽣 �떞湲�
 		model.addAttribute("tList", list);
 		
-		// 응답페이지 포워딩
+		// �쓳�떟�럹�씠吏� �룷�썙�뵫
 		return "admin/adminTourListView";
 	}
 	
-	// 유진 - 2024.06.10
-	// 관리자 여행지 추가 (페이지로 이동하는) 컨트롤러
+	// �쑀吏� - 2024.06.10
+	// 愿�由ъ옄 �뿬�뻾吏� 異붽� (�럹�씠吏�濡� �씠�룞�븯�뒗) 而⑦듃濡ㅻ윭
 	@GetMapping("adminTourEnroll.ad")
 	public String adminTourEnrollForm(Model model) {
-		// 응답페이지 포워딩
+		// �쓳�떟�럹�씠吏� �룷�썙�뵫
 		return "admin/adminTourEnrollForm";
 	}
 	
-	// 유진 - 2024.06.11 (실제 작성 - 2024.06.12)
-	// 관리자 여행지 추가 컨트롤러 (INSERT)
+	// �쑀吏� - 2024.06.11 (�떎�젣 �옉�꽦 - 2024.06.12)
+	// 愿�由ъ옄 �뿬�뻾吏� 異붽� 而⑦듃濡ㅻ윭 (INSERT)
 	@PostMapping("adminTourInsert.ad")
     public ModelAndView adminTourInsert(@RequestParam("tourType") String tourType, 
     									TourSpotData tsd, LodgingData lod, RestaurantData rd, 
@@ -85,23 +87,23 @@ public class TourController {
 		// System.out.println(ti);
 		// System.out.println("----------");
 		
-		// 파일 업로드 및 경로 설정
-		String thumbImg = savePath(thumbImgFile, session, "thumbImg"); // 썸네일
+		// �뙆�씪 �뾽濡쒕뱶 諛� 寃쎈줈 �꽕�젙
+		String thumbImg = savePath(thumbImgFile, session, "thumbImg"); // �뜽�꽕�씪
 		
 		ArrayList<String> changeNos = savePaths(changeNoFiles, session, "changeNo");
-		ArrayList<TourImg> tourImgList = new ArrayList<>(); // 일반이미지들
+		ArrayList<TourImg> tourImgList = new ArrayList<>(); // �씪諛섏씠誘몄��뱾
 		
 		String fileBasePath = "resources/tourUpfiles/";
 		String fullThumbImgPath = fileBasePath + thumbImg;
 
-		// 객체들에 경로 설정
-		// 각 객체들에 썸네일 담기
+		// 媛앹껜�뱾�뿉 寃쎈줈 �꽕�젙
+		// 媛� 媛앹껜�뱾�뿉 �뜽�꽕�씪 �떞湲�
 		tsd.setThumbImg(fullThumbImgPath);
 		lod.setThumbImg(fullThumbImgPath);
 		rd.setThumbImg(fullThumbImgPath);
 		led.setThumbImg(fullThumbImgPath);
 
-		// 다중 파일(참고이미지들)은 원래 따로 있었던 TourImg 객체에 담기
+		// �떎以� �뙆�씪(李멸퀬�씠誘몄��뱾)�� �썝�옒 �뵲濡� �엳�뿀�뜕 TourImg 媛앹껜�뿉 �떞湲�
 		for(String changeNo : changeNos) {
 			TourImg tourImg = new TourImg();
 			tourImg.setChangeNo(fileBasePath + changeNo);
@@ -109,7 +111,7 @@ public class TourController {
 		}
 		// System.out.println("tourType: "+tourType);
 		// System.out.println(tsd);
-		// 서비스 호출
+		// �꽌鍮꾩뒪 �샇異�
 		int result = 0;
 		
 		switch(tourType) {
@@ -142,19 +144,19 @@ public class TourController {
 		 System.out.println(tourImgList);
 		 System.out.println("----------");
 
-		// 결과에 따른 처리
+		// 寃곌낵�뿉 �뵲瑜� 泥섎━
 		if(result > 0) {
-			session.setAttribute("alertMsg", "성공적으로 여행지가 등록되었습니다.");
+			session.setAttribute("alertMsg", "�꽦怨듭쟻�쑝濡� �뿬�뻾吏�媛� �벑濡앸릺�뿀�뒿�땲�떎.");
 			mv.setViewName("redirect:/adminTour.ad");
 		} else {
-			mv.addObject("errorMsg", "등록 실패").setViewName("common/errorPage");
+			mv.addObject("errorMsg", "�벑濡� �떎�뙣").setViewName("common/errorPage");
 		}
 
 		return mv;
 	}
 	
-	// 김동현 - 2024.06.11
-	// 여행지 조회 메소드(SELECT)
+	// 源��룞�쁽 - 2024.06.11
+	// �뿬�뻾吏� 議고쉶 硫붿냼�뱶(SELECT)
 	@GetMapping(value="cityList.to", produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String selectCity(int areaCode) {
@@ -166,13 +168,13 @@ public class TourController {
 		return new Gson().toJson(list);
 	}
 	// 김동현 - 2024.06.16
-	// 여행지 리스트 조회
+	// 시군구코드/지역 코드 조회
 	@GetMapping(value="getLocation.to", produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String getLocation(String areaCode, String sigunguCodeNo) {
 		//System.out.println(areaCode);
-		//System.out.println(sigunguCodeNo);
-		if(Integer.parseInt(areaCode)>30) {
+		System.out.println(sigunguCodeNo);
+		if(Integer.parseInt(areaCode)>30&&Integer.parseInt(areaCode)<39) {
 			City c = tourService.getLocationCity(Integer.parseInt(sigunguCodeNo));
 			return new Gson().toJson(c);
 			//System.out.println(c);
@@ -183,29 +185,21 @@ public class TourController {
 		}
 		
 	}
+	// 김동현 - 2024.06.16
+	// 여행지 리스트 조회
 	@GetMapping(value="tourList.to",produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String selectTourList(String type,String areaCode,String areaName,int pno) {
-		System.out.println(type);
-		System.out.println(areaCode);
-		System.out.println(areaName);
-		System.out.println(pno);
+//		System.out.println(type);
+//		System.out.println(areaCode);
+//		System.out.println(areaName);
+//		System.out.println(pno);
 		//System.out.println(areaName);
 		HashMap<String, String> map = new HashMap<>();
 		map.put("type",type);
 		map.put("name",areaName);
 		int listCount=tourService.selectTourListCount(map);
-		int currentPage = pno;
-		int pageLimit = 5;
-		int boardLimit = 5;
-		
-		int maxPage = (int)Math.ceil((double)listCount/boardLimit);
-		int startPage= (((currentPage-1)/pageLimit)*pageLimit)+1;
-		int endPage = startPage+(pageLimit-1);
-		if(maxPage<endPage) {
-			endPage=maxPage;
-		}
-		PageInfo pinfo = new PageInfo(listCount, currentPage, pageLimit, boardLimit, maxPage, startPage, endPage);
+		PageInfo pinfo = getPagInfo(listCount,type, pno, map);
 		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
 		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
 		map.put("start", (start+""));
@@ -214,8 +208,6 @@ public class TourController {
 		for(Tour t : list) {
 			System.out.println(t);
 		}
-		System.out.println(pinfo);
-		System.out.println(listCount);
 		//System.out.println(map);
 		HashMap<String, Object> rtMap = new HashMap<String, Object>();
 		rtMap.put("list",list);
@@ -223,11 +215,42 @@ public class TourController {
 		return new Gson().toJson(rtMap);
 	}
 	
-	// 유진&현성 - 관리자 여행지 상세조회 컨트롤러 (2024.06.14)
+	//김동현 2024.06.20
+	// 여행지 검색 기능
+	@GetMapping(value="searchTourList.to",produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getSearchList(String type,String areaCode,String areaName,int pno,String keyword) {
+//		System.out.println(type);
+//		System.out.println(areaCode);
+//		System.out.println(areaName);
+//		System.out.println(pno);
+//		System.out.println(keyword);
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("type",type);
+		map.put("name",areaName);
+		map.put("keyword",keyword);
+		int listCount = tourService.searchTourListCount(map);
+		PageInfo pinfo = getPagInfo(listCount,type, pno, map);
+		//System.out.println(pinfo);
+		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
+		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
+		map.put("start", (start+""));
+		map.put("end",(end+""));
+		ArrayList<Tour> list = tourService.selectSearchList(map);
+//		for(Tour t : list) {
+//			System.out.println(t);
+//		}
+		HashMap<String,Object> rtData = new HashMap<String, Object>();
+		rtData.put("list", list);
+		rtData.put("page",pinfo);
+		return new Gson().toJson(rtData);
+	}
+	
+	// �쑀吏�&�쁽�꽦 - 愿�由ъ옄 �뿬�뻾吏� �긽�꽭議고쉶 而⑦듃濡ㅻ윭 (2024.06.14)
 		@ResponseBody
 		@GetMapping(value="tourDetailView.to",produces="application/json; charset=UTF-8")
 		public String tourDetailView(Tour tour) {
-//			System.out.println("controller 성공");
+//			System.out.println("controller �꽦怨�");
 //			System.out.println(tour);
 			HashMap<String, Object> rtMap = new HashMap<String, Object>();
 			switch(tour.getTourType()) {
@@ -240,7 +263,7 @@ public class TourController {
 				tsd.setThumbImg(tour.getThumbImg());
 				tsd.setTourtype(tour.getTourType());
 				rtMap.put("list",tsd);
-				// 다른 이미지들도 가져와야한다.
+				// �떎瑜� �씠誘몄��뱾�룄 媛��졇���빞�븳�떎.
 				break;
 			case "lodging" : 
 				LodgingData lod = tourService.lodgingDetail(tour.getTourNo());
@@ -277,49 +300,49 @@ public class TourController {
 
 
 			return new Gson().toJson(rtMap);
-			// 사진(썸네일 제외 다른 추가이미지들)들 받을 배열 = service.xml();
+			// �궗吏�(�뜽�꽕�씪 �젣�쇅 �떎瑜� 異붽��씠誘몄��뱾)�뱾 諛쏆쓣 諛곗뿴 = service.xml();
 		}
 		
-	// 유진 - 관리자 여행지 삭제 컨트롤러 (2024.06.17)
+	// �쑀吏� - 愿�由ъ옄 �뿬�뻾吏� �궘�젣 而⑦듃濡ㅻ윭 (2024.06.17)
 	@PostMapping(value="deleteTour.to")
 	public ModelAndView deleteTour(int tourNo, String thumbImg, HttpSession session, ModelAndView mv) {
 		int result = 0;
 		result = tourService.deleteTour(tourNo);
 		
-		// 결과에 따른 처리
+		// 寃곌낵�뿉 �뵲瑜� 泥섎━
 		if(result > 0) {
 			if(!thumbImg.equals("")) {
 				String realPath 
 					= session.getServletContext()
 							 .getRealPath(thumbImg);
 				
-				// realPath 가 가리키는 파일 객체 생성 후 delete
+				// realPath 媛� 媛�由ы궎�뒗 �뙆�씪 媛앹껜 �깮�꽦 �썑 delete
 				new File(realPath).delete();
 			}
 			
-			session.setAttribute("alertMsg", "성공적으로 여행지가 삭제되었습니다.");
+			session.setAttribute("alertMsg", "�꽦怨듭쟻�쑝濡� �뿬�뻾吏�媛� �궘�젣�릺�뿀�뒿�땲�떎.");
 			mv.setViewName("redirect:/adminTour.ad");
 		} else {
-			mv.addObject("errorMsg", "삭제 실패").setViewName("common/errorPage");
+			mv.addObject("errorMsg", "�궘�젣 �떎�뙣").setViewName("common/errorPage");
 		}
 		
 		return mv;
 	}
 	
-	// 유진 - 관리자 여행지 수정 컨트롤러 (2024.06.18)
-	// 관리자 여행지 추가 (페이지로 이동하는) 컨트롤러
+	// �쑀吏� - 愿�由ъ옄 �뿬�뻾吏� �닔�젙 而⑦듃濡ㅻ윭 (2024.06.18)
+	// 愿�由ъ옄 �뿬�뻾吏� 異붽� (�럹�씠吏�濡� �씠�룞�븯�뒗) 而⑦듃濡ㅻ윭
 	@PostMapping(value="adminTourUpdate.ad")
 	public String adminTourUpdateForm(@RequestParam("tourNo") int tourNo, Model model) {
 		
-		// 여행지 한 곳 조회
-		System.out.println("넘어온 글번호는 " + tourNo + "번입니다.");
+		// �뿬�뻾吏� �븳 怨� 議고쉶
+		System.out.println("�꽆�뼱�삩 湲�踰덊샇�뒗 " + tourNo + "踰덉엯�땲�떎.");
 		
-		// Tour 객체만 조회
+		// Tour 媛앹껜留� 議고쉶
         Tour tour = tourService.getTourByNo(tourNo);
         
-        System.out.println("선택한 객체: " + tour);
+        System.out.println("�꽑�깮�븳 媛앹껜: " + tour);
         if (tour == null) {
-            throw new NullPointerException("만일 null 이라면 넘어온 tour 객체의 번호: " + tourNo);
+            throw new NullPointerException("留뚯씪 null �씠�씪硫� �꽆�뼱�삩 tour 媛앹껜�쓽 踰덊샇: " + tourNo);
         }
         
         model.addAttribute("tour", tour);
@@ -335,7 +358,7 @@ public class TourController {
 			tsd.setThumbImg(tour.getThumbImg());
 			tsd.setTourtype(tour.getTourType());
 			rtMap.put("list",tsd);
-			// 다른 이미지들도 가져와야한다.
+			// �떎瑜� �씠誘몄��뱾�룄 媛��졇���빞�븳�떎.
 			break;
 		case "lodging" : 
 			LodgingData lod = tourService.lodgingDetail(tour.getTourNo());
@@ -376,9 +399,9 @@ public class TourController {
 		return "admin/adminTourUpdateForm";
 	}
 	
-	//------------------ 일반 메서드 영역 ------------------------------------------------------
+	//------------------ �씪諛� 硫붿꽌�뱶 �쁺�뿭 ------------------------------------------------------
 	
-	// 유진 - 파일 처리용 메서드 작성 (2024.06.12)
+	// �쑀吏� - �뙆�씪 泥섎━�슜 硫붿꽌�뱶 �옉�꽦 (2024.06.12)
 	public String savePath(MultipartFile file, HttpSession session, String type) {
         String savePath = session.getServletContext().getRealPath("/resources/tourUpfiles/");
         String fileName = type + "_" + System.currentTimeMillis() + "_" + StringUtils.cleanPath(file.getOriginalFilename());
@@ -397,7 +420,7 @@ public class TourController {
         return fileName;
     }
 
-	// 다중 파일의 경우
+	// �떎以� �뙆�씪�쓽 寃쎌슦
 	public ArrayList<String> savePaths(ArrayList<MultipartFile> files, HttpSession session, String type) {
 		ArrayList<String> fileNames = new ArrayList<>();
         for(MultipartFile file : files) {
@@ -408,5 +431,23 @@ public class TourController {
         }
         return fileNames;
     }
+	
+	// 페이징 처리 메소드
+	public PageInfo getPagInfo(int count,String type,int pno, Map<String, String> map) {
+		
+		int listCount = count;
+		int currentPage = pno;
+		int pageLimit = 5;
+		int boardLimit = 5;
+		
+		int maxPage = (int)Math.ceil((double)listCount/boardLimit);
+		int startPage= (((currentPage-1)/pageLimit)*pageLimit)+1;
+		int endPage = startPage+(pageLimit-1);
+		if(maxPage<endPage) {
+			endPage=maxPage;
+		}
+		
+		return new PageInfo(listCount, currentPage, pageLimit, boardLimit, maxPage, startPage, endPage);
+	}
 }
 

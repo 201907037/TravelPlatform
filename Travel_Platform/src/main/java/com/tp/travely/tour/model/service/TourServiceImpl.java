@@ -51,6 +51,16 @@ public class TourServiceImpl implements TourService {
 	public ArrayList<Tour> selectTourList(Map<String, String> map) {
 		return tourDao.selectTourList(sqlSession,map);
 	}
+	
+	@Override
+	public int searchTourListCount(Map<String, String> map) {
+		return tourDao.searchTourListCount(sqlSession, map);
+	}
+	
+	@Override
+	public ArrayList<Tour> selectSearchList(Map<String, String> map) {
+		return tourDao.selectSearchList(sqlSession,map);
+	}
 
 	// 유진 - 관리자 여행지 추가 서비스  (2024.06.12)
 	@Override
@@ -105,7 +115,7 @@ public class TourServiceImpl implements TourService {
 	    return result;
 	}
 
-	
+	// 김동현
 	@Override
 	public City getLocationCity(int sigunguCodeNo) {
 		return tourDao.getLocationCity(sqlSession,sigunguCodeNo);

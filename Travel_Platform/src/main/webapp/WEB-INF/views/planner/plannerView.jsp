@@ -42,10 +42,10 @@
 <jsp:include page="leftbar.jsp"/>
 
 <div class="outer41">
-<div id="header" style="height: 10%;">
+<!-- <div id="header" style="height: 10%;">
 
-</div>
-<div id="map" style="width:100%;height:90%;margin : auto;"></div>
+</div> -->
+<div id="map" style="width:100%;height:100%;margin : auto;"></div>
 </div>
 <script>
 	var container = document.getElementById('map');
@@ -73,6 +73,11 @@
         	</div>
         	<div align="center">
         		<input type="text" name="daterange" id="daterange" readonly style="width:200px;">
+        	</div>
+        	<br>
+        	<div class="dateSetter" align="center">
+        		<table>
+        		</table>
         	</div>
         </div>
         <br>
@@ -138,12 +143,36 @@ let planner = [];
 			    },
 			    opens : 'center',
 			    startDate : today,
-			    endDate : nextday
+			    endDate : nextday,
+			    minDate : today
 		  }, function(start, end, label) {
 		    //console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
 		   	
-		    $('#changeDate').on('apply.daterangepicker', function(ev, picker) {
+		    $('#daterange').on('apply.daterangepicker', function(ev, picker) {
 		  	  $("#daterange").val(start.format('YYYY/MM/DD')+" - "+end.format('YYYY/MM/DD'));
+		  	  tstart = drp.startDate._d;
+			  tend = drp.endDate._d;
+			  tDate = Math.ceil(Math.abs((tstart.getTime()-tend.getTime())/(1000 * 60 * 60 * 24)));
+			  //console.log(tDate);
+			  //console.log("출력");
+			 /* $(".dateSetter>table").html("");
+			  for(let i=0;i<tDate;i++){
+				 let tr = $("<tr>");
+				 let td = $("<td>");
+				 //let tdS = $("<td>");
+				 //let tdE = $("<td>");
+				 let startH = $("<input>").attr({"class" : "dateSelect","type":"number","min" : "01","max" : "24","step" : "1","value":"10","name" : "startH"}).css("background-color","white").css("color","black");
+				 let startM = $("<input>").attr({"class" : "dateSelect","type":"number","min" : "00","max" : "60","step" : "30","value":"00","name" : "startM"}).css("background-color","white").css("color","black");
+				 //tdS.append(startH," : ",startM);
+				 let endH = $("<input>").attr({"class" : "dateSelect","type":"number","min" : "01","max" : "24","step" : "1","value":"20","name" : "endH"}).css("background-color","white").css("color","black");
+				 let endM = $("<input>").attr({"class" : "dateSelect","type":"number","min" : "01","max" : "60","step" : "30","value":"00","name" : "endM"}).css("background-color","white").css("color","black");
+				 //tdE.append(endH," : ",endM);
+				 //tr.append(tdS,tdE);
+				 let hidden = $("<input>").attr({"type":"hidden","name" : "idx","value":i});
+				 td.append((i+1)+"일차 ",startH," : ",startM," ~ ",endH," : ",endM,hidden);
+				 tr.append(td);
+			  	$(".dateSetter>table").append(tr); 
+			  }*/
 		  	});
 		    $("#daterange").on('showCalendar.daterangepicker',function(){
 		    	
@@ -152,14 +181,16 @@ let planner = [];
 			$(".btn-default").html("취소");
 			$(".btn-primary").html("적용");
 		  var drp = $('#daterange').data('daterangepicker');
-		  tstart = drp.startDate._d;
-		  tend = drp.endDate._d;
+		  $(".dateSetter").on("change","input[class=dateSelect]",function(){
+			  //console.log($(this).val());
+			  
+		  });
 		  
 		  $("select[name=areaCode]").change(function(){
 			  //console.log($(this).val());
 			  let code = $(this).val();
-			  if(Number(code)>30){
-				  $("#city tbody").html("");
+			  $("#city tbody").html("");
+			  if(Number(code)>30&&Number(code)<39){
 				  $.ajax({
 					  url : "cityList.to",
 					  method : "get",
@@ -199,13 +230,13 @@ let planner = [];
 		  
 		  $("button[class^=btn-right]").click(function(){
 			  if($("#areaCode").val()!=0){
-				  tstart = drp.startDate._d; // 여행시작일
-				  tend = drp.endDate._d;	 // 여행종료일
+				  //tstart = drp.startDate._d; // 여행시작일
+				  //tend = drp.endDate._d;	 // 여행종료일
 				  //tDate = tend.getDate()-tstart.getDate()+1; // 여행일수
-				  tDate = Math.ceil(Math.abs((tstart.getTime()-tend.getTime())/(1000 * 60 * 60 * 24)));
+				  //tDate = Math.ceil(Math.abs((tstart.getTime()-tend.getTime())/(1000 * 60 * 60 * 24)));
 				  areaCode = $("#areaCode").val(); // 여행지역코드
 				  sigunguCodeNo=0;
-				  if(Number(areaCode)>30){
+				  if(Number(areaCode)>30&&Number(areaCode)<39){
 					  sigunguCodeNo = $(".choose").children().eq(0).val();
 					  sigunguCode = $(".choose").children().eq(1).val();
 					  areaName = $(".choose").text();
@@ -213,7 +244,7 @@ let planner = [];
 				  }else{
 					  areaName = $("#areaCode option:checked").text();
 				  }
-				  
+				  console.log(sigunguCodeNo);
 				  $.ajax({
 					  url : "getLocation.to",
 					  method : "GET",
@@ -249,14 +280,22 @@ let planner = [];
 						  console.log(tstart);
 						  console.log(tend);
 						  console.log(tDate); */
+						  if(plan!=null){
+							  plan = {};
+						  }
 						  var newloc =new kakao.maps.LatLng(locationYY,locationXX);
 						  $("#DATEPICK").modal("hide");
 						  map.setCenter(newloc);
-						  map.setLevel(7);
+						  if(Number(areaCode)==39){
+							  map.setLevel(9);
+						  }else{
+							  map.setLevel(7); 
+						  }
+						  
 						  for(let i=0;i<tDate;i++){
 							  let day;
-							  planner[i] = {date : new Date(new Date().setDate(tstart.getDate()+i)),dayCount:i+1,startTimeH : 10,startTimeM : "00",endTimeH: 20,endTimeM:"00"};
-							  if(i==0){
+							  planner[i] = {date : new Date(new Date().setDate(tstart.getDate()+i)),dayCount:i,startTimeH : 10,startTimeM : "00",endTimeH: 20,endTimeM:"00"};
+							  if(i==0){ 
 								  day = tstart;
 							  }else{
 								  day = new Date(new Date().setDate(tstart.getDate()+i));
@@ -264,14 +303,38 @@ let planner = [];
 							 
 							 let div =  $("<div>").attr("class","date").html((i+1)+"일차 : "+moment(day).format("YYYY/MM/DD"));
 							 let hidden = $("<input>").attr({type:"hidden",name:"plannerIndex",value:(i)});
-							 console.log(i);
+							 //console.log(i);
 							 div.append(hidden);
 							 $(".d_box").append(div);
+							 let obj = planner[i];
+							 let tourList = [];
+							 /* let startTime = new Date(new Date().setHours(obj.startTimeH));
+							 let endTime = new Date(new Date().setHours(obj.endTimeH));
+							 endTime.setMinutes(obj.endTimeM);
+							 startTime.setMinutes(obj.startTimeM);
+							 let maxTime = (endTime-startTime)/(1000 * 60 * 60); */
+							 for(let i=0;i<=5;i++){
+								/*
+								obj['p'+i] = {};
+								obj['p'+i]["time"] = 2;
+								if(i==1||i==4){
+									obj['p'+i]["time"] = 1;
+								}
+								*/
+								let p = {};
+								p.time = 2;
+								if(i==1||i==4){
+									p.time = 1;
+								}
+								tourList.push(p);
+							 }
+							 obj.tourList = tourList;
 						  }
 						 plan.startDate = tstart;
 						 plan.endDate = tend;
 						 plan.planList = planner;
-						 
+						 //console.log(plan);
+						 console.log(plan);
 						 
 					  }
 				  }else{
@@ -286,6 +349,7 @@ let planner = [];
 	  	 $("#changeDate").click(function(){
 	  		  $("#DATEPICK").modal("show");	
 	  	  });
+	  	 
 });
 
 

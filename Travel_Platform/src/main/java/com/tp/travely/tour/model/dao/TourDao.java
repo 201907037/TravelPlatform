@@ -37,6 +37,13 @@ public class TourDao {
 		return (ArrayList)sqlSession.selectList("tourMapper.selectTourList",map);
 	}
 
+	public int searchTourListCount(SqlSessionTemplate sqlSession, Map<String,String> map) {
+		return sqlSession.selectOne("tourMapper.searchTourListCount",map);
+	}
+	
+	public ArrayList<Tour> selectSearchList(SqlSessionTemplate sqlSession, Map<String,String> map){
+		return (ArrayList)sqlSession.selectList("tourMapper.selectSearchList",map);
+	}
 	
 	// 유진 - 관리자 여행지 추가 DAO (2024.06.12)
 	public int insertTourImg(SqlSessionTemplate sqlSession, TourImg tourImg) {
