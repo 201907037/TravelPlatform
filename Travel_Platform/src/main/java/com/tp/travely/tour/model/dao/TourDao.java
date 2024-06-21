@@ -51,22 +51,18 @@ public class TourDao {
 	}
 	
 	public int insertTour(SqlSessionTemplate sqlSession, TourSpotData tsd) {
-        System.out.println("TourSpotData");
         return sqlSession.insert("tourMapper.insertTourSpotData", tsd);
 	}
 
 	public int insertTour(SqlSessionTemplate sqlSession, LodgingData lod) {
-		System.out.println("LodgingData");
         return sqlSession.insert("tourMapper.insertLodgingData", lod);
 	}
 
 	public int insertTour(SqlSessionTemplate sqlSession, RestaurantData rd) {
-		System.out.println("RestaurantData");
         return sqlSession.insert("tourMapper.insertRestaurantData", rd);
 	}
 
 	public int insertTour(SqlSessionTemplate sqlSession, LeportsData led) {
-		System.out.println("LeportsData");
 		return sqlSession.insert("tourMapper.insertLeportsData", led);
 	}
 	

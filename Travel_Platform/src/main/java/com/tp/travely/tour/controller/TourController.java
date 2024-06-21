@@ -311,12 +311,7 @@ public class TourController {
 		// 여행지 한 곳 조회		
 		// Tour 객체만 조회
         Tour tour = tourService.getTourByNo(tourNo);
-        
-        System.out.println("선택한 객체: " + tour);
-        if (tour == null) {
-            throw new NullPointerException("만일 null 이라면 넘어온 tour 객체의 번호: " + tourNo);
-        }
-        
+
         model.addAttribute("tour", tour);
         
 		HashMap<String, Object> rtMap = new HashMap<String, Object>();
@@ -368,8 +363,6 @@ public class TourController {
 		
 		model.addAttribute("rtMap", rtMap);
 		model.addAttribute("imgList", imgList);
-		
-		System.out.println(imgList);
 		
 		return "admin/adminTourUpdateForm";
 	}

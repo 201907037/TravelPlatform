@@ -129,38 +129,32 @@ public class TourServiceImpl implements TourService {
 	// 유진&현성 - 관리자 여행지 상세조회 서비스 (2024.06.14)
 	@Override
 	public TourSpotData tourSpotDetail(int tourNo) {
-		System.out.println("관광지 서비스 넘어옴");
 		return tourDao.tourSpotDetail(sqlSession, tourNo);
 	}
 
 	@Override
 	public LodgingData lodgingDetail(int tourNo) {
-		System.out.println("숙박시설 서비스 넘어옴");
 		return tourDao.lodgingDetail(sqlSession, tourNo);
 	}
 
 	@Override
 	public RestaurantData restaurantDetail(int tourNo) {
-		System.out.println("레스토랑 서비스 넘어옴");
 		return tourDao.restaurantDetail(sqlSession, tourNo);
 	}
 
 	@Override
 	public LeportsData leportsDetail(int tourNo) {
-		System.out.println("레포츠 서비스 넘어옴");
 		return tourDao.leportsDetail(sqlSession, tourNo);
 	}
 	
 	@Override
 	public ArrayList<TourImg> tourImgList(int tourNo) {
-		System.out.println("추가이미지 서비스 넘어옴");
 		return tourDao.tourImgList(sqlSession, tourNo);
 	}
 	
 	// 유진 - 관리자 여행지 조회 서비스 (Tour 객체에서만) (2024.06.19)
 	@Override
 	public Tour getTourByNo(int tourNo) {
-		System.out.println("공통 Tour 객체 서비스 넘어옴");
         return tourDao.findTourByNo(sqlSession, tourNo);
     }
 
