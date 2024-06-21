@@ -7,108 +7,183 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-     #datatablesSimple>tbody>tr:hover {cursor:pointer;}
-     .updateBtn, .delateBtn{
-       display: block;
-	  width: 100%;
-	  border: none;
-	  background-color: #04AA6D;
-	  padding: 14px 28px;
-	  font-size: 16px;
-	  cursor: pointer;
-	  text-align: center;
-  }
+    #datatablesSimple>tbody>tr:hover {cursor:pointer;}
+   
+
+    /* 수정 및 삭제 버튼 스타일 */
+    .updateBtn, .deleteBtn {
+        display: block;
+        width: 100%;
+        border: none;
+        padding: 10px 20px;
+        font-size: 14px;
+        cursor: pointer;
+        text-align: center;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* 수정 버튼 스타일 - 연한 하늘색 */
+    .updateBtn {
+        background-color: #87CEEB;
+        color: white;
+    }
+
+    .updateBtn:hover {
+        background-color: #6DAEDB;
+        color: white;
+    }
+
+    /* 삭제 버튼 스타일 */
+    .deleteBtn {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .deleteBtn:hover {
+        background-color: #e53935;
+        color: white;
+    }
+
+    /* 글쓰기 버튼 스타일 */
+    .writeBtn {
+        float: right;
+        background-color: #008CBA;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .writeBtn:hover {
+        background-color: #007BB5;
+        color: white;
+    }
 </style>
+<script>
+    // JSP에서 userNo 값을 가져와서 JavaScript 변수에 저장
+    var userNo = "${sessionScope.userNo}";
+</script>
 </head>
 <body>
 
-
-	<jsp:include page="../admin/adminCommon.jsp"></jsp:include>
-			<!-- 패딩 영역 -->
-	<div style="width: 100%; padding:50px;">
-	<!-- 내부 영역 -->
-	<div class="card mb-4" style="width: 100%;">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            공지사항 목록
-            <button type="button" style="float: right;" onclick="location.href='enrollFormNotice.ad'">글쓰기</button>
-        </div>
-        <div class="card-body">
-            <table id="datatablesSimple">
-                <thead>
-                    <tr>
-                        <th>공지사항 번호</th>
-                        <th>제목</th>
-                        <th>내용</th>
-                        <th>작성일</th>
-                        <th style="width:30px;">수정</th>
-                        <th style="width:30px;">삭제</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <!-- 추후에 관리자 계정 제외후 일반 회원만 조회하게끔 구현 예정 -->
-                <c:forEach var="n" items="${requestScope.list}">
-                    <tr>
-                        <th class="num">${n.noticeNo}</th>
-                        <th>${n.noticeTitle}</th>
-                        <th>${n.noticeContent}</th>
-                        <th>${n.createDate}</th>
-                        <th onclick="event.stopPropagation();"><button onclick="event.stopPropagation();" class="updateBtn">수정</button></th>
-                        <th onclick="event.stopPropagation();"><button onclick="event.stopPropagation();" class="delateBtn">삭제</button></th>
-                    </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </div>
-        <footer class="py-4 bg-light mt-auto">
-            <div class="container-fluid px-4">
-                <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                </div>
+    <jsp:include page="../admin/adminCommon.jsp"></jsp:include>
+    <div style="width: 100%; padding:50px;">
+        <div class="card mb-4" style="width: 100%;">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                공지사항 목록
+                <button type="button" class="writeBtn" onclick="location.href='enrollFormNotice.ad'">글쓰기</button>
             </div>
-        </footer>
+            <div class="card-body">
+                <table id="datatablesSimple">
+                    <thead>
+                        <tr>
+                            <th>공지사항 번호</th>
+                            <th>제목</th>
+                            <th>내용</th>
+                            <th>작성일</th>
+                            <th style="width:30px;">수정</th>
+                            <th style="width:30px;">삭제</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="n" items="${requestScope.list}">
+                            <tr>
+                                <td class="num">${n.noticeNo}</td>
+                                <td>${n.noticeTitle}</td>
+                                <td>${n.noticeContent}</td>
+                                <td>${n.createDate}</td>
+                                <td><button data-notice-no="${n.noticeNo}" class="updateBtn">수정</button></td>
+                                <td><button data-notice-no="${n.noticeNo}" class="deleteBtn">삭제</button></td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
 
-	<script>
-	$(function(){
-		
-		// 업데이트 버튼 클릭 시
-		$(".updateBtn").on("click", function(e) {
-			// console.log(($(this).parents("tr")).children().eq(0).text());
-			
-			let num = ($(this).parents("tr")).children().eq(0).text();
-			console.log(num);
-			location.href="updateFormNotice.ad?num="+num;
-			
-		});
-	
-		// 삭제 버튼 클릭 시
-		$(".delateBtn").on("click", function(e){
-			
-			let num = ($(this).parents("tr")).children().eq(0).text();
-			console.log(num);
-			location.href="deleteNotice.ad?num="+num;
-			
-		});
-		
-		// 클릭 시 상세보기
-		$("#datatablesSimple>tbody>tr").click(function(){
-			
-			// console.log($(this).children().eq(0).text());
-			
-			let num = $(this).children().eq(0).text();
-			
-			location.href="detailNotice.bo?num="+num;
-		});
-		
-		
-	})
-	
+    <script>
+    $(function() {
+        // tr 요소 클릭 시 상세 페이지로 이동
+        $("#datatablesSimple tbody").on("click", "tr", function(e) {
+            // 버튼을 클릭한 경우 이벤트 무시
+            if ($(e.target).is("button")) {
+                return;
+            }
+            
+            let num = $(this).children().eq(0).text();
+            location.href = "detailNotice.bo?num="+num;
+        });
+    	
+        // 업데이트 버튼 클릭 시
+        $(".updateBtn").on("click", function(e) {
+            e.stopPropagation(); // 부모 요소로의 이벤트 전파를 중단
+            let num = $(this).data("notice-no");
+            console.log(num);
+            Swal.fire({
+                title: '공지사항 수정',
+                html: `<form id="updateForm" action="updateNotice.ad" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="noticeNo" name="noticeNo">
+                    <table border="1">
+                        <tr>
+                            <th>제목</th>
+                            <td><input type="text" style="width: 350px" name="noticeTitle" required></td>
+                        </tr>
+                        <tr>
+                            <th>내용</th>
+                            <td><textarea style="resize: none; height: 300px; width: 350px" name="noticeContent" required></textarea></td>
+                        </tr>
+                        <tr>
+                            <th><label for="reUpfile">첨부파일</label></th>
+                            <td><input type="file" id="reUpfile" name="reUpfile"></td>
+                        </tr>
+                    </table>
+                </form>`,
+                showCancelButton: true,
+                confirmButtonText: '수정',
+                cancelButtonText: '취소',
+                didOpen: () => {
+                    // 모달이 열렸을 때 실행됩니다.
+                    document.getElementById("noticeNo").value = num;
+                },
+                preConfirm: () => {
+                    document.getElementById("updateForm").submit();
+                }
+            });
+        });
 
-
-	</script>
+        // 삭제 버튼 클릭 시
+        $(".deleteBtn").on("click", function(e) {
+            e.stopPropagation(); // 부모 요소로의 이벤트 전파를 중단
+        	let num = $(this).data("notice-no");
+            console.log(num);
+            Swal.fire({
+                title: '공지사항 삭제',
+                text: '정말 삭제하시겠습니까?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '삭제',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.href = "deleteNotice.ad?num="+num;
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>

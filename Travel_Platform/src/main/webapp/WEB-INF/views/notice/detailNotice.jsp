@@ -178,6 +178,7 @@ a {
 							<img src="${requestScope.n.changeName }" width="300x" height="300px">
 							</div>
 							</c:if>
+							<div>
 							<img src="${ requestScope.n.changeName }" width="300px" height="300px">
 						</div>
 						</c:if>
@@ -186,8 +187,8 @@ a {
 						</p>
 					</td>
 				</tr>
-				<br>
 			</table>
+			<br>
 
 		</div>
 			<div align="center" class="fbtns" id="btns-fb-btn">

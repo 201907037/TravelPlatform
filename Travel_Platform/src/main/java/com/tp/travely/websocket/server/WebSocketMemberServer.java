@@ -114,11 +114,27 @@ public class WebSocketMemberServer extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		
-		// 사용자가 접속을 종료할 때 마다 userList 에서 해당 사용자 정보 제거
-		    userList.remove(session);
-			   
+		userList.remove(session);
+	    System.out.println("종료됨 :" + session);
+
+	    Member loginUser = (Member)session.getAttributes().get("loginUser");
+	    if (loginUser != null) {
+	        // 종료 메시지 생성
+	        Msg endMsg = new Msg();
+	        endMsg.setMsgContent(loginUser.getNickName() + "님이 채팅방을 나가셨습니다.");
+	        endMsg.setMsgTime(new SimpleDateFormat("a h:mm").format(new Date()));
+
+	        String results = new Gson().toJson(endMsg);
+	        TextMessage endMessage = new TextMessage(results);
+
+	        // 남아있는 사용자들에게 종료 메시지 전송
+	        for (WebSocketSession ws : userList) {
+	            if (ws.isOpen()) {
+	                ws.sendMessage(endMessage);
+	            }
+	        }
+	    }
 	}
-	
 	
 	
 }

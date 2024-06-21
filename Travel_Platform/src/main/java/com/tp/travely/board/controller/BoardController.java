@@ -423,54 +423,58 @@ public class BoardController {
 		
 	}
 	
-		// 게시글 검색 목록
-		@GetMapping("search.ad")
-		public String boardSearchListView(@RequestParam(value="cpage", defaultValue="1") int currentPage,
-									String keyword, Model model) {
-			
-			
-//			System.out.println(keyword);
-			int listCount = boardService.searchBoardCount(keyword);
-//			System.out.println(listCount);
-			
-			int pageLimit = 10;
-			int boardLimit = 16;
-			
-			// System.out.println(listCount);
-			
-			// PageInfo 객체 만들어내기
-			PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-			
-			
-			// 목록불러오는 기능 추가 예정
-			ArrayList<Board> list1 = boardService.searchListBoard(keyword, pi);
-//			System.out.println(list1);
-			ArrayList<BoardImg> list2 = boardService.searchListBoardImg(keyword);
-//			System.out.println(list2);
-			ArrayList<Member> list3 = boardService.searchMember(keyword);
-			// 회원 목록조회 메소드도 사용해야함
-			
-			// 각 게시글번호당 좋아요 수 가져오기
-			ArrayList<Integer> list4 = new ArrayList<>();
-			// > 10칸짜리 빈 ArrayList 객체 
-			//   int 형으로 받아오기 때문에 Integer 타입으로 제네릭 설정
-			
-			for(int i=0; i<list1.size(); i++) {
-				list4.add(boardService.likeListCount(list1.get(i).getBoardNo())); 
-			}
-			
-			
-			model.addAttribute("pi", pi);
-			model.addAttribute("bList", list1);
-			model.addAttribute("biList", list2);
-			model.addAttribute("mList", list3);
-			model.addAttribute("likeCount", list4);
-			
-			
-			return "board/boardListView";
+	// 게시글 검색 목록
+	@GetMapping("search.ad")
+	public String boardSearchListView(@RequestParam(value="cpage", defaultValue="1") int currentPage,
+								String keyword, Model model) {
+		
+		
+//				System.out.println(keyword);
+		int listCount = boardService.searchBoardCount(keyword);
+		if(listCount > 0) {
+//				System.out.println(listCount);
+		
+		int pageLimit = 10;
+		int boardLimit = 16;
+		
+		// System.out.println(listCount);
+		
+		// PageInfo 객체 만들어내기
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		
+		
+		// 목록불러오는 기능 추가 예정
+		ArrayList<Board> list1 = boardService.searchListBoard(keyword, pi);
+//				System.out.println(list1);
+		ArrayList<BoardImg> list2 = boardService.searchListBoardImg(keyword);
+//				System.out.println(list2);
+		ArrayList<Member> list3 = boardService.searchMember(keyword);
+		// 회원 목록조회 메소드도 사용해야함
+		
+		// 각 게시글번호당 좋아요 수 가져오기
+		ArrayList<Integer> list4 = new ArrayList<>();
+		// > 10칸짜리 빈 ArrayList 객체 
+		//   int 형으로 받아오기 때문에 Integer 타입으로 제네릭 설정
+		
+		for(int i=0; i<list1.size(); i++) {
+			list4.add(boardService.likeListCount(list1.get(i).getBoardNo())); 
 		}
-	
-	
+		
+		
+		model.addAttribute("pi", pi);
+		model.addAttribute("bList", list1);
+		model.addAttribute("biList", list2);
+		model.addAttribute("mList", list3);
+		model.addAttribute("likeCount", list4);
+		
+//				if() {mv.setViewName("redirect:/noticeList.ad");
+		return "board/boardListView";
+		}else {
+			return "redirect:/selectList.bo";
+		}
+	}
+
+
 	
 	
 	

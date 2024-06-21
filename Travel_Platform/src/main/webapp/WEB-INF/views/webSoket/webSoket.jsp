@@ -260,8 +260,8 @@
             </div>
             <div id="webSocketContent2" >
             	<div align="center" style="padding-right: 300px;">
-	            	<button onclick="connect();">접속</button>	
-					<button onclick="disconnect();">종료</button>
+	            	<button id="input-button" onclick="connect();">접속</button>	
+					<button id="output-button" disabled onclick="disconnect();">종료</button>
 				</div>
                 <div id="message_wrap">
                     <br><br>
@@ -269,83 +269,7 @@
                         <div class="msg_view">
 
                             <br>
-                            <div class="chat-container2">
-                                <div style="text-align: center;">
-                                <span>&nbsp;-뚱이님이 입장하셨습니다.-</span>
-                                </div>
-                                <br><br>
-                                
-                                
-                                <table>
-                                    <tr>
-                                        <td rowspan="2" style="padding-left: 20px;">
-                                            <div class="circle-image" data-toggle="modal" data-target="#profile">
-                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSirGOkvAvFHbOyiPbnwrcOqo0z1V2jQnIDxg&s">
-                                        </div>
-                                        </td>
-                                        <td class="name-section">
-                                            &nbsp;뚱이
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="message">
-                                                안녕 난 뚱이야
-                                            </div>
-                                        <span class="msg_time">오후 6:13</span>
-                                        </td>
-                                    </tr>
-                                    
-                                </table>
-                            </div>
-
-                            <div class="chat-container">
-                                <table>
-                                    <tr>
-                                        <td class="name-section" align="right">
-                                            스폰지밥
-                                        </td>
-                                        <td rowspan="2" style="padding-right: 20px;">
-                                            <div class="profile-image" data-toggle="modal" data-target="#profile">
-                                                <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTAxMTFfMjgz%2FMDAxNjEwMzM1OTQ0MzY3.RrSNHO5Dsg_GzmFrvvSrfjy89rsWNfi493yjXfMj1qcg.FWfE7pbHa-oz2Ns02MgLIdkCkERE95We1bxltzYN1Y0g.JPEG.wowmj95%2Foutput_3923337412.jpg&type=sc960_832" alt="Profile Image">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr> 
-                                        <td class="tdtd">
-                                            <span class="myMsg_time">오후 7:13</span>
-                                            <div class="chat-message">
-                                                안녕하세요 뜨뽄디밥이에요~ ㅎㅎㅎ
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                            <div class="chat-container2">
-                                <table >
-                                    <tr>
-                                        <td rowspan="2" style="padding-left: 20px;">
-                                            <div class="circle-image" data-toggle="modal" data-target="#profile">
-                                            <img src="https://i.namu.wiki/i/LcDH2U_aJZzFaTNE6pNoRsSFZ-DgCc0C0fnh-9OQ5sIZ2raVrp5kcxr4D4zaW91sIXrIzZe4MZ8v74qMUEsloA.webp">
-                                        </div>
-                                        </td>
-                                        <td class="name-section">
-                                            &nbsp;마징징
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="message">
-                                                하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하
-                                            </div>
-                                            <span class="msg_time">오후 8:20</span>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-
-
+                           
                             
                         </div>
                         <div id="msg_send">
@@ -379,11 +303,16 @@
 		    // onopen : 소켓 연결 성공 시 실행할 함수
 		    socket.onopen = function() {
 		        console.log("서버와 연결 되었습니다.");
+		        $("#input-button").attr("disabled", true);
+		        $("#output-button").attr("disabled", false);
 		    };
 	
 		    // onclose : 소켓 연결 종료 시 실행할 함수
 		    socket.onclose = function() {
 		        console.log("서버와 연결이 종료되었습니다.");
+		        $("#output-button").attr("disabled", true);
+		        $("#input-button").attr("disabled", false);
+		        alert("서버와 연결이 종료되었습니다.");
 		    };
 	
 		    // onerror : 소켓 연결 실패 (연결 오류 발생)시 실행할 함수
@@ -406,10 +335,16 @@
 		        if (obj.msgContent.includes("님이 입장하셨습니다.")) {
 		        	data += '<br>';
 		            data += '<div style="text-align: center;">';
+		            data += '<span>&nbsp;-' + obj.msgContent + '</span>- <span style="font-size:12px;">'+ obj.msgTime +'</span>';
+		            data += '</div>';
+		            data += '<br>';
+		        } else if (obj.msgContent.includes("님이 채팅방을 나가셨습니다.")) {
+		            data += '<br>';
+		            data += '<div style="text-align: center;">';
 		            data += '<span>&nbsp;-' + obj.msgContent + '-'+ obj.msgTime +'</span>';
 		            data += '</div>';
 		            data += '<br>';
-		        } else if(obj.userNo == uno) { 
+		    	} else if(obj.userNo == uno) { 
 		        		 data += '<div class="chat-container">';
 				         data += '    <table>';
 				         data += '        <tr>';
@@ -470,29 +405,18 @@
 		        // 문자를 연이어서 출력
 		        $(".msg_view").append(data);
 		        
-		        /*
-		        if (socket == null) {
-			        let nickName = "${sessionScope.loginUser.nickName}"
-			        
-			        let str ='' 
-			        
-			        str += '<br>';
-			        str += '<div style="text-align: center;">';
-			        str += '<span>&nbsp;-' + nickName + '님이 채팅방을 나가셨습니다.-</span>';
-			        str += '</div>';
-			        str += '<br>';
-			        
-			        $(".msg_view").append(str);
-			        
-			    }
-		        */
+		        
 		    };
 		}
 	
 		// 웹소켓 서버 접속 종료 함수
 		function disconnect() {
+			
+	        // 소켓을 닫고 플래그 설정
+	        socket.close();
+	        
 		    
-		        socket.close();
+		        
 		}
 	
 		// 메세지 전송 함수

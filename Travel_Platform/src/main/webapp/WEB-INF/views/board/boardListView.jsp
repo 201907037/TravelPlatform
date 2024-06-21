@@ -65,254 +65,163 @@
             font-weight: bold;
         }
 
-         #pagingArea {
-         	width:fit-content; margin:auto;
-         }
+        #pagingArea {
+            width: fit-content; margin: auto;
+        }
          
-         #pagingArea ul>li {
-         	display: inline-block; /* 가로 배치 */
+        #pagingArea ul>li {
+            display: inline-block; /* 가로 배치 */
             margin-right: 20px; /* 항목 간 간격 */
-         }
-         
-             /* 검색창 관련 스타일 */
-		#search_form {
-			width: 400px;
-			height: 40px;
-			margin: auto;
-		}
+        }
 
-		#search_form>div {
-			height: 100%;
-			float: left;
-		}
+        /* 검색창 관련 스타일 */
+        #search_form {
+            width: 400px;
+            height: 40px;
+            margin: auto;
+        }
 
-		#search_text {
-			width: 90%;
-		}
+        #search_form>div {
+            height: 100%;
+            float: left;
+        }
 
-		#search_btn {
-			width: 10%;
-		}
+        #search_text {
+            width: 90%;
+        }
 
-		#search_form input,
+        #search_btn {
+            width: 10%;
+        }
+
+        #search_form input,
         #search_form button {
-			width: 100%;
-			height: 100%;
-			border: 1px solid #F7F7F7;
+            width: 100%;
+            height: 100%;
+            border: 1px solid #F7F7F7;
             box-sizing: border-box;
             outline: none;
-		}
+        }
 
+        #search_text>#search {
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            background-color: #F7F7F7;
+            border-left-color: #F7F7F7;
+            padding-left: 10px;
+        }
 
-		#search_text>#search {
-			border-top-left-radius: 12px;
-			border-bottom-left-radius: 12px;
-			background-color: #F7F7F7;
-			border-left-color: #F7F7F7;
-            padding-left : 10px;
-		}
+        #search_btn>#submit {
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+            background-color: #F7F7F7;
+            border-right-color: #F7F7F7;
+            font-size: 15px;
+            font-weight: bold;
+        }
 
-		#search_btn>#submit {
-			border-top-right-radius: 12px;
-			border-bottom-right-radius: 12px;
-			background-color: #F7F7F7;
-			border-right-color: #F7F7F7;
-			font-size: 15px;
-			font-weight: bold;
-		}
-        
+        /* 글작성 버튼 스타일 */
+        .writeBtn {
+            background-color: white;
+            color: black;
+            padding: 10px 20px;
+            border: 2px solid black;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .writeBtn:hover {
+            background-color: black;
+            color: white;
+        }
          
     </style>
-    
 </head>
 <body>
-	<jsp:include page="../common/header1.jsp"></jsp:include>
-	
+    <jsp:include page="../common/header1.jsp"></jsp:include>
 
     <br><br><br><br><br><br><br><br><br>
     <div align="center" style="font-size: 30px; font-weight: bold;">자유게시판</div>
     <br><br>
     <form id="search_form" action="search.ad" method="get">
-                <div id="search_text">
-                    <input id="search" type="search" name="keyword" placeholder="검색..">
-                </div>
-                <div id="search_btn">
-                    <button type="submit" id="submit" class="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
-            </form>
+        <div id="search_text">
+            <input id="search" type="search" name="keyword" placeholder="검색..">
+        </div>
+        <div id="search_btn">
+            <button type="submit" id="submit" class="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </form>
     <div align="right" style="margin-right: 100px">
-        <button type="button" onclick="location.href='enrollForm.bo'">글작성임시버튼</button>
+        <c:if test="${ not empty sessionScope.loginUser }">
+            <button type="button" class="writeBtn" onclick="location.href='enrollForm.bo'">글 쓰기</button>
+        </c:if>
     </div>
     <div class="container">
-    	
-    	<!-- 게시글 데이터 추출 -->
-    	<c:forEach var="i" begin="0" end="${requestScope.bList.size() -1}">
-        <div class="item" onclick="location.href='detail.bo?bno=${requestScope.bList.get(i).boardNo}'">
-            <div class="header">
-                <img src="${ requestScope.mList.get(i).changeName }" alt="Profile Picture">
-                <span>${ requestScope.mList.get(i).nickName }</span>
-            </div>
-            <img src="${requestScope.biList.get(i).changeName }">
-            <div class="info">
-                <h3>${requestScope.bList.get(i).boardTitle}</h3>
-                <span>좋아요: ${ requestScope.likeCount.get(i) }</span><span>, 조회수: ${requestScope.bList.get(i).count}</span>
-                <div style="display: inline-block; text-align: right; width: 55%;" >
-                	<span> ${requestScope.bList.get(i).createDate}</span>
+        <!-- 게시글 데이터 추출 -->
+        <c:forEach var="i" begin="0" end="${requestScope.bList.size() -1}">
+            <div class="item" onclick="location.href='detail.bo?bno=${requestScope.bList.get(i).boardNo}'">
+                <div class="header">
+                    <img src="${ requestScope.mList.get(i).changeName }" alt="Profile Picture">
+                    <span>${ requestScope.mList.get(i).nickName }</span>
+                </div>
+                <img src="${requestScope.biList.get(i).changeName }">
+                <div class="info">
+                    <h3>${requestScope.bList.get(i).boardTitle}</h3>
+                    <span>좋아요: ${ requestScope.likeCount.get(i) }</span><span>, 조회수: ${requestScope.bList.get(i).count}</span>
+                    <div style="display: inline-block; text-align: right; width: 55%;" >
+                        <span> ${requestScope.bList.get(i).createDate}</span>
+                    </div>
                 </div>
             </div>
-        </div>
         </c:forEach>
-	    
-        <!-- 게시글 1 -->
-        <div class="item">
-            <div class="header">
-                <img src="https://via.placeholder.com/32" alt="Profile Picture">
-                <span>faker</span>
-            </div>
-            <img src="https://www.m-i.kr/news/photo/202205/920346_685537_5047.jpg">
-            <div class="info">
-                <h3>제목</h3>
-                <span>조회수,</span><span>좋아요,</span><span>작성일</span>
-            </div>
-        </div>
-        <!-- 게시글 2 -->
-        <div class="item">
-            <div class="header">
-                <img src="https://via.placeholder.com/32" alt="Profile Picture">
-                <span>zeus</span>
-            </div>
-            <img src="https://cdn.ccdn.co.kr/news/photo/202309/934105_433043_4022.jpg">
-            <div class="info">
-                <h3>제목</h3>
-                <span>조회수,</span><span>작성일</span>
-            </div>
-        </div>
-        <!-- 게시글 3 -->
-        <div class="item">
-            <div class="header">
-                <img src="https://via.placeholder.com/32" alt="Profile Picture">
-                <span>jQuery</span>
-            </div>
-            <img src="https://cdn.travie.com/news/photo/first/201605/img_19107_1.jpg" >
-            <div class="info">
-                <h3>제목</h3>
-                <span>조회수,</span><span>작성일</span>
-            </div>
-        </div>
-        <!-- 게시글 4 -->
-        <div class="item">
-            <div class="header">
-                <img src="https://via.placeholder.com/32" alt="Profile Picture">
-                <span>oracle</span>
-            </div>
-            <img src="https://media.triple.guide/triple-cms/c_limit,f_auto,h_1024,w_1024/feb4c9aa-3fe5-4ec7-8c50-4e065d1323d5.jpeg" >
-            <div class="info">
-                <h3>제목</h3>
-                <h3>제목</h3>
-                <span>조회수,</span><span>작성일</span>
-            </div>
-        </div>
-        <!-- 게시글 5 -->
-        <div class="item">
-            <div class="header">
-                <img src="https://via.placeholder.com/32" alt="Profile Picture">
-                <span>deokhudiary</span>
-            </div>
-            <img src="https://www.m-i.kr/news/photo/202205/920346_685537_5047.jpg">
-            <div class="info">
-                <h3>제목</h3>
-                <span>조회수,</span><span>작성일</span>
-            </div>
-        </div>
-        <!-- 게시글 6 -->
-        <div class="item">
-            <div class="header">
-                <img src="https://via.placeholder.com/32" alt="Profile Picture">
-                <span>basqwe</span>
-            </div>
-            <img src="https://cdn.ccdn.co.kr/news/photo/202309/934105_433043_4022.jpg">
-            <div class="info">
-                <h3>제목</h3>
-                <span>조회수,</span><span>작성일</span>
-            </div>
-        </div>
-        <!-- 게시글 7 -->
-        <div class="item">
-            <div class="header">
-                <img src="https://via.placeholder.com/32" alt="Profile Picture">
-                <span>deddsa</span>
-            </div>
-            <img src="https://cdn.travie.com/news/photo/first/201605/img_19107_1.jpg" >
-            <div class="info">
-                <h3>제목</h3>
-                <span>조회수,</span><span>작성일</span>
-            </div>
-        </div>
-        <!-- 게시글 8 -->
-        <div class="item">
-            <div class="header">
-                <img src="https://via.placeholder.com/32" alt="Profile Picture">
-                <span>hyeono</span>
-            </div>
-            <img src="https://media.triple.guide/triple-cms/c_limit,f_auto,h_1024,w_1024/feb4c9aa-3fe5-4ec7-8c50-4e065d1323d5.jpeg" >
-            <div class="info">
-                <h3>제목</h3>
-                <span>조회수,</span><span>작성일</span>
-            </div>
-        </div>
         <!-- 더 많은 게시글을 여기에 추가할 수 있습니다 -->
     </div>
     <!-- 페이징처리 영역 -->
     <div id="pagingArea">
-                <ul class="pagination">
-                	<c:choose>
-                    <c:when test="${ requestScope.pi.currentPage eq 1 }">
-                    	<li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none; display:none;">Previous</a></li>
+        <ul class="pagination">
+            <c:choose>
+                <c:when test="${ requestScope.pi.currentPage eq 1 }">
+                    <li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none; display:none;">Previous</a></li>
+                </c:when>
+                <c:otherwise>
+                    <li class="page-item"><a class="page-link" href="list.bo?cpage=${ requestScope.pi.currentPage -1 }">Previous</a></li>
+                </c:otherwise>
+            </c:choose>
+            <c:forEach var="p" begin="${ requestScope.pi.startPage }" end="${ requestScope.pi.endPage }" step="1">
+                <c:choose>
+                    <c:when test="${ requestScope.pi.currentPage ne p }">           
+                        <li class="page-item">
+                            <a class="page-link" href="list.bo?cpage=${ p }">
+                                ${ p }
+                            </a>
+                        </li>
                     </c:when>
                     <c:otherwise>
-                    	<li class="page-item"><a class="page-link" href="list.bo?cpage=${ requestScope.pi.currentPage -1 }">Previous</a></li>
+                        <li class="page-item active">
+                            <!-- active 추가시 현재 내가 보고있는 페이지만 색칠됨 -->
+                            <a class="page-link">
+                                <!-- 현재 내가 보고 있는 페이지이므로 클릭해도 href 속성이 없기때문에 클릭 막기 -->
+                                ${ p }
+                            </a>
+                        </li>
                     </c:otherwise>
-                    </c:choose>
-                    <c:forEach var="p" begin="${ requestScope.pi.startPage }"
-                    		   end="${ requestScope.pi.endPage }"
-                    		   step="1">
-                    
-                    <c:choose>
-                    <c:when test="${ requestScope.pi.currentPage ne p }">		   
-	                    <li class="page-item">
-	                    	<a class="page-link" href="list.bo?cpage=${ p }">
-	                    		${ p }
-	                		</a>
-	                    </li>
-                    </c:when>
-                    <c:otherwise>
-                    	<li class="page-item active">
-                    				<!-- active 추가시 현재 내가 보고있는 페이지만 색칠됨 -->
-	                    	<a class="page-link">
-	                    			<!-- 현재 내가 보고 있는 페이지이므로 클릭해도 href 속성이 없기때문에 클릭 막기 -->
-	                    		${ p }
-	                		</a>
-	                    </li>
-                    </c:otherwise>
-                    </c:choose>
-                    
-                    </c:forEach>
-                    
-                    <c:choose>
-                    <c:when test="${ requestScope.pi.currentPage eq requestScope.pi.maxPage }">
-                    	<li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none; display:none;">Next</a></li>
-                    </c:when>
-                    <c:otherwise>
-                    	<li class="page-item"><a class="page-link" href="list.bo?cpage=${ requestScope.pi.currentPage + 1 }">Next</a></li>
-                    </c:otherwise>
-                    </c:choose>
-                </ul>
-            </div>
-            
-            <br><br><br><br>
+                </c:choose>
+            </c:forEach>
+            <c:choose>
+                <c:when test="${ requestScope.pi.currentPage eq requestScope.pi.maxPage }">
+                    <li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none; display:none;">Next</a></li>
+                </c:when>
+                <c:otherwise>
+                    <li class="page-item"><a class="page-link" href="list.bo?cpage=${ requestScope.pi.currentPage + 1 }">Next</a></li>
+                </c:otherwise>
+            </c:choose>
+        </ul>
+    </div>
 
-    
-    
+    <br><br><br><br>
+
     <jsp:include page="../common/footer1.jsp"></jsp:include>
 </body>
 </html>
