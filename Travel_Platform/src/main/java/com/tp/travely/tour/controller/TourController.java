@@ -1,4 +1,4 @@
-// �쑀吏� - tour �뙣�궎吏� �깮�꽦 (2024.06.10)
+// 유진 - tour 패키지 생성 (2024.06.10)
 package com.tp.travely.tour.controller;
 
 import java.io.File;
@@ -40,32 +40,31 @@ public class TourController {
 	@Autowired
 	private TourService tourService;
 	
-	// �쑀吏� - 2024.06.10
-	// 愿�由ъ옄 �뿬�뻾吏� 紐⑸줉 議고쉶 而⑦듃濡ㅻ윭
+	// 유진 - 2024.06.10
+	// 관리자 여행지 목록 조회 컨트롤러
 	@GetMapping("adminTour.ad")
 	public String adminTourListView(Model model) {
 		
-		// 寃뚯떆湲� 紐⑸줉 議고쉶
+		// 게시글 목록 조회
 		ArrayList<Tour> list = tourService.adminTourList();
-		// System.out.println(list);
-		// System.out.println("-------------------");
-		// �쓳�떟�뜲�씠�꽣 �떞湲�
+
+		// 응답데이터 담기
 		model.addAttribute("tList", list);
 		
-		// �쓳�떟�럹�씠吏� �룷�썙�뵫
+		// 응답페이지 포워딩
 		return "admin/adminTourListView";
 	}
 	
-	// �쑀吏� - 2024.06.10
-	// 愿�由ъ옄 �뿬�뻾吏� 異붽� (�럹�씠吏�濡� �씠�룞�븯�뒗) 而⑦듃濡ㅻ윭
+	// 유진 - 2024.06.10
+	// 관리자 여행지 추가 (페이지로 이동하는) 컨트롤러
 	@GetMapping("adminTourEnroll.ad")
 	public String adminTourEnrollForm(Model model) {
-		// �쓳�떟�럹�씠吏� �룷�썙�뵫
+		// 응답페이지 포워딩
 		return "admin/adminTourEnrollForm";
 	}
 	
-	// �쑀吏� - 2024.06.11 (�떎�젣 �옉�꽦 - 2024.06.12)
-	// 愿�由ъ옄 �뿬�뻾吏� 異붽� 而⑦듃濡ㅻ윭 (INSERT)
+	// 유진 - 2024.06.11 (실제 작성 - 2024.06.12)
+	// 관리자 여행지 추가 컨트롤러 (INSERT)
 	@PostMapping("adminTourInsert.ad")
     public ModelAndView adminTourInsert(@RequestParam("tourType") String tourType, 
     									TourSpotData tsd, LodgingData lod, RestaurantData rd, 
@@ -74,44 +73,30 @@ public class TourController {
 							            ArrayList<MultipartFile> changeNoFiles, 
 							            HttpSession session, ModelAndView mv) {
 
-		// System.out.println("----------");
-		// System.out.println(thumbImgFile);
-		// System.out.println(changeNoFiles);
-		// System.out.println("----------");
-		
-		// System.out.println("----------1");
-		// System.out.println(tsd);
-		// System.out.println(lod);
-		// System.out.println(rd);
-		// System.out.println(led);
-		// System.out.println(ti);
-		// System.out.println("----------");
-		
-		// �뙆�씪 �뾽濡쒕뱶 諛� 寃쎈줈 �꽕�젙
-		String thumbImg = savePath(thumbImgFile, session, "thumbImg"); // �뜽�꽕�씪
+		// 파일 업로드 및 경로 설정
+		String thumbImg = savePath(thumbImgFile, session, "thumbImg"); // 썸네일
 		
 		ArrayList<String> changeNos = savePaths(changeNoFiles, session, "changeNo");
-		ArrayList<TourImg> tourImgList = new ArrayList<>(); // �씪諛섏씠誘몄��뱾
+		ArrayList<TourImg> tourImgList = new ArrayList<>(); // 일반이미지들
 		
 		String fileBasePath = "resources/tourUpfiles/";
 		String fullThumbImgPath = fileBasePath + thumbImg;
 
-		// 媛앹껜�뱾�뿉 寃쎈줈 �꽕�젙
-		// 媛� 媛앹껜�뱾�뿉 �뜽�꽕�씪 �떞湲�
+		// 객체들에 경로 설정
+		// 각 객체들에 썸네일 담기
 		tsd.setThumbImg(fullThumbImgPath);
 		lod.setThumbImg(fullThumbImgPath);
 		rd.setThumbImg(fullThumbImgPath);
 		led.setThumbImg(fullThumbImgPath);
 
-		// �떎以� �뙆�씪(李멸퀬�씠誘몄��뱾)�� �썝�옒 �뵲濡� �엳�뿀�뜕 TourImg 媛앹껜�뿉 �떞湲�
+		// 다중 파일(참고이미지들)은 원래 따로 있었던 TourImg 객체에 담기
 		for(String changeNo : changeNos) {
 			TourImg tourImg = new TourImg();
 			tourImg.setChangeNo(fileBasePath + changeNo);
 			tourImgList.add(tourImg);
 		}
-		// System.out.println("tourType: "+tourType);
-		// System.out.println(tsd);
-		// �꽌鍮꾩뒪 �샇異�
+		
+		// 서비스 호출
 		int result = 0;
 		
 		switch(tourType) {
@@ -135,28 +120,19 @@ public class TourController {
 			break;
 		}
 		
-		 System.out.println("----------2");
-		 System.out.println(tsd);
-		 System.out.println(lod);
-		 System.out.println(rd);
-		 System.out.println(led);
-		 System.out.println(ti);
-		 System.out.println(tourImgList);
-		 System.out.println("----------");
-
-		// 寃곌낵�뿉 �뵲瑜� 泥섎━
+		// 결과에 따른 처리
 		if(result > 0) {
-			session.setAttribute("alertMsg", "�꽦怨듭쟻�쑝濡� �뿬�뻾吏�媛� �벑濡앸릺�뿀�뒿�땲�떎.");
+			session.setAttribute("alertMsg", "성공적으로 여행지가 등록되었습니다.");
 			mv.setViewName("redirect:/adminTour.ad");
 		} else {
-			mv.addObject("errorMsg", "�벑濡� �떎�뙣").setViewName("common/errorPage");
+			mv.addObject("errorMsg", "등록 실패").setViewName("common/errorPage");
 		}
 
 		return mv;
 	}
 	
-	// 源��룞�쁽 - 2024.06.11
-	// �뿬�뻾吏� 議고쉶 硫붿냼�뱶(SELECT)
+	// 김동현 - 2024.06.11
+	// 여행지 조회 메소드(SELECT)
 	@GetMapping(value="cityList.to", produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String selectCity(int areaCode) {
@@ -246,12 +222,10 @@ public class TourController {
 		return new Gson().toJson(rtData);
 	}
 	
-	// �쑀吏�&�쁽�꽦 - 愿�由ъ옄 �뿬�뻾吏� �긽�꽭議고쉶 而⑦듃濡ㅻ윭 (2024.06.14)
+	// 유진&현성 - 관리자 여행지 상세조회 컨트롤러 (2024.06.14)
 		@ResponseBody
 		@GetMapping(value="tourDetailView.to",produces="application/json; charset=UTF-8")
 		public String tourDetailView(Tour tour) {
-//			System.out.println("controller �꽦怨�");
-//			System.out.println(tour);
 			HashMap<String, Object> rtMap = new HashMap<String, Object>();
 			switch(tour.getTourType()) {
 			case "tourSpot" : 
@@ -263,7 +237,7 @@ public class TourController {
 				tsd.setThumbImg(tour.getThumbImg());
 				tsd.setTourtype(tour.getTourType());
 				rtMap.put("list",tsd);
-				// �떎瑜� �씠誘몄��뱾�룄 媛��졇���빞�븳�떎.
+				// 다른 이미지들도 가져와야한다.
 				break;
 			case "lodging" : 
 				LodgingData lod = tourService.lodgingDetail(tour.getTourNo());
@@ -300,56 +274,54 @@ public class TourController {
 
 
 			return new Gson().toJson(rtMap);
-			// �궗吏�(�뜽�꽕�씪 �젣�쇅 �떎瑜� 異붽��씠誘몄��뱾)�뱾 諛쏆쓣 諛곗뿴 = service.xml();
+			// 사진(썸네일 제외 다른 추가이미지들)들 받을 배열 = service.xml();
 		}
 		
-	// �쑀吏� - 愿�由ъ옄 �뿬�뻾吏� �궘�젣 而⑦듃濡ㅻ윭 (2024.06.17)
+	// 유진 - 관리자 여행지 삭제 컨트롤러 (2024.06.17)
 	@PostMapping(value="deleteTour.to")
 	public ModelAndView deleteTour(int tourNo, String thumbImg, HttpSession session, ModelAndView mv) {
 		int result = 0;
 		result = tourService.deleteTour(tourNo);
 		
-		// 寃곌낵�뿉 �뵲瑜� 泥섎━
+		// 결과에 따른 처리
 		if(result > 0) {
 			if(!thumbImg.equals("")) {
 				String realPath 
 					= session.getServletContext()
 							 .getRealPath(thumbImg);
 				
-				// realPath 媛� 媛�由ы궎�뒗 �뙆�씪 媛앹껜 �깮�꽦 �썑 delete
+				// realPath 가 가리키는 파일 객체 생성 후 delete
 				new File(realPath).delete();
 			}
 			
-			session.setAttribute("alertMsg", "�꽦怨듭쟻�쑝濡� �뿬�뻾吏�媛� �궘�젣�릺�뿀�뒿�땲�떎.");
+			session.setAttribute("alertMsg", "성공적으로 여행지가 삭제되었습니다.");
 			mv.setViewName("redirect:/adminTour.ad");
 		} else {
-			mv.addObject("errorMsg", "�궘�젣 �떎�뙣").setViewName("common/errorPage");
+			mv.addObject("errorMsg", "삭제 실패").setViewName("common/errorPage");
 		}
 		
 		return mv;
 	}
 	
-	// �쑀吏� - 愿�由ъ옄 �뿬�뻾吏� �닔�젙 而⑦듃濡ㅻ윭 (2024.06.18)
-	// 愿�由ъ옄 �뿬�뻾吏� 異붽� (�럹�씠吏�濡� �씠�룞�븯�뒗) 而⑦듃濡ㅻ윭
+	// 유진 - 관리자 여행지 수정 컨트롤러 (2024.06.18)
+	// 관리자 여행지 추가 (페이지로 이동하는) 컨트롤러
 	@PostMapping(value="adminTourUpdate.ad")
-	public String adminTourUpdateForm(@RequestParam("tourNo") int tourNo, Model model) {
+	public String adminTourUpdateForm(@RequestParam("tourNo") int tourNo, @RequestParam("tourType") String tourType, Model model) {
 		
-		// �뿬�뻾吏� �븳 怨� 議고쉶
-		System.out.println("�꽆�뼱�삩 湲�踰덊샇�뒗 " + tourNo + "踰덉엯�땲�떎.");
-		
-		// Tour 媛앹껜留� 議고쉶
+		// 여행지 한 곳 조회		
+		// Tour 객체만 조회
         Tour tour = tourService.getTourByNo(tourNo);
         
-        System.out.println("�꽑�깮�븳 媛앹껜: " + tour);
+        System.out.println("선택한 객체: " + tour);
         if (tour == null) {
-            throw new NullPointerException("留뚯씪 null �씠�씪硫� �꽆�뼱�삩 tour 媛앹껜�쓽 踰덊샇: " + tourNo);
+            throw new NullPointerException("만일 null 이라면 넘어온 tour 객체의 번호: " + tourNo);
         }
         
         model.addAttribute("tour", tour);
         
 		HashMap<String, Object> rtMap = new HashMap<String, Object>();
 		
-		switch(tour.getTourType()) {
+		switch(tourType) {
 		case "tourSpot" : 
 			TourSpotData tsd = tourService.tourSpotDetail(tour.getTourNo());
 			tsd.setTourName(tour.getTourName());
@@ -358,7 +330,7 @@ public class TourController {
 			tsd.setThumbImg(tour.getThumbImg());
 			tsd.setTourtype(tour.getTourType());
 			rtMap.put("list",tsd);
-			// �떎瑜� �씠誘몄��뱾�룄 媛��졇���빞�븳�떎.
+			// 다른 이미지들도 가져와야한다.
 			break;
 		case "lodging" : 
 			LodgingData lod = tourService.lodgingDetail(tour.getTourNo());
@@ -395,13 +367,16 @@ public class TourController {
 		rtMap.put("img",imgList);
 		
 		model.addAttribute("rtMap", rtMap);
+		model.addAttribute("imgList", imgList);
+		
+		System.out.println(imgList);
 		
 		return "admin/adminTourUpdateForm";
 	}
 	
-	//------------------ �씪諛� 硫붿꽌�뱶 �쁺�뿭 ------------------------------------------------------
+	//------------------ 일반 메서드 영역 ------------------------------------------------------
 	
-	// �쑀吏� - �뙆�씪 泥섎━�슜 硫붿꽌�뱶 �옉�꽦 (2024.06.12)
+	// 유진 - 파일 처리용 메서드 작성 (2024.06.12)
 	public String savePath(MultipartFile file, HttpSession session, String type) {
         String savePath = session.getServletContext().getRealPath("/resources/tourUpfiles/");
         String fileName = type + "_" + System.currentTimeMillis() + "_" + StringUtils.cleanPath(file.getOriginalFilename());
@@ -420,7 +395,7 @@ public class TourController {
         return fileName;
     }
 
-	// �떎以� �뙆�씪�쓽 寃쎌슦
+	// 다중 파일의 경우
 	public ArrayList<String> savePaths(ArrayList<MultipartFile> files, HttpSession session, String type) {
 		ArrayList<String> fileNames = new ArrayList<>();
         for(MultipartFile file : files) {

@@ -11,26 +11,6 @@
 <style>
 	.tour-table>tbody>tr { cursor: pointer; }
 	
-	/*
-	.tour-table {
-		table-layout: fixed;
-		width: 100%;
-	}
-	
-	tr > :first-child {
-		width: 30%; !important;
-	}
-	tr > :second-child {
-		width: 10%; !important;
-	}
-	tr > :third-child {
-		width: 50%; !important;
-	}
-	tr > :forth-child {
-		width: 10%; !important;
-	}
-	*/
-	
 	#tour-thumbImg {
 		border: 1px solid black;
 		width: 400px;
@@ -137,7 +117,7 @@
 						      		<div class="modal-footer">
 						      			<form id="modifyTourForm" action="adminTourUpdate.ad" method="post">
 						      				<input type="hidden" class="tourNo" name="tourNo">
-						      				<!-- <input type="hidden" id="tourType" name="tourType"> -->
+						      				<input type="hidden" id="tourType" name="tourType">
 						      				<button type="submit" class="btn btn-primary" id="tourModify">수정</button>
 						      			</form>
   										<form id="deleteTourForm" action="deleteTour.to" method="post">
@@ -155,19 +135,13 @@
 			$(document).ready(function() {
 		    	$("#datatablesSimple>tbody>tr").click(function(e){
 		      		$(".infoModal").modal("show");
-		      		
-		      		// console.log($(this).children().eq(0).children().eq(0).val());
-		      		// console.log($(this).children().eq(0).children().eq(1).val());
-		      		
+
 		      		let tourNo = $(this).children().eq(0).children().eq(0).val();
 		      		let tourType = $(this).children().eq(0).children().eq(1).val();
 		      		let thumbImg = $(this).children().eq(0).children().eq(2).val();
 		      		let tourName = $(this).children().eq(0).children().eq(3).val();
 		      		let address = $(this).children().eq(0).children().eq(4).val();
 		      		let contentId = $(this).children().eq(0).children().eq(5).val();
-		      		// console.log(tourNo);
-		      		// console.log(tourType);
-		      		// console.log(thumbImg);
 		      		
 		      		$(".tourNo").val(tourNo);
 		      		$("#tourType").val(tourType);
@@ -185,21 +159,12 @@
 		      				tourType : tourType 
 		      			},
 		      			success : function(z){
-		      				console.log("ajax성공");
-		      				console.log(z);
-		      				// console.log(z["list"]["thumbImg"]);
-		      				
 		      				let b = $(".modal-body");
 		      				let result = "";
 		      				result += "<div id='tour-thumbImg'>"
 		      							+ "<img src="+z["list"]["thumbImg"]+" alt='Thumbnail'>"
 		      							+ "</div><br>"
 		      							+ "<div id='tourImg'>";
-		      				
-		      				// console.log(z["img"].length);
-		      				// console.log(z["img"][0]["changeNo"]);
-		      				
-		      				
 		      				
 		      				if(z["img"].length != null && z["img"].length > 0){
 		      					
