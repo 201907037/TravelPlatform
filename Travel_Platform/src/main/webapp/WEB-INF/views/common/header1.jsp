@@ -78,6 +78,10 @@
         <div class="h3">
             <c:choose>
                 <c:when test="${not empty sessionScope.loginUser}">
+                <div class="profile">
+           <img src="${sessionScope.loginUser.changeName}" alt="Profile Image">
+
+        </div>
                     <a href="myPage.me" class="yellow underline">My Page</a>
                     <a href="logout.me" class="yellow underline">Logout</a>
                 </c:when>

@@ -1,5 +1,11 @@
 package com.tp.travely.member.controller;
 
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -11,11 +17,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.tp.travely.member.model.service.MailSendService;
 import com.tp.travely.member.model.service.MemberService;
@@ -243,37 +251,55 @@ public class MemberController {
 	}
 	
 	@PostMapping("update.me")
-	public String updateMember(Member m,
-							   Model model,
-							   HttpSession session) {
-		
-		// System.out.println(m);
-		
-		int result = memberService.updateMember(m);
-		
-		if(result > 0) { // 성공
-			
-			// 갱신된 회원의 정보를 다시 조회해와서
-			// session 의 loginUser 에 덮어씌워야함
-			Member updateMem = memberService.loginMember(m);
-			// > 기존의 loginMember 서비스를 재활용 (아이디만 가지고 조회)
-			
-			session.setAttribute("loginUser", updateMem);
-			
-			session.setAttribute("alertMsg", "성공적으로 회원정보가 변경되었습니다.");
-			
-			// 마이페이지로 url 재요청
-			return "redirect:/myPage.me";
-			
-		} else { // 실패
-			
-			// 에러문구를 담아서 에러페이지로 포워딩
-			model.addAttribute("errorMsg", "회원정보 변경 실패");
-			
-			// /WEB-INF/views/common/errorPage.jsp
-			return "common/errorPage";
-		}
+	public String updateMember(@ModelAttribute Member m,
+	                           HttpSession session) {
+	    
+	    MultipartFile profileImage = m.getProfileImageFile();
+	    if (profileImage != null && !profileImage.isEmpty()) {
+	        String fileName = "resources/profileImages/" + saveFile(profileImage, session);
+	        m.setChangeName(fileName);  // 저장된 파일 이름을 m 객체의 적절한 필드에 설정
+	    }
+
+	    int result = memberService.updateMember(m);
+
+	    if (result > 0) {
+	        Member updateMem = memberService.loginMember(m);
+	        session.setAttribute("loginUser", updateMem);
+	        session.setAttribute("alertMsg", "성공적으로 회원정보가 변경되었습니다.");
+	        
+	        // 프로필 이미지를 session에 저장
+	        session.setAttribute("profileImageFile", m.getProfileImageFile());
+	        
+	        // System.out.println(m.getProfileImageFile());
+	        
+	    } else {
+	        session.setAttribute("alertMsg", "회원정보 변경에 실패했습니다.");
+	    }
+
+	    return "redirect:/";
 	}
+
+
+	private String saveFile(MultipartFile file, HttpSession session) {
+	    String savePath = session.getServletContext().getRealPath("resources/profileImages");
+	    String originalFileName = file.getOriginalFilename();
+	    String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+	    String ext = originalFileName.substring(originalFileName.lastIndexOf("."));
+	    String changeName = currentTime + ext;
+
+	    try {
+	        file.transferTo(new File(savePath + File.separator + changeName));
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+
+	    return changeName;
+	}
+
+
+
+
+
 
 	@PostMapping("delete.me")
 	public String deleteMember(Member m,
@@ -314,13 +340,11 @@ public class MemberController {
 				
 			} else { // 탈퇴 처리 실패
 				
-				// 에러문구 담아서 에러페이지로 포워딩
+				session.setAttribute("alertMsg", "탈퇴에 실패했습니다 비밀번호를 확인해주세요.");
 				
-				model.addAttribute("errorMsg", "회원 탈퇴 실패");
+				session.removeAttribute("loginUser");
 				
-				// /WEB-INF/views/common/errorPage.jsp
-				return "common/errorPage";
-				
+				return "redirect:/";
 			}
 			
 		} else {
@@ -331,7 +355,7 @@ public class MemberController {
 			
 			session.setAttribute("alertMsg", "비밀번호를 잘못 입력했습니다. 다시 확인해 주세요.");
 			
-			return "redirect:/myPage.me";
+			return "redirect:/";
 		}
 	}
 	
@@ -450,14 +474,14 @@ public class MemberController {
     public ResponseEntity<String> updatePassword(
             @RequestParam("userId") String userId,
             @RequestParam("currentPassword") String currentPassword,
-            @RequestParam("newPassword") String newPassword, HttpSession session) {
+            @RequestParam("newPassword") String newPassword, HttpSession session,RedirectAttributes redirectAttributes) {
 
         boolean result = memberService.updatePassword(userId, currentPassword, newPassword);
 
         if (result) {
-        	session.setAttribute("alertMsg", "성공적으로 비밀번호가 변경되었습니다.");
-            String successScript = "<script>window.location.href='';</script>"; // 메인 페이지 경로로 변경하세요
-            return ResponseEntity.ok(successScript);
+        	 session.setAttribute("alertMsg", "성공적으로 비밀번호가 변경되었습니다.");
+             redirectAttributes.addFlashAttribute("alertMsg", "성공적으로 비밀번호가 변경되었습니다.");
+             return ResponseEntity.status(HttpStatus.FOUND).body("<script>window.location.href='/travely';</script>");
         	
 
         } else {

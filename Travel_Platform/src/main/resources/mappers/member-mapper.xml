@@ -19,6 +19,7 @@
 		<result column="ADDRESS" property="address" />
 		<result column="GENDER" property="gender" />
 		<result column="CHANGE_NAME" property="changeName" />
+		<result column="PROFILE_IMAGE" property="profileImage" />
 		<result column="CREATE_DATE" property="createDate" />
 		<result column="MODIFY_DATE" property="modifyDate" />
 		<result column="STATUS" property="status" />
@@ -71,20 +72,20 @@
 	</insert>
 
 	<!-- 회원정보 수정용 쿼리문 -->
-	<update id="updateMember"
-			parameterType="member">
-		UPDATE MEMBER
-		   SET NAME = #{name}
-		     , NICK_NAME = #{nickName}
-		     , EMAIL = #{email}
-		     , AGE = #{age}
-		     , PHONE = #{phone}
-		     , ADDRESS = #{address}
-		     , GENDER = #{gender}
-		     , MODIFY_DATE = SYSDATE
-		 WHERE USER_ID = #{userId}
-		   AND STATUS = 'Y'
-	</update>
+	<update id="updateMember" parameterType="member">
+    UPDATE MEMBER
+       SET NAME = #{name}
+         , NICK_NAME = #{nickName}
+         , EMAIL = #{email}
+         , AGE = #{age}
+         , PHONE = #{phone}
+         , ADDRESS = #{address}
+         , GENDER = #{gender}
+         , MODIFY_DATE = SYSDATE
+         , CHANGE_NAME = #{changeName} <!-- 프로필 이미지 필드 추가 -->
+     WHERE USER_ID = #{userId}
+       AND STATUS = 'Y'
+</update>
 	
 	<!-- 회원 탈퇴용 쿼리문 -->
 	<update id="deleteMember"
