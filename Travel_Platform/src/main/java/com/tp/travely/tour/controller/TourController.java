@@ -304,11 +304,11 @@ public class TourController {
 	}
 	
 	// 유진 - 관리자 여행지 수정 컨트롤러 (2024.06.18)
-	// 관리자 여행지 추가 (페이지로 이동하는) 컨트롤러
-	@PostMapping(value="adminTourUpdate.ad")
+	// 관리자 여행지 수정 (페이지로 이동하는) 컨트롤러
+	@PostMapping(value="adminTourUpdateForm.ad")
 	public String adminTourUpdateForm(@RequestParam("tourNo") int tourNo, @RequestParam("tourType") String tourType, Model model) {
 		
-		// 여행지 한 곳 조회		
+		// 여행지 한 곳 조회
 		// Tour 객체만 조회
         Tour tour = tourService.getTourByNo(tourNo);
 
@@ -365,6 +365,13 @@ public class TourController {
 		model.addAttribute("imgList", imgList);
 		
 		return "admin/adminTourUpdateForm";
+	}
+	
+	// 유진 - 관리자 여행지 수정 컨트롤러 (2024.06.23)
+	// 관리자 여행지 수정 컨트롤러
+	@PostMapping(value="adminTourUpdate.ad")
+	public void adminTourUpdate() {
+		
 	}
 	
 	//------------------ 일반 메서드 영역 ------------------------------------------------------

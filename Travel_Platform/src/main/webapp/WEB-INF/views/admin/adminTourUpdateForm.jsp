@@ -37,10 +37,10 @@
 	        		<input type="hidden" name="tourNo" value="${ tour.tourNo }">
 	        		
 	        		<label>대표이미지 (필수) :</label>
-                    <input type="file" class="form-control" name="reThumbImgFile" id="thumbImgInput" required>
+                    <input type="file" class="form-control" name="reThumbImg" id="thumbImgInput" required>
                     <div id="originThumbImg" class="orginImgs">
                     	  현재 파일 : ${tour.thumbImg.substring(tour.thumbImg.lastIndexOf('_') + 1)}
-                    	 <input type="hidden" name="originThumbImg" value="${ tour.thumbImg }">
+                    	 <input type="hidden" name="ThumbImg" value="${ tour.thumbImg }">
                     </div>
                     <div id="checkResult" class="imgInputCheck">
 					</div>

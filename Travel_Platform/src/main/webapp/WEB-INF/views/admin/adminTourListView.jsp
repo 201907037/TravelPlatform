@@ -115,7 +115,7 @@
 						      		<div class="modal-body">
 						      		</div>
 						      		<div class="modal-footer">
-						      			<form id="modifyTourForm" action="adminTourUpdate.ad" method="post">
+						      			<form id="modifyTourForm" action="adminTourUpdateForm.ad" method="post">
 						      				<input type="hidden" class="tourNo" name="tourNo">
 						      				<input type="hidden" id="tourType" name="tourType">
 						      				<button type="submit" class="btn btn-primary" id="tourModify">수정</button>
