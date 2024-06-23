@@ -318,10 +318,10 @@
 		
 	}
 	.adv_search{
-		height : 10%;	
+		height : 15%;	
 	}
 	.el_box{
-		height : 70%;
+		height : 68%;
 	}
 	.t_box{
 		margin-bottom : 20px;
@@ -353,6 +353,13 @@
 	}
 	input[type=radio]{
 		width : 40px;	
+	}
+	#detail-body>table th{
+		text-align : right;
+		width : 100px;
+	}
+	#planBox div[class=planbody]:hover{
+		cursor: pointer;
 	}
 </style>
 <!--  <link rel="stylesheet" href="resources/css/styles.css">-->
@@ -450,16 +457,31 @@
 	    	 <div align="center">
 	    	 <table>
 	    	 	<tr>
-	    	 		<th style="text-align : right;">관광지명 검색 </th>
-	    	 		<td style="width : 40px; text-align : left;"><input type="radio" name="type" value="nameSearch" style="width : 100%;" checked></td>
+	    	 		<th style="text-align : right;"><label for="nameSearch">관광지명 검색</label></th>
+	    	 		<td style="width : 40px; text-align : left;"><input type="radio" id="nameSearch" name="search-type" value="nameSearch" style="width : 100%;"></td>
+	    	 		<th style="text-align : right;"><label for="areaSearch">주소로 검색</label></th>
+	    	 		<td style="width : 40px; text-align : left;"><input type="radio" id="addressSearch" name="search-type" value="addressSearch" style="width : 100%;"></td>
 	    	 	</tr>
 	    	 	<tr>
-	    	 		<th style="text-align : right;">주변 여행지 검색</th>
-	    	 		<td style="width : 40px; text-align : left;"><input type="radio" name="type" value="aroundSearch" style="width : 100%;"></td>
+	    	 		<th style="text-align : right;"><label for="aroundSearch">주변 여행지 찾기</label></th>
+	    	 		<td style="width : 40px; text-align : left;"><input type="checkbox" id="aroundSearch" name="aroundSearch" style="width : 100%;"></td>
 	    	 	</tr>
 	    	 </table>
 	         </div>
-	         
+	         <div id="aroundSearchOption" align="center" style="display:none;">
+	         	거리 : <select name="range">
+	         		<option value="20000">20km</option>
+	         		<option value="10000">10km</option>
+	         		<option value="5000">5km</option>
+	         		<option value="2000">2km</option>
+	         	</select>
+	         	분류 : <select name="tour-type">
+	         			<option value="12">관광지</option>
+	         			<option value="28">레포츠</option>
+	         			<option value="32">숙박</option>
+	         			<option value="39">음식점</option>
+	         		 </select>
+	         </div>
 	         <div align="center" style="display : none;"><br>
 	         	'<a id="skeyword" style="font-size : 20px;"></a>' 검색 결과
 	         </div>
@@ -543,17 +565,58 @@
 	    	<div id="planBox" style="height:750px;"></div>
 	   	</div>
 	</div>
-	
+	<!-- 세부정보 모달창 -->
+<div class="modal" id="detailModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="tour_name"></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="detailModal-box">
+        	<div id="detail" style="width : 300px;height : 200px; border : 1px solid black;margin : auto;">
+        		
+        	</div>
+        </div>
+        <hr>
+        <div id="detail-body">
+        	<table>
+        	
+        	</table>
+        </div>
+        <hr>
+        <div id="tour-review">
+        	리뷰영역
+        </div>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+        <button type="button" class="btn-OK btn btn-primary">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
 let type;
 let addTo;
 let datePlanIdx;
 let no = {tPno : 1, aPno : 1,lPno : 1, rPno : 1,sNo:1};
+
 let markerList=[];
+let dateMarkerList=[];
 let dateUseIdx;
+var polyline;
+
 let flag;
 let flagTL;
 let status;
+let option;
+let tourObj;
+
+let aroundNum;
+let mapX;
+let mapY;
 	function getList(type,pno){
 		$.ajax({
 			url : "tourList.to",
@@ -631,7 +694,74 @@ let status;
 			}
 		});
 	}
-		function getSearch(type,pno,keyword){
+		function getSearch(type,pno,keyword,option){
+			console.log(pno);
+			$.ajax({
+				url : "searchTourList.to",
+				method : "GET",
+				data : {type : type,areaCode : areaCode,areaName : areaName,pno : pno,keyword : $("input[name=keyword]").val(),option : option},
+				success : function(e){
+					console.log(e);
+					let pinfo = e.page;
+					$.each(e.list,function(i,v){
+						let tbox = $("<div>").attr("class","t_box");
+						let timg = $("<div>").attr("class","t_img");
+						if(v.thumbImg==null){
+							let span = $("<span>").attr("class","material-symbols-outlined").html("close");
+							timg.append(span)
+						}else{
+							let img = $("<img>").attr("src",v.thumbImg);
+							timg.append(img);
+						}
+						let tbody = $("<div>").attr("class","t_name");
+						let table = $("<table>").css({"width":"100%","height":"100%"});
+						let trN = $("<tr>");
+						let tdN = $("<td>").html(v.tourName);
+						let trA = $("<tr>");
+						let tdA = $("<td>").html(v.address);
+						trN.append(tdN);
+						trA.append(tdA);
+						table.append(trN,trA);
+						tbody.append(table);
+						let tno = $("<input>").attr({"type":"hidden","name":"tno","value":v.tourNo});
+						let contentId = $("<input>").attr({"type":"hidden","name" : "contentId", "value" : v.contentId});
+						let xx = $("<input>").attr({"type":"hidden","name" : "XX","value" : v.mapX});
+						let yy = $("<input>").attr({"type":"hidden","name" : "YY", "value": v.mapY});
+						tbox.append(timg,tbody,tno,contentId,xx,yy);
+						$(".el_box").append(tbox);
+					});
+					
+					no.sNo = e.page.currentPage;
+					
+					if(pinfo.startPage!=1){
+	                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-left").attr("class","search_left btn btn-success btn-sm").html("&lt;&lt;");
+	                    //console.log(btnleft);
+	                    $("#button_box").append(btnLeft);
+	                }
+	                for(let i = pinfo.startPage;i<=pinfo.endPage;i++){
+	                    if(i==pinfo.currentPage){
+	                    	var btnNum = $("<button>").attr("type","button").attr("disabled","ture").attr("class","btn_no btn btn-success btn-sm").text(i);
+	                    }else{
+	                    	var btnNum = $("<button>").attr("type","button").attr("class","btn_search_no btn btn-success btn-sm").text(i);
+	                    }
+	                    
+	                    //console.log(btnNum);
+	                    $("#button_box").append(btnNum);
+	                }
+	                if(pinfo.maxPage!=pinfo.endPage){
+	                    
+	                    var btnRight = $("<button>").attr("type","button").attr("id","btn-right").attr("class","search_right btn btn-success btn-sm").html("&gt;&gt;");
+	                    $("#button_box").append(btnRight);
+	                }
+	                $("#skeyword").html(keyword);
+	    			$("#skeyword").parent().css("display","block");
+				},
+				error : function(){
+					console.log("실패");
+				}
+			});
+	}
+		function getSearchModal(type,pno,keyword){
 			$.ajax({
 				url : "searchTourList.to",
 				method : "GET",
@@ -696,13 +826,203 @@ let status;
 					console.log("실패");
 				}
 			});
+	}	
+	function getDetail(){
+		$("#detail").html("");
+		$("#detail-body>table").html("");
+		$("#tour-review").html("리뷰영역");
+		$.ajax({
+			url : "getDetail.to",
+			method : "GET",
+			async : false,
+			data : {tno : tourObj.tno, contentId : tourObj.contentId, type : tourObj.type},
+			success : function(result){
+				console.log(result);
+				let obj = result.response.body.items.item[0];
+				console.log(obj);
+				console.log(option);
+				$("#tour_name").html(tourObj.name);
+				switch($(".left-bar>h3").html()){
+				case "관광지":
+					create12(obj);
+					break;
+				case "레포츠":
+					create28(obj);
+					break;
+				case "숙박":
+					create32(obj);
+					break;
+				case "음식점":
+					create39(obj);
+					break;
+				}
+				getImg();
+				$("#detailModal").modal("show");
+			},
+			error : function(){
+				console.log("실패");
+			}
+		});
+	}
+	function getImg(){
+		$.ajax({
+			url : "getImg.to",
+			method : "GET",
+			async : false,
+			data : {tno : tourObj.tno, contentId : tourObj.contentId, type : tourObj.type},
+			success : function(result){
+				console.log(result);
+				if(result.response.body.items==""){
+					let span = $("<span>").attr("class","material-symbols-outlined").html("close");
+					$("#detail").append(span);
+				}else{
+					let obj = result.response.body.items.item[0];
+					let img = $("<img>").attr("src",obj.originimgurl).css({width : "100%",height : "100%"});
+					$("#detail").append(img);
+				}
+				
+				
+				/* let img = $("<img>").attr({src : obj.originimgurl}).css("width : 100%;").css("height","100%");
+				$("#detail").append(img); */
+			},
+			error : function(){
+				console.log("실패")
+			}
+		});
+	}
+	function create12(obj){
+		let tr1 = $("<tr>");
+		let th1 = $("<th>").html("주소   | ");
+		let td1 = $("<td>").html(tourObj.address);
+		tr1.append(th1,td1);
+		
+		let tr2 = $("<tr>");
+		let th2 = $("<th>").html("전화번호   | ");
+		let td2 = $("<td>").html(obj.infocenter);
+		tr2.append(th2,td2);
+		
+		let tr3 = $("<tr>");
+		let th3 = $("<th>").html("운영시기   | ");
+		let td3;
+		if(obj.useseason == ""){
+			td3 = $("<td>").html("정보 없음");
+		}else{
+			td3 = $("<td>").html(obj.useseason);
+		}
+		tr3.append(th3,td3);
+		
+		let tr4 = $("<tr>");
+		let th4 = $("<th>").html("이용시간   | ");
+		let td4;
+		if(obj.usetime == ""){
+			td4 = $("<td>").html("정보없음");
+		}else{
+			td4 = $("<td>").html(obj.usetime);
+		}
+		tr4.append(th4,td4);
+		
+		$("#detail-body>table").append(tr1,tr2,tr3,tr4);
+		
+	}
+	function create28(obj){
+		
+	}
+	function create32(obj){
+		
+	}
+	function create39(obj){
+		
+	}
+	
+	function getAroundTourList(mapX,mapY,range,tourType,aroundNum){
+		$(".el_box").html("");
+		$("#button_box").html("");
+		$.ajax({
+			url : "getRangeTourList.to",
+			method : "get",
+			data : {x : mapX,y:mapY,range : range,tourType : tourType,aroundNum : aroundNum},
+			success : function(e){
+				console.log(e);
+				let tc = Number(e.response.body.totalCount);
+				let obj = e.response.body.items.item;
+				$.each(obj,function(i,v){
+					let tbox = $("<div>").attr("class","t_box");
+					let timg = $("<div>").attr("class","t_img");
+					if(v.firstimage==""){
+						let span = $("<span>").attr("class","material-symbols-outlined").html("close");
+						timg.append(span)
+					}else{
+						let img = $("<img>").attr("src",v.firstimage);
+						timg.append(img);
+					}
+					let tbody = $("<div>").attr("class","t_name");
+					let table = $("<table>").css({"width":"100%","height":"100%"});
+					let trN = $("<tr>");
+					let tdN = $("<td>").html(v.title);
+					let trA = $("<tr>");
+					let tdA = $("<td>").html(v.addr1);
+					trN.append(tdN);
+					trA.append(tdA);
+					table.append(trN,trA);
+					tbody.append(table);
+					let tno = $("<input>").attr({"type":"hidden","name":"tno","value":0});
+					let contentId = $("<input>").attr({"type":"hidden","name" : "contentId", "value" : v.contentid});
+					let xx = $("<input>").attr({"type":"hidden","name" : "XX","value" : v.mapx});
+					let yy = $("<input>").attr({"type":"hidden","name" : "YY", "value": v.mapy});
+					tbox.append(timg,tbody,tno,contentId,xx,yy);
+					$(".el_box").append(tbox);
+					
+				});
+				let maxPage = Math.ceil(tc / 5);
+				let startPage = Math.floor((aroundNum - 1) / 5) * 5 + 1;
+				let endPage = startPage + 5 - 1;
+				if(startPage!=1){
+                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-range-left").attr("class","range_left btn btn-success btn-sm").html("&lt;&lt;");
+                    //console.log(btnleft);
+                    $("#button_box").append(btnLeft);
+                }
+                for(let i = startPage;i<=endPage;i++){
+                    if(i==aroundNum){
+                    	var btnNum = $("<button>").attr("type","button").attr("disabled","ture").attr("class","btn_range_no btn btn-success btn-sm").text(i);
+                    }else{
+                    	var btnNum = $("<button>").attr("type","button").attr("class","btn_range_no btn btn-success btn-sm").text(i);
+                    }
+                    
+                    //console.log(btnNum);
+                    $("#button_box").append(btnNum);
+                }
+                if(maxPage!=endPage){
+                    
+                    var btnRight = $("<button>").attr("type","button").attr("id","btn-range-right").attr("class","range_right btn btn-success btn-sm").html("&gt;&gt;");
+                    $("#button_box").append(btnRight);
+                }
+                $("#skeyword").html(tourObj.name);
+    			$("#skeyword").parent().css("display","block");
+			},
+			error : function(){
+				console.log("실패");
+			}
+		});
 	}
 	$(function(){
+		$("#nameSearch").attr("checked","true");
+		$("input[type=radio]").click(function(){
+			let iptId = $(this).attr("id");
+			sNo=1;
+			if(iptId=="nameSearch"){
+				$(this).attr("checked","true");
+				$("#addressSearch").removeAttr("checked");		
+			}else{
+				$(this).attr("checked","true");
+				$("#nameSearch").removeAttr("checked");	
+			}
+			
+		});
 		$("#search_btn").click(function(){
 			$(".el_box").html("");
 			$("#button_box").html("");
 			$("#skeyword").parent().css("display","none");
-			let option = $("input[name=type]").val();
+			option = $("input[name=search-type]:checked").val();
 			type=$(this).children().eq(1).html();
 			let keyword = $("input[name=keyword]").val();
 			$("input[name=save_keyword]").val(keyword);
@@ -712,12 +1032,9 @@ let status;
 			console.log(option);
 			console.log(keyword);
 			//console.log(sigunguCodeNo);
-			if(option=="nameSearch"){
-				
-				getSearch(type,pno,$("input[name=save_keyword]").val())
-			}else{
-				
-			}
+			
+			getSearch(type,pno,$("input[name=save_keyword]").val(),option)
+			
 		});
 		
 		$("#button_box").on("click","button[class^=btn_search_no]",function(){
@@ -727,7 +1044,7 @@ let status;
 			let pno = $(this).html();
 			//console.log(sigunguCodeNo);
 			
-			getSearch(type,pno,$("input[name=save_keyword]").val());
+			getSearch(type,pno,$("input[name=save_keyword]").val(),option);
 			
 		});
 		$("#button_box").on("click","button[class^=search_left]",function(){
@@ -736,7 +1053,7 @@ let status;
 			
 			let pno=no.sNo;
 			pno--;
-			getSearch(type,pno,$("input[name=save_keyword]").val());
+			getSearch(type,pno,$("input[name=save_keyword]").val(),option);
 		});
 		$("#button_box").on("click","button[class^=search_right]",function(){
 			$(".el_box").html("");
@@ -745,7 +1062,7 @@ let status;
 			let pno = no.sNo;
 			
 			pno++;
-			getSearch(type,pno,$("input[name=save_keyword]").val());
+			getSearch(type,pno,$("input[name=save_keyword]").val(),option);
 		});
 		$("input[name=keyword]").keypress(function(e){
 			//console.log(e.code);
@@ -754,7 +1071,6 @@ let status;
 			}
 		});
 		$(".nav__list>a[class^=tourList]").click(function(){
-			
 				if(dateUseIdx!=null){
 					$(".btn-cl").click();
 					setTimeout(function(){
@@ -861,6 +1177,15 @@ let status;
 			
 		});
 		$(".d_box").on("click","div[class=date]",function(){
+			for(let i =0;i<dateMarkerList.length;i++){
+				dateMarkerList[i].setMap(null);
+			}
+			for(let i=0;i<markerList.length;i++){
+				markerList[i].setMap(null);
+			}
+			if(polyline!=null){
+				polyline.setMap(null);
+			}	
 			if(flag==null){
 				if(dateUseIdx!=null){
 					$(".left-bar").css("display","none").css("width","0px");
@@ -887,7 +1212,7 @@ let status;
 			//console.log(planner[$(this).children().eq(0).val()]);
 			dateUseIdx = $(this).children().eq(0).val();
 			let dateObj = plan.planList[dateUseIdx];
-			
+			let linePath = [];
 			//console.log(dateObj);
 			$("input[name=startH]").val(dateObj.startTimeH);
 			$("input[name=startM]").val(dateObj.startTimeM);
@@ -905,7 +1230,9 @@ let status;
 			//console.log(plan);
 			$("#planBox").html("");
 			for(let i=0;i<dateObj.tourList.length;i++){
-				
+				for(let i=0;i<markerList.length;i++){
+					markerList[i].setMap(null);
+				}
 				let planObj=$("<div>").attr("class","planObj");
 				let title=$("<div>").attr("class","planTitle").css("height","28%").html("일정"+(i+1)+" : ");
 				let time = $("<input>").attr({"type":"number","step":"0.5","name":"time","value":dateObj.tourList[i].time,"class":"time"}).css("height","90%");
@@ -936,7 +1263,29 @@ let status;
 				planObj.append(title,body);
 				$("#planBox").append(planObj);
 				
+				if(dateObj.tourList[i].name!=null){
+					var position = new kakao.maps.LatLng(dateObj.tourList[i].YY,dateObj.tourList[i].XX);
+					marker = new kakao.maps.Marker({
+						position : position
+					});
+					dateMarkerList.push(marker);
+					marker.setMap(map);
+					linePath.push(new kakao.maps.LatLng(dateObj.tourList[i].YY,dateObj.tourList[i].XX));
+					
+				}
+				
 			}
+			
+				polyline = new kakao.maps.Polyline({
+				    path: linePath, // 선을 구성하는 좌표배열 입니다
+				    strokeWeight: 5, // 선의 두께 입니다
+				    strokeColor: '#000000', // 선의 색깔입니다
+				    strokeOpacity: '1', // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+				    strokeStyle: 'solid' // 선의 스타일입니다
+				});
+				polyline.setMap(map); 
+			
+			
 			 let dateTotal = $(".planTitle>input[type=number]");
 			 let total=0;
 			 $.each(dateTotal,function(i,v){
@@ -956,6 +1305,7 @@ let status;
 				 $("#planBox").append(div);
 				 
 			 }
+			 
 			//console.log(plan);
 		});
 		$("#planBox").on("click","button[class=planAdd]",function(){
@@ -968,50 +1318,76 @@ let status;
 		});
 		
 		$(".el_box").on("click","div[class=t_box]",function(){
-			
+			tourObj = {tno : $(this).children().eq(2).val()
+					 , contentId : $(this).children().eq(3).val()
+					 , type : $(".left-bar>h3").html()
+					 , name : $(this).children().eq(1).children().children().eq(0).children().eq(0).text()
+					 , address : $(this).children().eq(1).children().children().eq(1).children().eq(0).text()};
 			//console.log($(this));
 			//console.log($(this).children().eq(0).children().attr("src"));
 			//console.log($(this).children().eq(1).children().children().eq(0).children().eq(1).text());
 			//console.log($(this).children().eq(2).val());
 			//console.log(addTo);
 			//console.log($(this).children().eq(3).val());
-			if(addTo!=null){
-				plan.planList[addTo].tourList[datePlanIdx].name = $(this).children().eq(1).children().children().eq(0).children().eq(0).text();
-				plan.planList[addTo].tourList[datePlanIdx].img = $(this).children().eq(0).children().attr("src");
-				plan.planList[addTo].tourList[datePlanIdx].address = $(this).children().eq(1).children().children().eq(1).children().eq(0).text();
-				plan.planList[addTo].tourList[datePlanIdx].tno = $(this).children().eq(2).val();
-				plan.planList[addTo].tourList[datePlanIdx].contentId=$(this).children().eq(3).val();
-				//console.log(plan.planList[addTo].tourList[datePlanIdx].address.length);
-				
-				//console.log(plan);
-				$("div[class=date]>input[value="+addTo+"]").parent().click();
-				no = {tPno : 1, aPno : 1,lPno : 1, rPno : 1,sNo:1};
-				addTo=null;
+			
+			if($("#aroundSearch").is(":checked")){
+				//console.log("클릭");
+				aroundNum = 1;
+				mapX = $(this).children().eq(4).val();
+				mapY = $(this).children().eq(5).val();
+				range = $("select[name=range]").val();
+				tourType = $("select[name=tour-type]").val();
+				getAroundTourList(mapX,mapY,range,tourType,aroundNum);
 			}else{
-				for(let i=0;i<markerList.length;i++){
-					markerList[i].setMap(null);
+				if(addTo!=null){
+					plan.planList[addTo].tourList[datePlanIdx].name = $(this).children().eq(1).children().children().eq(0).children().eq(0).text();
+					plan.planList[addTo].tourList[datePlanIdx].img = $(this).children().eq(0).children().attr("src");
+					plan.planList[addTo].tourList[datePlanIdx].address = $(this).children().eq(1).children().children().eq(1).children().eq(0).text();
+					plan.planList[addTo].tourList[datePlanIdx].tno = $(this).children().eq(2).val();
+					plan.planList[addTo].tourList[datePlanIdx].contentId=$(this).children().eq(3).val();
+					plan.planList[addTo].tourList[datePlanIdx].XX = $(this).children().eq(4).val();
+					plan.planList[addTo].tourList[datePlanIdx].YY = $(this).children().eq(5).val();
+					//console.log(plan.planList[addTo].tourList[datePlanIdx].address.length);
+					
+					//console.log(plan);
+					$("div[class=date]>input[value="+addTo+"]").parent().click();
+					no = {tPno : 1, aPno : 1,lPno : 1, rPno : 1,sNo:1};
+					addTo=null;
 				}
-				markerList = [];
-				//console.log(marker);
-				let mapX = $(this).children().eq(4).val();
-				let mapY = $(this).children().eq(5).val();
-				var position = new kakao.maps.LatLng(mapY,mapX);
-				marker = new kakao.maps.Marker({
-					position : position
-				});
-				markerList.push(marker);
-				marker.setMap(map);
-				console.log(markerList);
-				var newloc =new kakao.maps.LatLng(mapY,mapX);
-				map.setCenter(newloc);
-				map.setLevel(5);
+					for(let i=0;i<markerList.length;i++){
+						markerList[i].setMap(null);
+					}
+					markerList = [];
+					//console.log(marker);
+					let mapX = $(this).children().eq(4).val();
+					let mapY = $(this).children().eq(5).val();
+					var position = new kakao.maps.LatLng(mapY,mapX);
+					marker = new kakao.maps.Marker({
+						position : position
+					});
+					markerList.push(marker);
+					marker.setMap(map);
+					console.log(markerList);
+					var newloc =new kakao.maps.LatLng(mapY,mapX);
+					map.setCenter(newloc);
+					map.setLevel(5);
+					kakao.maps.event.addListener(marker,"click",function(){
+						//alert(tourObj.tno);
+						getDetail();
+					});
+				
 			}
+			
 		});
+		
 		$("button[class=btn-cl]").click(function(){
+			
 			let bar_cl = $(this).parent().parent().attr("class");
 			//console.log($(this));
 			if(bar_cl == "left-bar"){
-				
+				for(let i=0;i<markerList.length;i++){
+					markerList[i].setMap(null);
+				}
 				$(".left-bar").animate({width : '0px'},500);
 				setTimeout(function(){
 					$(".left-bar").css("display","none");
@@ -1051,7 +1427,28 @@ let status;
 			}
 		});
 		$("#save-plan").click(function(){
-			alert("저장");
+			let jsonPlan = JSON.stringify(plan);
+			let obj = {
+					plan : plan,
+					title : "제목",
+					exp : "설명"
+			};
+			let jsonData = JSON.stringify(obj);
+			//console.log(typeof(jsonPlan));
+			//console.log(jsonPlan);
+			$.ajax({
+				url : "savePlanner.pl",
+				method : "POST",
+				contentType: 'application/json; charset=UTF-8',
+				data : jsonData,
+				success : function(e){
+					console.log(e);
+				},
+				error : function(){
+					console.log("실패");
+				}
+			});
+			
 		});
 		$("#btn_startT").click(function(){
 			console.log($("#start1").val());
@@ -1318,6 +1715,46 @@ let status;
 			 }
 			
 		});
+		
+		$("#planBox").on("click","div[class=planbody]>div",function(){
+			getDetail();
+		});
+		
+		$("#aroundSearch").change(function(){
+			console.log($(this).is(":checked"));
+			if($(this).is(":checked")){
+				$("#aroundSearchOption").css("display","block");
+			}else{
+				$("#aroundSearchOption").css("display","none");
+			}
+		});
+		
+		$("#button_box").on("click","button[class^=btn_range_no]",function(){
+			$(".el_box").html("");
+			$("#button_box").html("");
+			
+			aroundNum = $(this).html();
+			//console.log(sigunguCodeNo);
+			
+			getAroundTourList(mapX,mapY,$("select[name=range]").val(),$("select[name=tour-type]").val(),aroundNum);
+			
+		});
+		$("#button_box").on("click","button[class^=range_left]",function(){
+			$(".el_box").html("");
+			$("#button_box").html("");
+			
+			
+			aroundNum--;
+			getAroundTourList(mapX,mapY,$("select[name=range]").val(),$("select[name=tour-type]").val(),aroundNum)
+			
+		});
+		$("#button_box").on("click","button[class^=range_right]",function(){
+			$(".el_box").html("");
+			$("#button_box").html("");
+			aroundNum++;
+			getAroundTourList(mapX,mapY,$("select[name=range]").val(),$("select[name=tour-type]").val(),aroundNum)
+		});
+		
 		$("#planBox").on("change","input[type=number]",function(){
 			//console.log($(this).parent().parent().children().eq(1).children().eq(1).val());
 			idx = $(this).parent().parent().children().eq(1).children().eq(1).val();

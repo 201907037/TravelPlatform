@@ -349,6 +349,7 @@ let planner = [];
 	  	 $("#changeDate").click(function(){
 	  		  $("#DATEPICK").modal("show");	
 	  	  });
+	  	
 	  	 
 });
 

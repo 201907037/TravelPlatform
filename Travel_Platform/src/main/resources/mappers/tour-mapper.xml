@@ -334,12 +334,19 @@
 			resultType="_int">
 	SELECT COUNT(*)
 	FROM TOUR
-	WHERE TOUR_NAME LIKE '%'||#{keyword}||'%'
-	AND TOUR_TYPE = #{type}
-	AND ADDRESS LIKE '%'||#{name}||'%'
+	WHERE TOUR_TYPE = #{type} 
+	<choose>
+		<when test="option=='nameSearch'">
+		AND ADDRESS LIKE '%'||#{name}||'%'
+		AND TOUR_NAME LIKE '%'||#{keyword}||'%'	
+		</when>
+		<otherwise>
+		AND ADDRESS LIKE '%'||#{name}||'%'
+		AND ADDRESS LIKE '%'||#{keyword}||'%'
+		</otherwise>
+	</choose>
 	AND STATUS = 'Y'
 	</select>
-	
 	<select id="selectSearchList"
 			parameterType="hashmap"
 			resultMap="tourResultSet">
@@ -347,9 +354,17 @@
 	FROM (SELECT ROWNUM RN, TT.*
 	        FROM (SELECT *
 	                FROM TOUR
-	                WHERE TOUR_NAME LIKE '%'||#{keyword}||'%'
-	                AND ADDRESS LIKE '%'||#{name}||'%'
-	                AND TOUR_TYPE = #{type}
+	                WHERE TOUR_TYPE = #{type}
+	                <choose>
+						<when test="option=='nameSearch'">
+						AND ADDRESS LIKE '%'||#{name}||'%'
+						AND TOUR_NAME LIKE '%'||#{keyword}||'%'	
+						</when>
+						<otherwise>
+						AND ADDRESS LIKE '%'||#{name}||'%'
+						AND ADDRESS LIKE '%'||#{keyword}||'%'
+						</otherwise>
+					</choose>
 	                AND STATUS = 'Y'
 	                ORDER BY TOUR_NAME ASC) TT)
 	WHERE RN BETWEEN ${start} AND ${end}

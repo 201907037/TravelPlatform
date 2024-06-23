@@ -29,6 +29,8 @@
 		<!-- 김동현 -->
 		<typeAlias type="com.tp.travely.tour.model.vo.City" alias="city"/>
 		<typeAlias type="com.tp.travely.tour.model.vo.Districts" alias="area"/>
+		<typeAlias type="com.tp.travely.planner.model.vo.Planner" alias="planner"/>
+		<typeAlias type="com.tp.travely.planner.model.vo.PlanDetail" alias="detail"/>
 
 		<!-- alias 추가 (전유진) - 2024.06.11 -->
 		<typeAlias type="com.tp.travely.tour.model.vo.Leports" alias="leports" />
@@ -42,6 +44,8 @@
 		<typeAlias type="com.tp.travely.tour.model.vo.LodgingData" alias="lod" />
 		<typeAlias type="com.tp.travely.tour.model.vo.RestaurantData" alias="rd" />
 		<typeAlias type="com.tp.travely.tour.model.vo.TourSpotData" alias="tsd" />
+		
+		
 	</typeAliases>
 	
 	<mappers>
@@ -54,6 +58,9 @@
 
 				<!-- tour mapper 추가 (전유진) -->
 		<mapper resource="/mappers/tour-mapper.xml" />
+		
+		<!-- planner mapper 추가 김동현 -->
+		<mapper resource="/mappers/planner-mapper.xml"/>
 
 	</mappers>
 	

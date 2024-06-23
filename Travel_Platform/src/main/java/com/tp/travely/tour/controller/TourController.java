@@ -1,8 +1,12 @@
 // 유진 - tour 패키지 생성 (2024.06.10)
 package com.tp.travely.tour.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +40,7 @@ import com.tp.travely.tour.model.vo.TourSpotData;
 
 @Controller
 public class TourController {
-	
+	private static final String KEY = "kSu5EX07G5ba6MAXMOBjLbV30e%2B28Xhh3Q3Qo2gqkDtwhS7B7GcUKKKg8D8va2qlva530vfM095CqfAWEGemmw%3D%3D";
 	@Autowired
 	private TourService tourService;
 	
@@ -220,6 +224,100 @@ public class TourController {
 		rtData.put("list", list);
 		rtData.put("page",pinfo);
 		return new Gson().toJson(rtData);
+	}
+	@GetMapping(value="getDetail.to", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getDetail(int tno, String contentId,String type) throws IOException {
+		//System.out.println(tno);
+		//System.out.println(contentId);
+		//System.out.println(type);
+		int contentTypeId=0;
+		switch(type) {
+		case "관광지":
+			contentTypeId=12;
+			break;
+		case "레포츠":
+			contentTypeId=28;
+			break;
+		case "숙박":
+			contentTypeId=32;
+			break;
+		case "음식점":
+			contentTypeId=39;
+			break;
+		}
+		
+		String url = "https://apis.data.go.kr/B551011/KorService1/detailIntro1?";
+		url+="MobileOS=ETC";
+		url+="&MobileApp=Travely";
+		url+="&contentId="+contentId;
+		url+="&contentTypeId="+contentTypeId;
+		url+="&_type=json";
+		url+="&serviceKey="+KEY;
+		//System.out.println(url);
+		URL cUrl = new URL(url);
+		HttpURLConnection connectU = (HttpURLConnection)cUrl.openConnection();
+		BufferedReader br = new BufferedReader(new InputStreamReader(connectU.getInputStream()));
+		String result = "";
+		String line;
+		while((line=br.readLine())!=null) {
+			result += line;
+		}
+		br.close();
+		connectU.disconnect();
+		
+		return result;
+	}
+	@GetMapping(value="getImg.to", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getImg(int tno, String contentId,String type) throws IOException {
+		String url = "https://apis.data.go.kr/B551011/KorService1/detailImage1?";
+		url+="MobileOS=ETC";
+		url+="&MobileApp=Travely";
+		url+="&_type=json";
+		url+="&contentId="+contentId;
+		url+="&imageYN=Y";
+		url+="&subImageYN=Y";
+		url+="&serviceKey="+KEY;
+		
+		URL cUrl = new URL(url);
+		HttpURLConnection connectU = (HttpURLConnection)cUrl.openConnection();
+		BufferedReader br = new BufferedReader(new InputStreamReader(connectU.getInputStream()));
+		String result = "";
+		String line;
+		while((line=br.readLine())!=null) {
+			result += line;
+		}
+		br.close();
+		connectU.disconnect();
+		
+		return result;
+	}
+	@GetMapping(value="getRangeTourList.to", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getRangeTourList(double x,double y,int range,int tourType,int aroundNum) throws IOException {
+		String url = "https://apis.data.go.kr/B551011/KorService1/locationBasedList1?";
+		url+="numOfRows=5";
+		url+="&pageNo="+aroundNum;
+		url+="&MobileApp=Travely";
+		url+="&MobileOS=ETC";
+		url+="&_type=json";
+		url+="&mapX="+x;
+		url+="&mapY="+y;
+		url+="&radius="+range;
+		url+="&contentTypeId="+tourType;
+		url+="&serviceKey="+KEY;
+		URL cUrl = new URL(url);
+		HttpURLConnection connectU = (HttpURLConnection)cUrl.openConnection();
+		BufferedReader br = new BufferedReader(new InputStreamReader(connectU.getInputStream()));
+		String result = "";
+		String line;
+		while((line=br.readLine())!=null) {
+			result += line;
+		}
+		br.close();
+		connectU.disconnect();
+		return result;
 	}
 	
 	// 유진&현성 - 관리자 여행지 상세조회 컨트롤러 (2024.06.14)
