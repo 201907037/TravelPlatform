@@ -15,7 +15,7 @@
 		display : none;
 	}
 	
-	.orginImgs { font-size : 0.8em; }
+	.orginImgs, .changeNotion { font-size : 0.8em; }
 </style>
 </head>
 <body>
@@ -36,7 +36,7 @@
 	        	<form id="tourUpdate" action="adminTourUpdate.ad" method="post" enctype="multipart/form-data">
 	        		<input type="hidden" name="tourNo" value="${ tour.tourNo }">
 	        		
-	        		<label>대표이미지 (필수) :</label>
+	        		<label>대표이미지 (필수) : <span class="changeNotion">현재 유지하고 싶은 파일이어도 다시 선택해주세요</span></label>
                     <input type="file" class="form-control" name="reThumbImg" id="thumbImgInput" required>
                     <div id="originThumbImg" class="orginImgs">
                     	  현재 파일 : ${tour.thumbImg.substring(tour.thumbImg.lastIndexOf('_') + 1)}
@@ -71,7 +71,7 @@
 					
 					<br>
 
-					<label>참고이미지들 (최대 4개까지 선택 가능) :</label> <br>
+					<label>참고이미지들 (최대 4개까지 선택 가능) : <span class="changeNotion">현재 유지하고 싶은 파일도 다시 선택해주세요</span></label> <br>
 					<table id="imgInput-holder">
 						<tr>
 							<td>
@@ -95,6 +95,7 @@
 							    	<td>
 							    		<div id="originChangeNo${ loop.index + 1 }" class="orginImgs">
 											현재 파일 : ${ extraImg.changeNo.substring(extraImg.changeNo.lastIndexOf('_') + 1) }
+											<input type="hidden" name="changeNoFiles" value="${ extraImg.changeNo }">
 								        </div>
 							    	</td>
 							    </c:forEach>

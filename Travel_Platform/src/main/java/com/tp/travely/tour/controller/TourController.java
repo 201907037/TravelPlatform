@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.tp.travely.common.model.vo.PageInfo;
-import com.tp.travely.common.template.Pagination;
+import com.tp.travely.member.model.vo.Member;
 import com.tp.travely.tour.model.service.TourService;
 import com.tp.travely.tour.model.vo.City;
 import com.tp.travely.tour.model.vo.Districts;
@@ -36,6 +35,7 @@ import com.tp.travely.tour.model.vo.LodgingData;
 import com.tp.travely.tour.model.vo.RestaurantData;
 import com.tp.travely.tour.model.vo.Tour;
 import com.tp.travely.tour.model.vo.TourImg;
+import com.tp.travely.tour.model.vo.TourReview;
 import com.tp.travely.tour.model.vo.TourSpotData;
 
 @Controller
@@ -475,8 +475,156 @@ public class TourController {
 	// 유진 - 관리자 여행지 수정 컨트롤러 (2024.06.23)
 	// 관리자 여행지 수정 컨트롤러
 	@PostMapping(value="adminTourUpdate.ad")
-	public void adminTourUpdate() {
+	public ModelAndView adminTourUpdate(@RequestParam("tourType") String tourType, Tour tour, 
+										TourSpotData tsd, LodgingData lod, RestaurantData rd, 
+							            LeportsData led, TourImg ti, 
+							            MultipartFile reThumbImg, 
+							            ArrayList<MultipartFile> reChangeNoFiles, 
+							            HttpSession session, ModelAndView mv) {
 		
+		// 새로 들어온 대표 이미지 파일이 있다면
+	    if (reThumbImg != null && !reThumbImg.isEmpty()) {
+	        // 원래 있었던 대표 이미지 파일 위치 찾아 삭제
+	        String realPath = session.getServletContext().getRealPath(tour.getThumbImg());
+	        new File(realPath).delete();
+
+	        // 새로 들어온 대표 이미지 파일 추가
+	        String changeName = savePath(reThumbImg, session, "thumbImg");
+	        String fullThumbImgPath = "resources/tourUpfiles/" + changeName;
+	        tour.setThumbImg(fullThumbImgPath);
+
+	        // 각 객체들에 썸네일 담기
+	        tsd.setThumbImg(fullThumbImgPath);
+	        lod.setThumbImg(fullThumbImgPath);
+	        rd.setThumbImg(fullThumbImgPath);
+	        led.setThumbImg(fullThumbImgPath);
+	    }
+	    
+	    // 기존 추가 이미지 파일 목록 가져오기
+	    ArrayList<TourImg> existingTourImgs = tourService.getTourImgsByTourNo(tour.getTourNo());
+	    ArrayList<TourImg> updatedTourImgs = new ArrayList<>();
+	    
+	    // 새로 들어온 파일이 있다면
+	    boolean hasNewFiles = reChangeNoFiles != null && !reChangeNoFiles.isEmpty() && reChangeNoFiles.stream().anyMatch(file -> !file.isEmpty());
+
+	    if (hasNewFiles) {
+	        // 새로운 추가 이미지 파일 처리
+	        for (int i = 0; i < reChangeNoFiles.size(); i++) {
+	            MultipartFile file = reChangeNoFiles.get(i);
+
+	            if (!file.isEmpty()) {
+	                // 새 파일 저장
+	                String changeName = savePath(file, session, "changeNo");
+	                String fullChangeNoPath = "resources/tourUpfiles/" + changeName;
+
+	                // 새 TourImg 객체 생성
+	                TourImg tourImg = new TourImg();
+	                tourImg.setChangeNo(fullChangeNoPath);
+	                tourImg.setRefTno(tour.getTourNo());
+
+	                // 기존 이미지가 있을 경우 timgNo 설정, 기존 파일 삭제
+	                if (i < existingTourImgs.size()) {
+	                    tourImg.setTimgNo(existingTourImgs.get(i).getTimgNo());
+	                    String realPath = session.getServletContext().getRealPath(existingTourImgs.get(i).getChangeNo());
+	                    new File(realPath).delete();
+	                }
+
+	                updatedTourImgs.add(tourImg);
+	            }
+	        }
+
+	        // 기존 이미지 중 남은 부분 삭제
+	        for (int i = reChangeNoFiles.size(); i < existingTourImgs.size(); i++) {
+	            String realPath = session.getServletContext().getRealPath(existingTourImgs.get(i).getChangeNo());
+	            new File(realPath).delete();
+	        }
+	    } else {
+	        // 새 파일이 없을 경우 기존 파일 삭제
+	        for (TourImg img : existingTourImgs) {
+	            String realPath = session.getServletContext().getRealPath(img.getChangeNo());
+	            new File(realPath).delete();
+	        }
+	    }
+
+	    // 결과 확인
+	    System.out.println("변경된 추가이미지들 : " + updatedTourImgs);
+	    
+		// 서비스 호출
+		int result = 0;
+		result = tourService.updateTour(tour); // 공통으로 수정되는 부분
+		
+		switch(tourType) {
+		case "tourSpot" : 
+			tsd.setTourtype(tourType);
+			tsd.setRefTno(tour.getTourNo());
+			result = tourService.updateTour(tsd, updatedTourImgs);
+			break;
+		case "lodging" : 
+			lod.setTourtype(tourType);
+			lod.setRefTno(tour.getTourNo());
+			result = tourService.updateTour(lod, updatedTourImgs);
+			break;
+		case "restaurant" : 
+			rd.setTourtype(tourType);
+			rd.setRefTno(tour.getTourNo());
+			result = tourService.updateTour(rd, updatedTourImgs);
+			break;
+		case "leports" : 
+			led.setTourtype(tourType);
+			led.setRefTno(tour.getTourNo());
+			result = tourService.updateTour(led, updatedTourImgs);
+			break;
+		default : 
+			break;
+		}
+		
+		// 결과에 따른 처리
+		if(result > 0) {
+			session.setAttribute("alertMsg", "성공적으로 여행지가 수정되었습니다.");
+			mv.setViewName("redirect:/adminTour.ad");
+		} else {
+			mv.addObject("errorMsg", "수정 실패").setViewName("common/errorPage");
+		}
+		
+		return mv;
+	}
+	
+	@ResponseBody
+	@GetMapping(value="reviewList.ad",produces="application/json; charset=UTF-8")
+	public String reviewList(int tourNo, Model model) {
+		
+		ArrayList<TourReview> list = tourService.reviewList(tourNo);
+
+		
+		HashMap<String, Object> rtMap = new HashMap<String, Object>();
+		
+		if(!list.isEmpty()) {
+			rtMap.put("rList", list);
+			ArrayList<Member> mList = tourService.reviewMemberList(tourNo);
+			if(!mList.isEmpty()) {
+				rtMap.put("mList", mList);
+			}
+			
+		}else {
+			model.addAttribute("alertMsg", "에러");
+		}
+		
+		return new Gson().toJson(rtMap);
+	}
+	
+	@ResponseBody
+	@PostMapping(value="reviewDelete.ad",produces="application/text; charset=UTF-8")
+	public String reviewDelete(int reviewNo) {
+		
+		int result = tourService.reviewDelete(reviewNo);
+		String s = "";
+		if(result > 0) {
+			s = "성공";
+		}else {
+			s = "실패";
+		}
+		
+		return s;
 	}
 	
 	//------------------ 일반 메서드 영역 ------------------------------------------------------

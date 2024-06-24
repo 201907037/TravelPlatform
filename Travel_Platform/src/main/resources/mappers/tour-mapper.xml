@@ -143,6 +143,40 @@
 		<result column="LOCATION_XX" property="locationXX"/>
 		<result column="LOCATION_YY" property="locationYY"/>
 	</resultMap>
+	
+	<!-- 현성 - 리뷰 -->
+	<resultMap id="reviewResultSet" 
+			   type="com.tp.travely.tour.model.vo.TourReview">
+		<result column="REVIEW_NO" property="reviewNo" />
+		<result column="REVIEW_TITLE" property="reviewTitle" />
+		<result column="REVIEW_CONTENT" property="reviewContent" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="SCORE" property="score" />
+		<result column="TOUR_NO" property="tourNo" />
+		<result column="USER_NO" property="userNo" />
+	</resultMap>
+	
+	<!-- 현성 - 회원 정보 -->
+	<resultMap id="memberResultSet"
+	   type="member">
+		<result column="USER_NO" property="userNo" />	   
+		<result column="USER_ID" property="userId" />
+		<result column="USER_PWD" property="userPwd" />
+		<result column="NICK_NAME" property="nickName" />
+		<result column="NAME" property="name" />
+		<result column="AGE" property="age" />
+		<result column="EMAIL" property="email" />
+		<result column="PHONE" property="phone" />
+		<result column="ADDRESS" property="address" />
+		<result column="GENDER" property="gender" />
+		<result column="CHANGE_NAME" property="changeName" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="MODIFY_DATE" property="modifyDate" />
+		<result column="STATUS" property="status" />
+		<result column="MAIL_AUTH" property="mail_auth" />
+		<result column="MAIL_KEY" property="mail_key" />
+	</resultMap>
+	
 	<!-- 유진 - 관리자 여행지 목록 조회 쿼리문 (2024.06.10) -->
 	<select id="adminTourList" 
 			resultMap="tourResultSet">
@@ -386,7 +420,7 @@
 			resultMap="lodgingResultSet">
 		SELECT *
 		FROM LODGING
-		WHERE REF_TNO = #{tourNo}	
+		WHERE REF_TNO = #{tourNo}
 	</select>
 	
 	<!-- 식당/카페 -->
@@ -395,7 +429,7 @@
 			resultMap="restaurantResultSet">
 		SELECT *
 		FROM RESTAURANT
-		WHERE REF_TNO = #{tourNo}	
+		WHERE REF_TNO = #{tourNo}
 	</select>
 	
 	<!-- 레포츠 -->
@@ -404,7 +438,7 @@
 			resultMap="leportsResultSet">
 		SELECT *
 		FROM LEPORTS
-		WHERE REF_TNO = #{tourNo}	
+		WHERE REF_TNO = #{tourNo}
 	</select>
 	
 	<!-- 이미지들 -->
@@ -432,5 +466,110 @@
 		   SET STATUS = 'N' 
 		 WHERE TOUR_NO = #{tourNo}
 		   AND STATUS = 'Y'
+	</update>
+	
+	<!-- 현성 - 여행지 리뷰 리스트 -->
+	<select id="reviewList"
+			parameterType="_int"
+			resultMap="reviewResultSet">
+		SELECT *
+		FROM TOUR_REVIEW
+		WHERE TOUR_NO = #{tourNo}
+		AND STATUS = 'Y'
+		ORDER BY TOUR_NO
+	</select>
+	
+
+	
+	<!-- 현성 - 관리자 리뷰 회원 정보 리스트 -->
+	<select id="reviewMemberList"
+			parameterType="_int"
+			resultMap="memberResultSet">
+		SELECT *
+		FROM MEMBER
+		JOIN TOUR_REVIEW USING(USER_NO)
+		WHERE TOUR_REVIEW.TOUR_NO = #{tourNo}
+		AND TOUR_REVIEW.STATUS = 'Y'
+	</select>	
+	
+	
+	<!-- 현성 - 관리자 리뷰 삭제 -->
+	<update id="reviewDelete"
+			parameterType="_int">
+
+		UPDATE TOUR_REVIEW 
+		   SET STATUS = 'N' 
+		 WHERE REVIEW_NO = #{reviewNo}
+		   AND STATUS = 'Y'
+	</update>
+	
+	<!-- 유진 - 관리자 여행지 추가이미지 파일들 조회 쿼리문 (2024.06.24) -->
+	<select id="getTourImgsByTourNo" 
+			parameterType="_int" 
+			resultMap="tourImgResultSet">
+		SELECT * 
+		  FROM TOUR_IMG 
+		 WHERE REF_TNO = #{tourNo}
+	</select>
+	
+	<!-- 유진 - 관리자 여행지 수정 쿼리문 (2024.06.24) -->
+	<update id="updateTour" 
+			parameterType="tour">	   	   
+		UPDATE TOUR 
+		   SET TOUR_NAME = #{tourName}, 
+		   	   ADDRESS = #{address}, 
+		   	   THUMB_IMG = #{thumbImg} 
+		 WHERE TOUR_NO = #{tourNo}
+	</update>
+	
+	<update id="updateTourSpotData" 
+			parameterType="tsd">	   	   
+		UPDATE TOUR_SPOT 
+		   SET SEASON = #{season}, 
+		   	   USE_TIME = #{useTime}, 
+		   	   TEL = #{tel}, 
+		   	   PET = #{pet} 
+		 WHERE REF_TNO = #{refTno}
+	</update>
+	
+	<update id="updateLodgingData" 
+			parameterType="lod">
+		UPDATE LODGING 
+		   SET ROOM_TYPE = #{roomType}, 
+		   	   CHECK_IN = #{checkIn}, 
+		   	   CHECK_OUT = #{checkOut}, 
+		   	   COOK = #{cook}, 
+		   	   TEL = #{tel}, 
+		   	   PARKING = #{parking} 
+		 WHERE REF_TNO = #{refTno}
+	</update>
+	
+	<update id="updateRestaurantData" 
+			parameterType="rd">   	   
+		UPDATE RESTAURANT 
+		   SET KID_ROOM = #{kidRoom}, 
+		   	   FIRST_MENU = #{firstMenu}, 
+		   	   TREAT_MENU = #{treatMenu}, 
+		   	   TEL = #{tel}, 
+		   	   OPEN_TIME = #{openTime}, 
+		   	   REST_DATE = #{restDate} 
+		 WHERE REF_TNO = #{refTno}
+	</update>
+	
+	<update id="updateLeportsData" 
+			parameterType="led">	   
+		UPDATE LEPORTS 
+		   SET USE_TIME = #{useTime}, 
+		   	   PARKING = #{parking}, 
+		   	   PET = #{pet}, 
+		   	   TEL = #{tel} 
+		 WHERE REF_TNO = #{refTno}
+	</update>
+	
+	<update id="updateTourImg" 
+			parameterType="tourImg">
+		UPDATE TOUR_IMG 
+		   SET CHANGE_NO = #{changeNo} 
+		 WHERE REF_TNO = #{refTno}
 	</update>
 </mapper>

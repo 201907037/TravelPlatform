@@ -196,9 +196,16 @@
                     
                     <label>여행지명 :</label>
 				    <input type="text" class="form-control" name="tourName" required> <br>
-				    <label>주소 :</label>
-				    <input type="text" class="form-control" name="address" required> <br>
-	   				
+				    <table>
+				    	<tr>
+				    		<td style="width : 1150px; padding-right: 20px;"><label>주소 :</label> <input type="text" class="form-control" name="address" required></td>
+				    		<td style="padding-right: 20px;"><label>x좌표 : </label><input type="number" class="form-control" name="mapX" required></td>
+				    		<td><label>y좌표 : </label><input type="number" class="form-control" name="mapY" required></td>
+				    	</tr>
+				    </table>
+				    
+				    <br>
+				    
 					<label for="tourType">여행지 분류 :</label>
 				  	<select class="form-control" id="tourType" name="tourType">
 				  		<option>-- 선택 --</option>

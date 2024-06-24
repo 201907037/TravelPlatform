@@ -4,6 +4,7 @@ package com.tp.travely.tour.model.service;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.tp.travely.member.model.vo.Member;
 import com.tp.travely.tour.model.vo.City;
 import com.tp.travely.tour.model.vo.Districts;
 import com.tp.travely.tour.model.vo.LeportsData;
@@ -11,6 +12,7 @@ import com.tp.travely.tour.model.vo.LodgingData;
 import com.tp.travely.tour.model.vo.RestaurantData;
 import com.tp.travely.tour.model.vo.Tour;
 import com.tp.travely.tour.model.vo.TourImg;
+import com.tp.travely.tour.model.vo.TourReview;
 import com.tp.travely.tour.model.vo.TourSpotData;
 
 public interface TourService {
@@ -38,9 +40,6 @@ public interface TourService {
 	int insertTour(RestaurantData rd, ArrayList<TourImg> tourImgList);
 	int insertTour(LeportsData led, ArrayList<TourImg> tourImgList);
 	
-	
-
-	
 	// 유진&현성 - 관리자 여행지 상세조회 서비스 (2024.06.14)
 	TourSpotData tourSpotDetail(int tourNo);
 	LodgingData lodgingDetail(int tourNo);
@@ -48,9 +47,25 @@ public interface TourService {
 	LeportsData leportsDetail(int tourNo);
 	// 이미지 list
 	ArrayList<TourImg> tourImgList(int tourNo);
-	// 유진 - 관리자 여행지 조회 DAO (Tour 객체에서만) (2024.06.19)
+	// 유진 - 관리자 여행지 조회 서비스 (Tour 객체에서만) (2024.06.19)
 	Tour getTourByNo(int tourNo);
 
 	// 유진 - 관리자 여행지 삭제 서비스 (2024.06.17)
 	int deleteTour(int tourNo);
+	
+	// 현성 - 리뷰 리스트(2026.06.19)
+	ArrayList<TourReview> reviewList(int tourNo);
+
+	ArrayList<Member> reviewMemberList(int tourNo);
+
+	int reviewDelete(int reviewNo);
+
+	// 유진 - 관리자 여행지 추가이미지 파일들 조회 서비스 (2024.06.24)
+	ArrayList<TourImg> getTourImgsByTourNo(int tourNo);
+	// 유진 - 관리자 여행지 수정 서비스 (2024.06.24)
+	int updateTour(Tour tour);
+	int updateTour(TourSpotData tsd, ArrayList<TourImg> updatedTourImgs);
+	int updateTour(LodgingData lod, ArrayList<TourImg> updatedTourImgs);
+	int updateTour(RestaurantData rd, ArrayList<TourImg> updatedTourImgs);
+	int updateTour(LeportsData led, ArrayList<TourImg> updatedTourImgs);
 }

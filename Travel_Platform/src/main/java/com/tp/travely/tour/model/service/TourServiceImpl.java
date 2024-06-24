@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tp.travely.member.model.vo.Member;
 import com.tp.travely.tour.model.dao.TourDao;
 import com.tp.travely.tour.model.vo.City;
 import com.tp.travely.tour.model.vo.Districts;
@@ -17,6 +18,7 @@ import com.tp.travely.tour.model.vo.LodgingData;
 import com.tp.travely.tour.model.vo.RestaurantData;
 import com.tp.travely.tour.model.vo.Tour;
 import com.tp.travely.tour.model.vo.TourImg;
+import com.tp.travely.tour.model.vo.TourReview;
 import com.tp.travely.tour.model.vo.TourSpotData;
 
 @Service
@@ -73,45 +75,49 @@ public class TourServiceImpl implements TourService {
 	    for (TourImg tourImg : tourImgList) {
 	        result += tourDao.insertTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
 	    }
+	    
 	    return result;
 	}
 	
 	@Override
 	@Transactional
 	public int insertTour(LodgingData lod, ArrayList<TourImg> tourImgList) {
-		// TourSpotData 저장
+		// LodgingData 저장
 	    int result = tourDao.insertTour(sqlSession, lod);
 
 	    // TourImg 리스트 저장
 	    for (TourImg tourImg : tourImgList) {
 	        result += tourDao.insertTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
 	    }
+	    
 	    return result;
 	}
 	
 	@Override
 	@Transactional
 	public int insertTour(RestaurantData rd, ArrayList<TourImg> tourImgList) {
-		// TourSpotData 저장
+		// RestaurantData 저장
 	    int result = tourDao.insertTour(sqlSession, rd);
 
 	    // TourImg 리스트 저장
 	    for (TourImg tourImg : tourImgList) {
 	        result += tourDao.insertTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
 	    }
+	    
 	    return result;
 	}
 	
 	@Override
 	@Transactional
 	public int insertTour(LeportsData led, ArrayList<TourImg> tourImgList) {
-		// TourSpotData 저장
+		// LeportsData 저장
 	    int result = tourDao.insertTour(sqlSession, led);
 
 	    // TourImg 리스트 저장
 	    for (TourImg tourImg : tourImgList) {
 	        result += tourDao.insertTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
 	    }
+	    
 	    return result;
 	}
 
@@ -163,5 +169,91 @@ public class TourServiceImpl implements TourService {
 	@Transactional
 	public int deleteTour(int tourNo) {
 		return tourDao.deleteTour(sqlSession, tourNo);
+	}
+	
+	@Override
+	public ArrayList<TourReview> reviewList(int tourNo) {
+		return tourDao.reviewList(sqlSession, tourNo);
+	}
+
+	@Override
+	public ArrayList<Member> reviewMemberList(int tourNo) {
+		// TODO Auto-generated method stub
+		return tourDao.reviewMemberList(sqlSession, tourNo);
+	}
+
+	@Override
+	@Transactional
+	public int reviewDelete(int reviewNo) {
+		return tourDao.reviewDelete(sqlSession, reviewNo);
+	}
+
+	// 유진 - 관리자 여행지 추가이미지 파일들 조회 서비스 (2024.06.24)
+	@Override
+	public ArrayList<TourImg> getTourImgsByTourNo(int tourNo) {
+		return tourDao.getTourImgsByTourNo(sqlSession, tourNo);
+	}
+
+	// 유진 - 관리자 여행지 수정 서비스 (2024.06.24)
+	@Override
+	@Transactional
+	public int updateTour(Tour tour) {
+		return tourDao.updateTour(sqlSession, tour);
+	}
+	
+	@Override
+	@Transactional
+	public int updateTour(TourSpotData tsd, ArrayList<TourImg> updatedTourImgs) {
+		// TourSpotDatas 저장
+	    int result = tourDao.updateTour(sqlSession, tsd);
+
+	    // TourImg 리스트 저장
+	    for (TourImg tourImg : updatedTourImgs) {
+	        result += tourDao.updateTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
+	    }
+	    
+	    return result;
+	}
+
+	@Override
+	@Transactional
+	public int updateTour(LodgingData lod, ArrayList<TourImg> updatedTourImgs) {
+		// LodgingData 저장
+	    int result = tourDao.updateTour(sqlSession, lod);
+
+	    // TourImg 리스트 저장
+	    for (TourImg tourImg : updatedTourImgs) {
+	        result += tourDao.updateTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
+	    }
+	    
+	    return result;
+	}
+
+	@Override
+	@Transactional
+	public int updateTour(RestaurantData rd, ArrayList<TourImg> updatedTourImgs) {
+		// RestaurantData 저장
+	    int result = tourDao.updateTour(sqlSession, rd);
+	    
+	    // TourImg 리스트 저장
+	    for (TourImg tourImg : updatedTourImgs) {
+	        result += tourDao.updateTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
+	    }
+	    
+	    return result;
+	}
+
+	@Override
+	@Transactional
+	public int updateTour(LeportsData led, ArrayList<TourImg> updatedTourImgs) {
+		// LeportsData 저장
+	    int result = tourDao.updateTour(sqlSession, led);
+
+	    // TourImg 리스트 저장
+	    for (TourImg tourImg : updatedTourImgs) {
+	        result += tourDao.updateTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
+	    }
+	    
+	    return result;
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.tp.travely.member.model.vo.Member;
 import com.tp.travely.tour.model.vo.City;
 import com.tp.travely.tour.model.vo.Districts;
 import com.tp.travely.tour.model.vo.LeportsData;
@@ -14,6 +15,7 @@ import com.tp.travely.tour.model.vo.LodgingData;
 import com.tp.travely.tour.model.vo.RestaurantData;
 import com.tp.travely.tour.model.vo.Tour;
 import com.tp.travely.tour.model.vo.TourImg;
+import com.tp.travely.tour.model.vo.TourReview;
 import com.tp.travely.tour.model.vo.TourSpotData;
 
 @Repository
@@ -105,5 +107,48 @@ public class TourDao {
 	// 유진 - 관리자 여행지 삭제 DAO (2024.06.17)
 	public int deleteTour(SqlSessionTemplate sqlSession, int tourNo) {
 		return sqlSession.update("tourMapper.deleteTour", tourNo);
+	}
+	
+	// 현성 - 관광지 리뷰 리스트 DAO (2024.06.19)
+	public ArrayList<TourReview> reviewList(SqlSessionTemplate sqlSession, int tourNo) {
+		return (ArrayList)sqlSession.selectList("tourMapper.reviewList", tourNo);
+	}
+
+	public ArrayList<Member> reviewMemberList(SqlSessionTemplate sqlSession, int tourNo) {
+		return (ArrayList)sqlSession.selectList("tourMapper.reviewMemberList", tourNo);
+	}
+
+	public int reviewDelete(SqlSessionTemplate sqlSession, int reviewNo) {
+		return sqlSession.update("tourMapper.reviewDelete", reviewNo);
+	}
+
+	// 유진 - 관리자 여행지 추가이미지 파일들 조회 DAO (2024.06.24)
+	public ArrayList<TourImg> getTourImgsByTourNo(SqlSessionTemplate sqlSession, int tourNo) {
+		return (ArrayList)sqlSession.selectList("tourMapper.getTourImgsByTourNo", tourNo);
+	}
+
+	// 유진 - 관리자 여행지 수정 DAO (2024.06.24)
+	public int updateTourImg(SqlSessionTemplate sqlSession, TourImg tourImg) {
+		return sqlSession.update("tourMapper.updateTourImg", tourImg);
+	}
+	
+	public int updateTour(SqlSessionTemplate sqlSession, Tour tour) {
+		return sqlSession.update("tourMapper.updateTour", tour);
+	}
+	
+	public int updateTour(SqlSessionTemplate sqlSession, TourSpotData tsd) {
+		return sqlSession.update("tourMapper.updateTourSpotData", tsd);
+	}
+
+	public int updateTour(SqlSessionTemplate sqlSession, LodgingData lod) {
+		return sqlSession.update("tourMapper.updateLodgingData", lod);
+	}
+
+	public int updateTour(SqlSessionTemplate sqlSession, RestaurantData rd) {
+		return sqlSession.update("tourMapper.updateRestaurantData", rd);
+	}
+
+	public int updateTour(SqlSessionTemplate sqlSession, LeportsData led) {
+		return sqlSession.update("tourMapper.updateLeportsData", led);
 	}
 }
