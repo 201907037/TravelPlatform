@@ -4,5 +4,19 @@
 <!-- planner mapper 파일 김동현 -->
 <mapper namespace="plannerMapper">
 	
-	
+	<select id="getTNOBycontentId"
+			parameterType="_int"
+			resultType="_int">
+	SELECT TOUR_NO
+	FROM TOUR
+	WHERE CONTENT_ID = #{id}
+	</select>
+	<insert id="insertPlanner"
+			parameterType="planner">
+			
+	</insert>
+	<insert id="insertPlanDetail"
+			parameterType="detail">
+			
+	</insert>
 </mapper>

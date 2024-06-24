@@ -199,7 +199,7 @@ public class TourController {
 	// 여행지 검색 기능
 	@GetMapping(value="searchTourList.to",produces="application/json; charset=UTF-8")
 	@ResponseBody
-	public String getSearchList(String type,String areaCode,String areaName,int pno,String keyword) {
+	public String getSearchList(String type,String areaCode,String areaName,int pno,String keyword,String option) {
 //		System.out.println(type);
 //		System.out.println(areaCode);
 //		System.out.println(areaName);
@@ -209,9 +209,11 @@ public class TourController {
 		map.put("type",type);
 		map.put("name",areaName);
 		map.put("keyword",keyword);
+		map.put("option",option);
+		System.out.println(map);
 		int listCount = tourService.searchTourListCount(map);
 		PageInfo pinfo = getPagInfo(listCount,type, pno, map);
-		//System.out.println(pinfo);
+		System.out.println(pinfo);
 		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
 		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
 		map.put("start", (start+""));
@@ -221,8 +223,13 @@ public class TourController {
 //			System.out.println(t);
 //		}
 		HashMap<String,Object> rtData = new HashMap<String, Object>();
-		rtData.put("list", list);
-		rtData.put("page",pinfo);
+		if(list.isEmpty()) {
+			rtData.put("none","검색결과가 없습니다.");
+		}else {
+			rtData.put("list", list);
+			rtData.put("page",pinfo);
+			
+		}
 		return new Gson().toJson(rtData);
 	}
 	@GetMapping(value="getDetail.to", produces="application/json; charset=UTF-8")
@@ -230,7 +237,7 @@ public class TourController {
 	public String getDetail(int tno, String contentId,String type) throws IOException {
 		//System.out.println(tno);
 		//System.out.println(contentId);
-		//System.out.println(type);
+		System.out.println("type : "+type);
 		int contentTypeId=0;
 		switch(type) {
 		case "관광지":
@@ -257,7 +264,7 @@ public class TourController {
 		//System.out.println(url);
 		URL cUrl = new URL(url);
 		HttpURLConnection connectU = (HttpURLConnection)cUrl.openConnection();
-		BufferedReader br = new BufferedReader(new InputStreamReader(connectU.getInputStream()));
+		BufferedReader br = new BufferedReader(new InputStreamReader(connectU.getInputStream(),"UTF-8"));
 		String result = "";
 		String line;
 		while((line=br.readLine())!=null) {
@@ -282,7 +289,7 @@ public class TourController {
 		
 		URL cUrl = new URL(url);
 		HttpURLConnection connectU = (HttpURLConnection)cUrl.openConnection();
-		BufferedReader br = new BufferedReader(new InputStreamReader(connectU.getInputStream()));
+		BufferedReader br = new BufferedReader(new InputStreamReader(connectU.getInputStream(),"UTF-8"));
 		String result = "";
 		String line;
 		while((line=br.readLine())!=null) {
@@ -309,7 +316,7 @@ public class TourController {
 		url+="&serviceKey="+KEY;
 		URL cUrl = new URL(url);
 		HttpURLConnection connectU = (HttpURLConnection)cUrl.openConnection();
-		BufferedReader br = new BufferedReader(new InputStreamReader(connectU.getInputStream()));
+		BufferedReader br = new BufferedReader(new InputStreamReader(connectU.getInputStream(),"UTF-8"));
 		String result = "";
 		String line;
 		while((line=br.readLine())!=null) {
