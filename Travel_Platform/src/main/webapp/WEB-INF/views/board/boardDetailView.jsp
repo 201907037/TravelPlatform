@@ -349,6 +349,26 @@
             font-weight: bolder;
             cursor: pointer;
         }
+        
+        /* 수정하기 및 삭제하기 버튼 스타일 */
+		#update-btn,
+		#delete-btn {
+		    background-color: #f0f0f0;
+		    color: #000;
+		    padding: 8px 15px;
+		    border: 2px solid gray;
+		    border-radius: 5px;
+		    cursor: pointer;
+		    font-size: 15px;
+		    transition: background-color 0.3s ease, color 0.3s ease;
+		    font-weight: bold;
+		}
+		
+		#update-btn:hover,
+		#delete-btn:hover {
+		    background-color: #ccc;
+		    color: #fff;
+		}
     </style>
 </head>
 <body>
@@ -364,8 +384,8 @@
         	> 수정하기, 삭제하기 요청을POST 방식으로 보내면 해결 가능함
          -->
         <c:if test="${ not empty sessionScope.loginUser && sessionScope.loginUser.userNo eq requestScope.b.userNo }">
-         <button type="button" onclick="postFormSubmit(1);">수정하기</button>
-         <button type="button" class="deleteBoard-button" data-boardbno="${ requestScope.b.boardNo }" onclick="postFormSubmit(2);">삭제하기</button>
+         <button type="button" id="update-btn" onclick="postFormSubmit(1);">수정하기</button>
+         <button type="button" id="delete-btn" class="deleteBoard-button" data-boardbno="${ requestScope.b.boardNo }" onclick="postFormSubmit(2);">삭제하기</button>
         </c:if>
     </div>
     <br><br>
@@ -527,7 +547,7 @@
 	        			type : "post",
 	        			data : {
 	        				boardNo : ${ requestScope.b.boardNo },
-        					replyContent : $("#content").val()
+	        				replyContent : $("#content").val().replace(/\n/g, "<br>")
         				},
         				success : function(result) {
         					
@@ -810,7 +830,7 @@
 	        cancelButtonText: '취소'
 	    }).then((result) => {
 	        if (result.isConfirmed) {
-	            const replyContent = $('#editReply').val();
+	        	const replyContent = $('#editReply').val().replace(/\n/g, "<br>");
 	
 	            $.ajax({
 	                url: 'rUpdate.bo', // API 엔드포인트로 변경

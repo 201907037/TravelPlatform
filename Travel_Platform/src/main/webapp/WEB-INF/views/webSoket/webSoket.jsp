@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core_1_1" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,11 +93,33 @@
         /* 전송버튼 */
         #msg_input_input{
             border-bottom-left-radius : 30px;
+            padding: 10px;
+		    vertical-align: top; /* 글씨를 위쪽에 정렬 */
+		    text-align: left; /* 글씨를 왼쪽에 정렬 */
+		    font-size: 20px;
+		    resize: none;
+            
         }
         #msg_button_input {
             border-bottom-right-radius : 30px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            color: #000;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: bold;
+            font-size: 15px; /* 글씨 크기를 키움 */
+            transition: background-color 0.3s ease, color 0.3s ease, font-size 0.3s ease; /* 글씨 크기 변화를 애니메이션으로 */
+   		
         }
 
+        #msg_button_input:hover {
+            background-color: #ccc;
+            color: #000;
+            font-size: 18px; /* 호버 시 글씨 크기 */
+        }
+        
+        
+        
         
         /* 이미지 원형모양 스타일 */
         .circle-image {
@@ -229,6 +252,33 @@
             font-weight: 100;
             padding-right: 5px;
         }
+        
+        /* 접속 및 종료 버튼 스타일 */
+        #input-button,
+        #output-button {
+            background-color: white;
+            color: #000;
+            padding: 8px 15px;
+            border: 3px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: bold;
+        }
+        #input-button:hover,
+        #output-button:hover {
+            background-color: #f44336;
+            color: #fff;
+        }
+        #input-button:disabled,
+        #output-button:disabled {
+            background-color: #e0e0e0;
+            color: #888;
+            border-color: white;
+            cursor: not-allowed;
+        }
+        
     </style>
 
 </head>
@@ -259,10 +309,14 @@
                 
             </div>
             <div id="webSocketContent2" >
+            	
             	<div align="center" style="padding-right: 300px;">
-	            	<button id="input-button" onclick="connect();">접속</button>	
-					<button id="output-button" disabled onclick="disconnect();">종료</button>
+            		<c:if test="${ not empty sessionScope.loginUser }">	
+	            	<button id="input-button" onclick="connect();">입장</button>	
+					<button id="output-button" disabled onclick="disconnect();">나가기</button>
+					</c:if>
 				</div>
+				
                 <div id="message_wrap">
                     <br><br>
                     <div id="message_text" style="margin-left: 200px;">
@@ -275,10 +329,10 @@
                         <div id="msg_send">
                             
                             <div id="msg_input" style="width: 80%; height: 100%; display: inline-block;">
-                                <input id="msg_input_input" type="text" value="" style="width: 100%; height: 100%; box-sizing: border-box; border: 2px solid rgb(233, 233, 233);">
+                                <textarea id="msg_input_input" type="text" value="" style="width: 100%; height: 100%; box-sizing: border-box; border: 2px solid lightgray;"></textarea>
                             </div>
                             <div id="msg_button" style="width: 20%; height: 100%;">
-                                <input id="msg_button_input" type="submit" style="width: 100%; height: 100%; background-color: rgb(233, 233, 233);; border: 1px solid rgb(233, 233, 233);" value="보내기">
+                                <input id="msg_button_input" type="submit" style="width: 100%; height: 100%; background-color: lightgray; border: 1px solid lightgray;" value="보내기">
                             </div>
                         </div>
                     </div>
@@ -312,7 +366,7 @@
 		        console.log("서버와 연결이 종료되었습니다.");
 		        $("#output-button").attr("disabled", true);
 		        $("#input-button").attr("disabled", false);
-		        alert("서버와 연결이 종료되었습니다.");
+		        alert("채팅방을 나가셨습니다.");
 		    };
 	
 		    // onerror : 소켓 연결 실패 (연결 오류 발생)시 실행할 함수
@@ -341,7 +395,7 @@
 		        } else if (obj.msgContent.includes("님이 채팅방을 나가셨습니다.")) {
 		            data += '<br>';
 		            data += '<div style="text-align: center;">';
-		            data += '<span>&nbsp;-' + obj.msgContent + '-'+ obj.msgTime +'</span>';
+		            data += '<span>&nbsp;-' + obj.msgContent + '</span>- <span style="font-size:12px;">'+ obj.msgTime +'</span>';
 		            data += '</div>';
 		            data += '<br>';
 		    	} else if(obj.userNo == uno) { 

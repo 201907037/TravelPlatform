@@ -77,7 +77,7 @@
 							<tr>
 								<th>내용</th>
 								<td colspan="3">
-									<textarea name="boardContent" rows="5" style="resize: none; min-height: 200px; max-height: 300px; font-size:20px; padding: 5px;" required>${ requestScope.b.boardContent }</textarea>
+									<textarea name="boardContent" rows="5"    required>${ requestScope.b.boardContent }</textarea>
 								</td>
 							</tr>
 							<tr>

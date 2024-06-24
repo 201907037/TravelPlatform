@@ -76,6 +76,7 @@ public class WebSocketMemberServer extends TextWebSocketHandler {
 		
 		String msgContent = message.getPayload(); // 어떤 내용을
 		
+		System.out.println(msgContent);
 		
 		// 로그인된 사용자가 보낸 메세지만 전송하겠다.
 		if(loginUser != null) {
@@ -88,7 +89,7 @@ public class WebSocketMemberServer extends TextWebSocketHandler {
 			// Message 정보를 담을 수 있는 VO객체 > GSON을 이용해서 JSON으로 가공
 			Msg mg = new Msg();
 			mg.setUserNo(loginUser.getUserNo());
-			mg.setMsgContent(msgContent);
+			mg.setMsgContent(msgContent.replace("\n", "<br>"));
 			
 			String currentTime = new SimpleDateFormat("a h:mm").format(new Date());
             mg.setMsgTime(currentTime);

@@ -50,13 +50,13 @@
 							<tr>
 								<th width="120">제목</th>
 								<td colspan="3">
-									<input type="text" name="boardTitle" style="min-height: 30px; max-height: 50px;" required>
+									<input type="text" name="boardTitle" style="height: 40px; font-size:20px; padding: 5px;"  required>
 								</td>
 							</tr>
 							<tr>
 								<th>내용</th>
 								<td colspan="3">
-									<textarea name="boardContent" rows="5" style="resize: none; min-height: 200px; max-height: 300px;" required></textarea>
+									<textarea name="boardContent" rows="5" style="resize: none; min-height: 200px; max-height: 300px; font-size:20px; padding: 5px;" required></textarea>
 								</td>
 							</tr>
 							<tr>

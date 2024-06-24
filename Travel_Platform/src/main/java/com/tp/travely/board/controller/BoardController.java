@@ -106,6 +106,9 @@ public class BoardController {
 							  HttpSession session,
 							  ModelAndView mv) {
 		
+		// 개행처리
+		b.setBoardContent(b.getBoardContent().replace("\r\n","<br>"));
+		
 		int result = boardService.insertBoard(b);
 		int results = 0;
 		// System.out.println(result);
@@ -160,6 +163,7 @@ public class BoardController {
 		*/
 		Board b = boardService.selectBoard(bno);
 		
+		b.setBoardContent(b.getBoardContent().replace("<br>","\r\n"));
 		model.addAttribute("b", b);
 		model.addAttribute("biList", biList);
 		
@@ -173,16 +177,14 @@ public class BoardController {
 							  HttpSession session,
 							  Model model) {
 		
+		
 		BoardImg bi = new BoardImg();
 		
 		ArrayList<BoardImg> biList = boardService.selectBoardImg(b.getBoardNo());
-		// 4
-		// System.out.println(reupfiles);
-		/*
-		for(BoardImg bis : biList) {
-			System.out.println(bis);
-		}
-		*/
+		
+		// 개행처리
+		b.setBoardContent(b.getBoardContent().replace("\r\n","<br>"));
+		
 		int result1 = boardService.updateBoard(b);
 		int result2 = boardService.updateBiStatus(b.getBoardNo());
 		int result3 = 0;

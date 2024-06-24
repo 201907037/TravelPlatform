@@ -124,16 +124,17 @@
         .writeBtn {
             background-color: white;
             color: black;
-            padding: 10px 20px;
-            border: 2px solid black;
+            padding: 10px 15px;
+            border: 2px solid gray;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
             transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: bold;
         }
 
         .writeBtn:hover {
-            background-color: black;
+            background-color: gray;
             color: white;
         }
          
@@ -153,6 +154,7 @@
             <button type="submit" id="submit" class="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
     </form>
+    <br>
     <div align="right" style="margin-right: 100px">
         <c:if test="${ not empty sessionScope.loginUser }">
             <button type="button" class="writeBtn" onclick="location.href='enrollForm.bo'">글 쓰기</button>
