@@ -22,4 +22,8 @@ public class PlannerDao {
 		return sqlSession.insert("plannerMapper.insertPlanDetail",p);
 	}
 
+	public Planner getPlannerByPNO(SqlSessionTemplate sqlSession, int pno) {
+		return sqlSession.selectOne("plannerMapper.getPlannerByPNO",pno);
+	}
+
 }

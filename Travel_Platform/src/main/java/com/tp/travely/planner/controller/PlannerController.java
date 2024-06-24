@@ -10,6 +10,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,12 +25,17 @@ import com.google.gson.JsonParser;
 import com.tp.travely.planner.model.service.PlannerService;
 import com.tp.travely.planner.model.vo.PlanDetail;
 import com.tp.travely.planner.model.vo.Planner;
+import com.tp.travely.tour.model.service.TourService;
+import com.tp.travely.tour.model.vo.City;
+import com.tp.travely.tour.model.vo.Districts;
 
 @Controller
 public class PlannerController {
 	
 	@Autowired
 	private PlannerService plannerService;
+	@Autowired
+	private TourService tourService;
 	
 	@PostMapping(value="savePlanner.pl")
 	public String savePlanner(MultipartFile file,String plan, String title,String content,String ckOpen,HttpSession session) {
@@ -52,7 +59,12 @@ public class PlannerController {
 		 planner.setPlanExp(exp);
 		 planner.setStartDate(startD);
 		 planner.setEndDate(endD);
-		 if(ckOpen.equals("Y")) {
+		 planner.setAreaCode(planObj.get("areaCode").getAsInt());
+		 if(planObj.get("sigunguCodeNo").getAsInt()!=0) {
+			 planner.setSigunguCodeNo(planObj.get("sigunguCodeNo").getAsInt());
+		 }
+		 
+		 if(ckOpen!=null) {
 			 planner.setPlStatus("Y");
 		 }else {
 			 planner.setPlStatus("N");
@@ -63,7 +75,7 @@ public class PlannerController {
 				String changeName = "resources/planImg/"+savePath(file, session);
 				planner.setChangeName(changeName);
 		}
-		 
+		 System.out.println(planner);
 		 ArrayList<PlanDetail> detailList = new ArrayList<PlanDetail>(); 
 		 for(int i =0;i<planArr.size();i++) { 
 			 JsonObject item = planArr.get(i).getAsJsonObject();
@@ -88,14 +100,38 @@ public class PlannerController {
 		 //System.out.println(planner); 
 		 
 		if(rs>0) {
-			return "º∫∞¯";
+			return "ÏÑ±Í≥µ";
 		}else {
-			return "Ω«∆–";
+			return "Ïã§Ìå®";
 		}
 		
 	}
+	@GetMapping("detail.pl")
+	public String goDetailForm(int pno,Model model) {
+//		Planner p = plannerService.getPlannerByPNO(pno);
+//		Planner p = new Planner();
+//		p.setAreaCode(3);
+//		p.setSigunguCodeNo(0);
+//		Double xx=0.0;
+//		Double yy=0.0;
+//		if(p.getSigunguCodeNo()!=0) {
+//			City c = tourService.getLocationCity(p.getSigunguCodeNo());
+//			xx = c.getLocationXX();
+//			yy = c.getLocationYY();
+//		}else {
+//			Districts d = tourService.getLocationArea(p.getAreaCode());
+//			xx = d.getLocationXX();
+//			yy = d.getLocationYY();
+//		}
+//		model.addAttribute("xx", xx);
+//		model.addAttribute("yy", yy);
+		
+		model.addAttribute("xx", 127.928144444444);
+		model.addAttribute("yy", 36.9881805555555);
+		return "planner/planDetail";
+	}
 	
-	// ¿œπ› ∏ﬁº“µÂ 
+	// ÏùºÎ∞òÎ©îÏÜåÎìú
 	public String savePath(MultipartFile upfile,
 			   HttpSession session) {
 
@@ -134,7 +170,7 @@ public class PlannerController {
 		e.printStackTrace();
 		}
 		
-		// ºˆ¡§∆ƒ¿œ∏Ì πÆ¿⁄ø≠¿ª ∏Æ≈œ
+		
 		return changeName;
 	}
 }

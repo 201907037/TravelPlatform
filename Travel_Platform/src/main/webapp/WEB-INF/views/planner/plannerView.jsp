@@ -333,6 +333,8 @@ let planner = [];
 						 plan.startDate = tstart;
 						 plan.endDate = tend;
 						 plan.planList = planner;
+						 plan.areaCode = areaCode;
+						 plan.sigunguCodeNo = sigunguCodeNo;
 						 //console.log(plan);
 						 console.log(plan);
 						 

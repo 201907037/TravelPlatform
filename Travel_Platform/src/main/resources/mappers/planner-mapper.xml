@@ -3,7 +3,34 @@
 
 <!-- planner mapper 파일 김동현 -->
 <mapper namespace="plannerMapper">
+	<resultMap id="plannerResultSet" 
+			   type="planner">
+		<result column="PLAN_NO" property="planNo" />
+		<result column="PLAN_NO" property="planName" />
+		<result column="PLAN_NO" property="planExp" />
+		<result column="PLAN_NO" property="startDate" />
+		<result column="END_DATE" property="endDate" />
+		<result column="CHANGE_NAME" property="changeName" />
+		<result column="PL_STATUS" property="plStatus" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="AREA_CODE" property="areaCode" />
+		<result column="SIGUNGUCODENO" property="sigunguCodeNo" />
+		<result column="COUNT" property="count" />
+		<result column="STATUS" property="status" />
+		<result column="REF_UNO" property="refUno" />
+	</resultMap>
 	
+	<resultMap id="detailResultSet" 
+			   type="detail">
+		<result column="DETAIL_NO" property="detailNo" />
+		<result column="START_TIME" property="startTime" />
+		<result column="END_TIME" property="endTime" />
+		<result column="PLAN_DATE" property="planDate" />
+		<result column="TIME_AMOUNT" property="time" />
+		<result column="DAY_COUNT" property="dayCount" />
+		<result column="REF_TNO" property="refTno" />
+		<result column="REF_PNO" property="refPno" />
+	</resultMap>
 	<select id="getTNOBycontentId"
 			parameterType="_int"
 			resultType="_int">
@@ -19,4 +46,8 @@
 			parameterType="detail">
 			
 	</insert>
+	<select id="getPlannerByPNO"
+			parameterType="_int">
+	
+	</select>
 </mapper>

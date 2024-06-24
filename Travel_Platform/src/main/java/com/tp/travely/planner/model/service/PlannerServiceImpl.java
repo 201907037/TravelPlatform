@@ -32,5 +32,9 @@ public class PlannerServiceImpl implements PlannerService{
 		}
 		return rs;
 	}
+	@Override
+	public Planner getPlannerByPNO(int pno) {
+		return plannerDao.getPlannerByPNO(sqlSession,pno);
+	}
 	
 }
