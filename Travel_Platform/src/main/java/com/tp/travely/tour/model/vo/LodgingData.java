@@ -17,6 +17,8 @@ public class LodgingData {
 	private String addDate;
 	private String thumbImg;
 	private String contentId; // 추가
+	private double mapX;
+	private double mapY;
 	
 	private String roomType;
 	private String checkIn;

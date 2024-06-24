@@ -17,6 +17,8 @@ public class TourSpotData {
 	private String addDate;
 	private String thumbImg;
 	private String contentId;
+	private double mapX;
+	private double mapY;
 	
 	private int spotNo;
 	private String season;

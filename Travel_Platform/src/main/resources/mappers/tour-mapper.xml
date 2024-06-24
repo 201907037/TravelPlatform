@@ -204,12 +204,16 @@
 					 	  TOUR_NAME, 
 					 	  ADDRESS, 
 					 	  THUMB_IMG, 
-					 	  TOUR_TYPE) 
+					 	  TOUR_TYPE, 
+					 	  MAP_X, 
+					 	  MAP_Y) 
 					VALUES(TOUR_DNO.CURRVAL, 
 						   #{tourName}, 
 						   #{address}, 
 						   #{thumbImg}, 
-						   #{tourtype}) 
+						   #{tourtype}, 
+						   #{mapX}, 
+						   #{mapY}) 
 			   INTO TOUR_SPOT (SPOT_NO, 
 					 	  	   SEASON, 
 					 	  	   USE_TIME, 
@@ -231,12 +235,16 @@
 					 	  TOUR_NAME, 
 					 	  ADDRESS, 
 					 	  THUMB_IMG, 
-					 	  TOUR_TYPE) 
+					 	  TOUR_TYPE 
+					 	  MAP_X, 
+					 	  MAP_Y) 
 					VALUES(TOUR_DNO.CURRVAL, 
 						   #{tourName}, 
 						   #{address}, 
 						   #{thumbImg}, 
-						   #{tourtype}) 
+						   #{tourtype}, 
+						   #{mapX}, 
+						   #{mapY}) 
 			   INTO LODGING (L_NO, 
 					 	  	 ROOM_TYPE, 
 					 	  	 CHECK_IN, 
@@ -262,12 +270,16 @@
 					 	  TOUR_NAME, 
 					 	  ADDRESS, 
 					 	  THUMB_IMG, 
-					 	  TOUR_TYPE) 
+					 	  TOUR_TYPE 
+					 	  MAP_X, 
+					 	  MAP_Y) 
 					VALUES(TOUR_DNO.CURRVAL, 
 						   #{tourName}, 
 						   #{address}, 
 						   #{thumbImg}, 
-						   #{tourtype}) 
+						   #{tourtype}, 
+						   #{mapX}, 
+						   #{mapY}) 
 			   INTO RESTAURANT (RD_NO, 
 					 	  	    KID_ROOM, 
 					 	  	    FIRST_MENU, 
@@ -293,12 +305,16 @@
 					 	  TOUR_NAME, 
 					 	  ADDRESS, 
 					 	  THUMB_IMG, 
-					 	  TOUR_TYPE) 
+					 	  TOUR_TYPE 
+					 	  MAP_X, 
+					 	  MAP_Y) 
 					VALUES(TOUR_DNO.CURRVAL, 
 						   #{tourName}, 
 						   #{address}, 
 						   #{thumbImg}, 
-						   #{tourtype}) 
+						   #{tourtype}, 
+						   #{mapX}, 
+						   #{mapY}) 
 			   INTO LEPORTS (L_NO, 
 					 	  	 USE_TIME, 
 					 	  	 PARKING, 
@@ -518,7 +534,9 @@
 		UPDATE TOUR 
 		   SET TOUR_NAME = #{tourName}, 
 		   	   ADDRESS = #{address}, 
-		   	   THUMB_IMG = #{thumbImg} 
+		   	   THUMB_IMG = #{thumbImg}, 
+		   	   MAP_X = #{mapX}, 
+		   	   MAP_Y = #{mapY} 
 		 WHERE TOUR_NO = #{tourNo}
 	</update>
 	

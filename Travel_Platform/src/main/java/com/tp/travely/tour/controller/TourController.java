@@ -483,7 +483,7 @@ public class TourController {
 							            HttpSession session, ModelAndView mv) {
 		
 		// 새로 들어온 대표 이미지 파일이 있다면
-	    if (reThumbImg != null && !reThumbImg.isEmpty()) {
+	    if(reThumbImg != null && !reThumbImg.isEmpty()) {
 	        // 원래 있었던 대표 이미지 파일 위치 찾아 삭제
 	        String realPath = session.getServletContext().getRealPath(tour.getThumbImg());
 	        new File(realPath).delete();
@@ -499,8 +499,8 @@ public class TourController {
 	        rd.setThumbImg(fullThumbImgPath);
 	        led.setThumbImg(fullThumbImgPath);
 	    }
-	    
-	    // 기존 추가 이미지 파일 목록 가져오기
+		
+		// 기존 추가 이미지 파일 목록 가져오기
 	    ArrayList<TourImg> existingTourImgs = tourService.getTourImgsByTourNo(tour.getTourNo());
 	    ArrayList<TourImg> updatedTourImgs = new ArrayList<>();
 	    
@@ -508,8 +508,11 @@ public class TourController {
 	    boolean hasNewFiles = reChangeNoFiles != null && !reChangeNoFiles.isEmpty() && reChangeNoFiles.stream().anyMatch(file -> !file.isEmpty());
 
 	    if (hasNewFiles) {
+	        int existingSize = existingTourImgs.size();
+	        int newSize = reChangeNoFiles.size();
+	        
 	        // 새로운 추가 이미지 파일 처리
-	        for (int i = 0; i < reChangeNoFiles.size(); i++) {
+	        for (int i = 0; i < newSize; i++) {
 	            MultipartFile file = reChangeNoFiles.get(i);
 
 	            if (!file.isEmpty()) {
@@ -522,28 +525,31 @@ public class TourController {
 	                tourImg.setChangeNo(fullChangeNoPath);
 	                tourImg.setRefTno(tour.getTourNo());
 
-	                // 기존 이미지가 있을 경우 timgNo 설정, 기존 파일 삭제
-	                if (i < existingTourImgs.size()) {
-	                    tourImg.setTimgNo(existingTourImgs.get(i).getTimgNo());
+	                if (i < existingSize) {
+	                    // 기존 파일 삭제
 	                    String realPath = session.getServletContext().getRealPath(existingTourImgs.get(i).getChangeNo());
-	                    new File(realPath).delete();
+	                    if (new File(realPath).exists()) {
+	                        new File(realPath).delete();
+	                    }
+	                    tourImg.setTimgNo(existingTourImgs.get(i).getTimgNo()); // 기존 TimgNo 유지
 	                }
 
 	                updatedTourImgs.add(tourImg);
+	            } else {
+	                // 파일이 비어있으면 기존 파일 유지
+	                if (i < existingSize) {
+	                    updatedTourImgs.add(existingTourImgs.get(i));
+	                }
 	            }
 	        }
 
-	        // 기존 이미지 중 남은 부분 삭제
-	        for (int i = reChangeNoFiles.size(); i < existingTourImgs.size(); i++) {
-	            String realPath = session.getServletContext().getRealPath(existingTourImgs.get(i).getChangeNo());
-	            new File(realPath).delete();
+	        // 기존 파일 중에서 남아 있는 파일 유지
+	        for (int i = newSize; i < existingSize; i++) {
+	            updatedTourImgs.add(existingTourImgs.get(i));
 	        }
 	    } else {
-	        // 새 파일이 없을 경우 기존 파일 삭제
-	        for (TourImg img : existingTourImgs) {
-	            String realPath = session.getServletContext().getRealPath(img.getChangeNo());
-	            new File(realPath).delete();
-	        }
+	        // 새 파일이 없을 경우 기존 파일 유지
+	        updatedTourImgs = existingTourImgs;
 	    }
 
 	    // 결과 확인

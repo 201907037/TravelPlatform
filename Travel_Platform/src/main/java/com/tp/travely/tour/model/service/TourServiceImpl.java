@@ -207,9 +207,15 @@ public class TourServiceImpl implements TourService {
 		// TourSpotDatas 저장
 	    int result = tourDao.updateTour(sqlSession, tsd);
 
-	    // TourImg 리스트 저장
+	    // 이미지 업데이트 처리
 	    for (TourImg tourImg : updatedTourImgs) {
-	        result += tourDao.updateTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
+	        if (tourImg.getTimgNo() != 0) {
+	            // 기존 이미지 업데이트
+	            result += tourDao.updateTourImg(sqlSession, tourImg);
+	        } else {
+	            // 새 이미지 추가
+	            result += tourDao.insertTourImg(sqlSession, tourImg);
+	        }
 	    }
 	    
 	    return result;
@@ -221,9 +227,15 @@ public class TourServiceImpl implements TourService {
 		// LodgingData 저장
 	    int result = tourDao.updateTour(sqlSession, lod);
 
-	    // TourImg 리스트 저장
+	    // 이미지 업데이트 처리
 	    for (TourImg tourImg : updatedTourImgs) {
-	        result += tourDao.updateTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
+	        if (tourImg.getTimgNo() != 0) {
+	            // 기존 이미지 업데이트
+	            result += tourDao.updateTourImg(sqlSession, tourImg);
+	        } else {
+	            // 새 이미지 추가
+	            result += tourDao.insertTourImg(sqlSession, tourImg);
+	        }
 	    }
 	    
 	    return result;
@@ -235,9 +247,15 @@ public class TourServiceImpl implements TourService {
 		// RestaurantData 저장
 	    int result = tourDao.updateTour(sqlSession, rd);
 	    
-	    // TourImg 리스트 저장
+	    // 이미지 업데이트 처리
 	    for (TourImg tourImg : updatedTourImgs) {
-	        result += tourDao.updateTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
+	        if (tourImg.getTimgNo() != 0) {
+	            // 기존 이미지 업데이트
+	            result += tourDao.updateTourImg(sqlSession, tourImg);
+	        } else {
+	            // 새 이미지 추가
+	            result += tourDao.insertTourImg(sqlSession, tourImg);
+	        }
 	    }
 	    
 	    return result;
@@ -249,9 +267,15 @@ public class TourServiceImpl implements TourService {
 		// LeportsData 저장
 	    int result = tourDao.updateTour(sqlSession, led);
 
-	    // TourImg 리스트 저장
+	    // 이미지 업데이트 처리
 	    for (TourImg tourImg : updatedTourImgs) {
-	        result += tourDao.updateTourImg(sqlSession, tourImg); // 각각의 TourImg 저장
+	        if (tourImg.getTimgNo() != 0) {
+	            // 기존 이미지 업데이트
+	            result += tourDao.updateTourImg(sqlSession, tourImg);
+	        } else {
+	            // 새 이미지 추가
+	            result += tourDao.insertTourImg(sqlSession, tourImg);
+	        }
 	    }
 	    
 	    return result;

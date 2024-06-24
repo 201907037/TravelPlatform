@@ -17,6 +17,8 @@ public class RestaurantData {
 	private String addDate;
 	private String thumbImg;
 	private String contentId;
+	private double mapX;
+	private double mapY;
 	
 	private String kidRoom;
 	private String firstMenu;

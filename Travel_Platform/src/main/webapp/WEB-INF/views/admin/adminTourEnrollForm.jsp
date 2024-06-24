@@ -198,9 +198,9 @@
 				    <input type="text" class="form-control" name="tourName" required> <br>
 				    <table>
 				    	<tr>
-				    		<td style="width : 1150px; padding-right: 20px;"><label>주소 :</label> <input type="text" class="form-control" name="address" required></td>
-				    		<td style="padding-right: 20px;"><label>x좌표 : </label><input type="number" class="form-control" name="mapX" required></td>
-				    		<td><label>y좌표 : </label><input type="number" class="form-control" name="mapY" required></td>
+				    		<td style="width : 1050px; padding-right: 20px;"><label>주소 :</label><input type="text" class="form-control" name="address" required></td>
+				    		<td style="padding-right: 20px;"><label>x좌표 :</label><input type="number" class="form-control" name="mapX" step="0.000001" required></td>
+				    		<td><label>y좌표 :</label><input type="number" class="form-control" name="mapY" step="0.000001" required></td>
 				    	</tr>
 				    </table>
 				    
