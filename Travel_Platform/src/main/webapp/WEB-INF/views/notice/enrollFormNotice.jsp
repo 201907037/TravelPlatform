@@ -94,16 +94,18 @@
 					<h2 align="center">공지사항 작성</h2>
 		<form action="insertNotice.ad" method="post" enctype="multipart/form-data" align="center">
 			<table align="center" class="recipeWrite">
-			<tr style="border-bottom: 1px solid #23443e;">
+			<tr>
 					<th class="oo">제목</th>
 					<td><input type="text"  name=noticeTitle
 						class="form-control" placeholder="제목을 입력해주세요." required></td>
 				</tr>
 
-				<tr	style="border-bottom: 1px solid #23443e;">
-					<th>이미지</th>
+				<tr>
+					<th sytle="font-size:10px">이미지</th>
 					<td style="text-align: center;">
-						<img width='300' height='200'  class='contentImg' style="float: left;">
+					<div>
+						<img width='300' height='300'  class='contentImg' style="float: none;">
+					</div>
 					</td>
 				</tr>
 				<tr>

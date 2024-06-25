@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -110,16 +111,28 @@ public class NoticeController {
 		return "notice/detailNotice";
 	}
 	
-	// 공지사항 수정 페이지 이동 Controller
-	@GetMapping(value="updateFormNotice.ad")
-	public String updateFormNotice(int num,
-							Model model) {
-		
-		Notice n = noticeService.detailNotice(num);
-//		System.out.println(n);
-		model.addAttribute("n", n);
-		return "notice/updateFormNotice";
-	}
+	
+	
+	
+	
+	
+//	// 공지사항 수정 페이지 이동 Controller
+//	@ResponseBody
+//	@GetMapping(value="updateFormNotice.ad")
+//	public void updateFormNotice(int num,
+//							Model model) {
+//		System.out.println(num);
+//		Notice n = noticeService.detailNotice(num);
+////		System.out.println(n);
+//		model.addAttribute("n", n);
+//		
+//	}
+	
+	
+	
+	
+	
+	
 	
 	// 공지사항 수정 메서드
 	@PostMapping(value="updateNotice.ad")
@@ -128,7 +141,6 @@ public class NoticeController {
 							HttpSession session,
 							ModelAndView mv) {
 		
-		System.out.println("aaa: "+n);
 		if(!reUpfile.getOriginalFilename().equals("")) {
 			String afterName = savePath(reUpfile, session);
 			n.setChangeName("resources/noticeUpfiles/"+afterName);
@@ -138,7 +150,6 @@ public class NoticeController {
 		}
 		
 		int result = noticeService.updateNotice(n);
-		// System.out.println(result);
 		if(result > 0) {
 			session.setAttribute("alertMsg", "성공적으로 게시글이 추가되었습니다.");
 			

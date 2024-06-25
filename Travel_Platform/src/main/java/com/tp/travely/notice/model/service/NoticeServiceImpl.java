@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tp.travely.common.model.vo.PageInfo;
 import com.tp.travely.notice.model.dao.NoticeDao;
@@ -27,6 +28,7 @@ public class NoticeServiceImpl implements NoticeService{
 	}
 
 	// 공지사항 isnert Service
+	@Transactional
 	@Override
 	public int insertNotice(Notice n) {
 		
@@ -34,6 +36,7 @@ public class NoticeServiceImpl implements NoticeService{
 	}
 
 	// 공지사항 삭제 Service
+	@Transactional
 	@Override
 	public int deleteNotice(int num) {
 		return noticeDao.deleteNotice(sqlSession, num);
@@ -46,9 +49,9 @@ public class NoticeServiceImpl implements NoticeService{
 	}
 
 	// 공지사항 업데이트 Service
+	@Transactional
 	@Override
 	public int updateNotice(Notice n) {
-		System.out.println(n);
 		return noticeDao.updateNotice(sqlSession, n);
 	}
 

@@ -98,8 +98,11 @@
                                 <td>${n.noticeTitle}</td>
                                 <td>${n.noticeContent}</td>
                                 <td>${n.createDate}</td>
-                                <td><button data-notice-no="${n.noticeNo}" class="updateBtn">수정</button></td>
+                                <td>
+                                <input type="hidden" value="${ n.changeName }">
+                                <button data-notice-no="${n.noticeNo}" class="updateBtn">수정</button></td>
                                 <td><button data-notice-no="${n.noticeNo}" class="deleteBtn">삭제</button></td>
+                                
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -117,6 +120,7 @@
 
     <script>
     $(function() {
+		
         // tr 요소 클릭 시 상세 페이지로 이동
         $("#datatablesSimple tbody").on("click", "tr", function(e) {
             // 버튼을 클릭한 경우 이벤트 무시
@@ -128,36 +132,64 @@
             location.href = "detailNotice.bo?num="+num;
         });
     	
+        
         // 업데이트 버튼 클릭 시
         $(".updateBtn").on("click", function(e) {
             e.stopPropagation(); // 부모 요소로의 이벤트 전파를 중단
-            let num = $(this).data("notice-no");
-            console.log(num);
+
+
+         	
             Swal.fire({
                 title: '공지사항 수정',
-                html: `<form id="updateForm" action="updateNotice.ad" method="post" enctype="multipart/form-data">
+                html: `	<form id="updateForm" action="updateNotice.ad" method="post" enctype="multipart/form-data" align="center">
                     <input type="hidden" id="noticeNo" name="noticeNo">
-                    <table border="1">
-                        <tr>
-                            <th>제목</th>
-                            <td><input type="text" style="width: 350px" name="noticeTitle" required></td>
-                        </tr>
-                        <tr>
-                            <th>내용</th>
-                            <td><textarea style="resize: none; height: 300px; width: 350px" name="noticeContent" required></textarea></td>
-                        </tr>
-                        <tr>
-                            <th><label for="reUpfile">첨부파일</label></th>
-                            <td><input type="file" id="reUpfile" name="reUpfile"></td>
-                        </tr>
-                    </table>
-                </form>`,
+        			<table align="center" class="recipeWrite">
+        			<tr>
+        					<th class="oo">제목</th>
+        					<td><input type="text" name=noticeTitle
+        						class="form-control noticeTitle" placeholder="제목을 입력해주세요." required></td>
+        				</tr>
+
+        				<tr>
+        					<th style="font-size:15px;" width="50">이미지</th>
+        					<td style="text-align: center;">
+        					<div>
+        						<img width='200' height='200' class='contentImg' style="float: none;">
+        						</div>
+        						</td>
+        				</tr>
+        				<tr>
+
+        					<th class="oo">내용</th>
+        					<td><textarea
+        							name="noticeContent"
+        							class="form-control noticeContent" cols="50%" style="resize: none; 		
+        																	margin-bottom: 10px;
+        																	margin-top: 10px;
+        																	height:300px;"
+        					placeholder="공지사항을 입력해주세요." maxlength="300" required></textarea>
+        					</td>
+        				</tr>
+
+        			</table>
+
+        			<br>
+        				<input type="file" id="upfile" name="reUpfile" onchange="loadImg(this);">
+        		</form>`,
                 showCancelButton: true,
                 confirmButtonText: '수정',
                 cancelButtonText: '취소',
                 didOpen: () => {
-                    // 모달이 열렸을 때 실행됩니다.
-                    document.getElementById("noticeNo").value = num;
+                // 모달이 열렸을 때 실행됩니다.
+                let num = $(this).data("notice-no");
+				let changeName = $(this).prev().val();
+				let title = $(this).parents().eq(1).children(0).eq(1).text();
+				let content = $(this).parents().eq(1).children(0).eq(2).text()
+				    document.getElementById("noticeNo").value = num;
+				    $("#upfile").hide();
+				$(".noticeTitle").val(title);
+				$(".noticeContent").val(content);
+				$(".contentImg").attr("src", changeName);
                 },
                 preConfirm: () => {
                     document.getElementById("updateForm").submit();
@@ -184,6 +216,36 @@
             });
         });
     });
+    
+    
+    
+	$(document).on("click", ".contentImg", function(){					
+		
+		$("#upfile").click();
+		
+	});
+	
+	function loadImg(inputFile){
+		console.log(inputFile.files.length)
+		if(inputFile.files.length == 1) {
+
+			let reader = new FileReader(); // 생성자함수
+
+
+			reader.readAsDataURL(inputFile.files[0]);
+
+			reader.onload = function(e) {
+
+				$(".contentImg").attr("src", e.target.result);
+			};
+
+		} else { 
+
+			$(".contentImg").attr("src", null);
+		}
+	}
+    
+    
     </script>
 </body>
 </html>

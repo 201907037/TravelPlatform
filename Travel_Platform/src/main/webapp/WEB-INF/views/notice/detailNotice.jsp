@@ -171,17 +171,14 @@ a {
 
 			<table class="contents border-table">
 				<tr style="border: none;">
-					<td>
-						<c:if test="${ not empty requestScope.n.changeName }">
+					<td>				
 						<c:if test="${ not empty requestScope.n.changeName }">
 							<div align="center">
 							<img src="${requestScope.n.changeName }" width="300x" height="300px">
 							</div>
 							</c:if>
 							<div>
-							<img src="${ requestScope.n.changeName }" width="300px" height="300px">
-						</div>
-						</c:if>
+						</div>	
 						<p id="content" name="content">
 							${ requestScope.n.noticeContent }
 						</p>
