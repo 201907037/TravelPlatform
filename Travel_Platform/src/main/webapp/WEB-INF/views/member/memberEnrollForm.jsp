@@ -28,15 +28,68 @@
    
    
    <style>
+
+	body{
+		background-size: cover;
+		background-color: whitesmoke;
+	}
+
+
    #enrollForm{
    	
-   	width : 70%;
-   	height : 60%;
+   	width : 50%;
+   	height : 55%;
+	
+	padding: 24px;
+	border-radius: 20px;
+	
+	background-color: whitesmoke;
+	
+
+
+
+
+
+	
    }
    
    form{
     margin: auto;
    }
+
+   form label{
+	color: black;
+	font-weight: bold;
+   }
+
+   
+
+   .form-control{
+	border-width: 0 0 1px;
+	background-color: whitesmoke;
+   }
+
+   #sample4_detailAddress{
+	border-width: 0 0 1px;
+	
+   }
+
+   #sample4_postcode{
+	border-width: 0 0 1px;
+
+	border-bottom: lightgrey;
+
+   }
+
+   #sample4_roadAddress{
+	border-width: 0 0 1px;
+	
+	border-bottom: none;
+
+
+   }
+
+   
    
    a{
             color: black;
@@ -46,46 +99,85 @@
        color: black;
        text-decoration: none;
    }
+
+   #guide{
+	font-weight: bold;
+   }
+
+   #title{
+	text-align: center;
+   }
+
+   
+
+	.form-control:focus{
+	border-color: crimson;
+	box-shadow: none;
+	background-color: whitesmoke;
+   }
+
+   #mail-Check-Btn{
+	background-color: cadetblue;
+	border: none;
+   }
+
+   #new{
+	background-color: rgb(176, 196, 222);
+   }
+
+   #reset{
+	background-color: salmon;
+	color: #fff;
+   }
+
+   .btn:focus{
+	border: none;
+	box-shadow: none;
+   }
+
    
    
    </style>
 </head>
-<body>
+<body background="resources/image/pado.gif">
     
     <!-- 메뉴바 -->
     <jsp:include page="../common/header1.jsp" />
     
 	<div class="content">
-        <br><br>
+        <br><br><br><br><br>
         <div class="innerOuter">
+			<h1 id="title">회원가입</h1>
             
-            <br>
+            <br><br><br>
 
             <form action="insert.me" method="post" id="enrollForm" name="enrollForm">
                 <div class="form-group">
+					<br>
                     <label for="userId">아이디 : </label>
                     <input type="text" class="form-control" id="userId" placeholder="6 ~ 14글자로 생성해주세요." name="userId" maxlength="14" required> <br>
 					<div id="checkResult" 
 						 style="font-size : 0.8em; display : none;">
 					</div>
-					<br>
+					<br><br>
 
                     <label for="userPwd">비밀번호 : </label>
-                    <input type="password" class="form-control" id="memberPw" placeholder="Please Enter Password" name="userPwd" maxlength="14" required> <br>
-
+                    <input type="password" class="form-control" id="memberPw" placeholder="영어,숫자,특수문자(!,@,#,-,_) 6~14글자 사이로 입력해주세요." name="userPwd" maxlength="14" required> <br>
+					<br><br>
                     <label for="memberPwConfirm">비밀번호 확인 : </label>
-                    <input type="password" class="form-control" id="memberPwConfirm" placeholder="Please Enter Password" maxlength="14" required> <br>
+                    <input type="password" class="form-control" id="memberPwConfirm" placeholder="" maxlength="14" required> <br>
                     
-                   	<span class="signUp-message" id="pwMessage" name="pwMessage">영어,숫자,특수문자(!,@,#,-,_) 6~14글자 사이로 입력해주세요.</span> <br><br>
+                   	<span class="signUp-message" id="pwMessage" name="pwMessage"></span> <br><br>
 
                     <label for="userName">이름 : </label>
-                    <input type="text" class="form-control" id="name" placeholder="Please Enter Name" name="name" required maxlength="30"> <br>
+                    <input type="text" class="form-control" id="name" placeholder="" name="name" required maxlength="30"> <br><br>
                     
-                    <label for="nickName"> &nbsp; 닉네임 :  </label>
+                    <label for="nickName">닉네임 :  </label>
                     <input type="text" class="form-control" id="nickName" placeholder="2 ~ 8글자로 생성해주세요." name="nickName" maxlength="8" required> <br>
                     <div id="checkResult1" 
 						 style="font-size : 0.8em; display : none;">
 					</div>
+					<br><br>
                     
                     
 
@@ -94,7 +186,7 @@
                    <div class="form-group email-form">
 						 <label for="email">이메일</label>
 						 <div class="input-group">
-						<input type="text" class="form-control" name="email1" id="userEmail1" placeholder="이메일" required>
+						<input type="text" class="form-control" name="email1" id="userEmail1" placeholder="" required>
 						<select class="form-control" name="email2" id="userEmail2" >
 						<option>@naver.com</option>
 						<option>@daum.net</option>
@@ -110,9 +202,10 @@
 					
 						  
 					<div class="input-group-addon">
-						<button type="button" class="btn btn-primary" id="mail-Check-Btn">본인인증</button>
+						<button type="button" class="btn" id="mail-Check-Btn" disabled>본인인증</button>
 					</div>
 					</div>
+					<br>
 					
 					<div id="checkResult2" 
 						 style="font-size : 0.8em; display : none;">
@@ -125,23 +218,26 @@
 					</div>
 						<span id="mail-check-warn"></span>
 					</div>
+					<br><br>
 
-                    <label for="age"> &nbsp; 나이 : </label>
-                    <input type="number" class="form-control" id="age" placeholder="Please Enter Age" name="age"> <br>
+                    <label for="age">나이 : </label>
+                    <input type="number" class="form-control" id="age" placeholder="" name="age"> <br><br>
 
-                    <label for="phone"> &nbsp; 전화번호 : </label>
-                    <input type="tel" class="form-control" id="phone" placeholder="Please Enter Phone (-없이)" name="phone" maxlength="11"> <br>
+                    <label for="phone">전화번호 : </label>
+                    <input type="tel" class="form-control" id="phone" placeholder="- 없이 입력해주세요." name="phone" maxlength="11"> <br>
                     
-                    <span class="signUp-message" id="telMessage">전화번호를 입력해주세요.(- 제외)</span> <br><br>
+                    <span class="signUp-message" id="telMessage"></span> <br><br>
                     
                     
                     
-                    <input type="text" id="sample4_postcode" name="address" placeholder="우편번호" disabled>
-					<input type="button" onclick="sample4_execDaumPostcode()" value="우편번호 찾기"><br>
-					<input type="text" id="sample4_roadAddress" name="address" placeholder="도로명주소" size="60" disabled><br>
+                    <input type="text" class="form-control" id="sample4_postcode" name="address" placeholder="우편번호" disabled><br>
+					
+					<input type="button" id="mail-Check-Btn" class="btn btn-primary" onclick="sample4_execDaumPostcode()" value="우편번호 찾기"><br><br><br>
+					
+					<input type="text" class="form-control" id="sample4_roadAddress" name="address" placeholder="도로명주소" size="60" disabled><br><br>
 					<input type="hidden" id="sample4_jibunAddress" placeholder="지번주소"  size="60">
-					<span id="guide" style="color:#999;display:none"></span>
-					<input type="text" id="sample4_detailAddress" name="address" placeholder="상세주소"  size="60" required><br>
+					<span id="guide" style="color:#0f0f0f;display:none"></span> <br><br>
+					<input type="text" class="form-control" id="sample4_detailAddress" name="address" placeholder="상세주소"  size="60" required><br>
 					<input type="hidden" id="sample4_extraAddress" placeholder="참고항목"  size="60">
 					<input type="hidden" id="sample4_engAddress" placeholder="영문주소"  size="60" ><br>
 					
@@ -154,8 +250,8 @@
                  
                 <br>
                 <div class="btns" align="center">
-                    <button type="submit" class="btn btn-primary" disabled>회원가입</button>
-                    <button type="reset" class="btn btn-danger">초기화</button>
+                    <button type="submit" class="btn" id="new" disabled>회원가입</button>
+                    <button type="reset" class="btn" id="reset">초기화</button>
                 </div>
                 </div>
             </form>
@@ -332,51 +428,51 @@ $('.mail-check-input').blur(function () {
 		
 		
 		$(function() {
-			const $emailInput = $("#enrollForm input[name=email1]");
+    const $emailInput1 = $("#userEmail1");
+    const $emailInput2 = $("#userEmail2");
 
-			$emailInput.keyup(function() {
-				
-				const regEx = /^[A-Za-z0-9]{4,30}$/
-				
-				if(regEx.test($emailInput.val())) {
-					
-					$.ajax({
-						url : "emailCheck.me",
-						type : "get",
-						data : {
-							checkEmail : $emailInput.val()
-						},
-						success : function(result) {
-							console.log("성공");
-							if(result == "NNNNN") {
-								
-								$("#checkResult2").show()
-												.css("color", "red")
-												.text("이미 사용중인 이메일입니다.");
-								$('#mail-Check-Btn').prop('disabled', true); // 버튼 비활성화
-								
-							} else {
-								
-								$("#checkResult2").show().css("color", "green").text("멋진 이메일이에요!");
-								$('#mail-Check-Btn').prop('disabled', false); // 버튼 활성화
-								
-							}
-						},
-						error : function() {
-							console.log("이메일 중복 체크용 ajax 통신 실패!");
-						}
-					});
-				} else {
-					// 입력된 값이 조건에 맞지 않을 때	
-					$("#enrollForm button[type=submit]").attr("disabled", true);
-					// $("#checkResult").hide(); // 메세지 숨기기
-					$("#checkResult2").show()
-												.css("color", "red")
-												.text("사용 할 수 없는 이메일입니다");
-					$('#mail-Check-Btn').prop('disabled', true); // 버튼 비활성화
-				}
-			});
-		});
+    $emailInput1.add($emailInput2).on('keyup change', function() {
+        const email1 = $emailInput1.val();
+        const email2 = $emailInput2.val();
+        const fullEmail = email1 + email2;
+
+        const regEx = /^[A-Za-z0-9]{4,30}$/;
+
+        if(regEx.test(email1)) {
+            $.ajax({
+                url: "emailCheck.me",
+                type: "get",
+                data: {
+                    checkEmail: fullEmail
+                },
+                success: function(result) {
+                    console.log("성공");
+                    if(result == "NNNNN") {
+                        $("#checkResult2").show()
+                            .css("color", "red")
+                            .text("이미 사용중인 이메일입니다.");
+                        $('#mail-Check-Btn').prop('disabled', true); // 버튼 비활성화
+                    } else {
+                        $("#checkResult2").show()
+                            .css("color", "green")
+                            .text("멋진 이메일이에요!");
+                        $('#mail-Check-Btn').prop('disabled', false); // 버튼 활성화
+                    }
+                },
+                error: function() {
+                    console.log("이메일 중복 체크용 ajax 통신 실패!");
+                }
+            });
+        } else {
+            $("#enrollForm button[type=submit]").attr("disabled", true);
+            $("#checkResult2").show()
+                .css("color", "red")
+                .text("사용 할 수 없는 이메일입니다");
+            $('#mail-Check-Btn').prop('disabled', true); // 버튼 비활성화
+        }
+    });
+});
+
         	
         	
         	//본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
@@ -468,7 +564,7 @@ $('.mail-check-input').blur(function () {
 					if(memberPw.value.trim().length == 0 ){
 						memberPw.value="";
 					
-						pwMessage.innerText="영어,숫자,특수문자(!,@,#,-,_) 6~14글자 사이로 입력해주세요."
+						pwMessage.innerText=""
 
 						$("#pwMessage").css("color", "black");
 
@@ -602,7 +698,7 @@ $('.mail-check-input').blur(function () {
             	    }else{
 						$("#telMessage").css("color", "black");
 						
-            	        telMessage.innerText = "전화번호를 입력해주세요.(- 제외)"
+            	        telMessage.innerText = ""
             	        telMessage.classList.remove("confirm", "error");
 
 
@@ -654,7 +750,7 @@ $('.mail-check-input').blur(function () {
     
 
     <!-- 푸터바 -->
-    <jsp:include page="../common/footer1.jsp" />
+    
 
 </body>
 </html>

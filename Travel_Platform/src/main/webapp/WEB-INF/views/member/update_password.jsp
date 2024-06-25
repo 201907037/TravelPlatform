@@ -37,6 +37,7 @@
 
         #dd{
             top: 160px;
+			
         }
 
         #cc{
@@ -56,6 +57,10 @@
             color: black;
             text-decoration: none;
         }
+
+		.user{
+			height: 400px;
+		}
         
         
 
@@ -68,7 +73,7 @@
 
     <jsp:include page="../common/header1.jsp" />
 
-    <div id="oo" class="container">
+    <div id="oo" class="container animate__animated animate__fadeInDown">
 
         <!-- Outer Row -->
         <div class="row justify-content-center">
@@ -79,7 +84,7 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block"><img id="cc" src="resources/image/frog.png" alt=""></div>
+                            <div class="col-lg-6 d-none d-lg-block"><img id="cc" src="resources/image/jeju.jpg" alt=""></div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
@@ -308,7 +313,7 @@
 </script>
 
 
-<jsp:include page="../common/footer1.jsp" />
+
 
 </body>
 

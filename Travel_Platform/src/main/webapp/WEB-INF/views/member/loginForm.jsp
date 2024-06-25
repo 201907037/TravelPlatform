@@ -57,8 +57,16 @@
         }
 
         #mm{
-            background-color: lightsteelblue;
+            background-color: lightskyblue;
             color: white;
+        }
+
+        #mm:hover{
+            background-color: cornflowerblue;
+        }
+
+        #kk{
+            margin-top: 100px;
         }
         
         
@@ -72,7 +80,7 @@
 
     <jsp:include page="../common/header1.jsp" />
 
-    <div id="oo" class="container">
+    <div id="oo" class="container animate__animated animate__fadeInDown">
 
         <!-- Outer Row -->
         <div class="row justify-content-center">
@@ -83,9 +91,9 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block"><img id="cc" src="resources/image/frog.png" alt=""></div>
+                            <div class="col-lg-6 d-none d-lg-block"><img id="cc" src="resources/image/login1.jpg" alt=""></div>
                             <div class="col-lg-6">
-                                <div class="p-5">
+                                <div class="p-5" id="kk">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">환영해요!</h1>
                                     </div>
@@ -94,11 +102,11 @@
                                             <input type="text" class="form-control form-control-user"
                                                 id="userId" name="userId" 
                         						value="${ cookie.saveId.value }" required aria-describedby="emailHelp"
-                                                placeholder="Enter Id">
+                                                placeholder="아이디를 입력하세요.">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="userPwd" name="userPwd" required placeholder="Password">
+                                                id="userPwd" name="userPwd" required placeholder="비밀번호를 입력하세요.">
                                         </div>
                                         
                         <c:choose>
@@ -134,7 +142,7 @@
                                         <a href="searchId.me" id="mm" class="btn btn-user btn-block">
                                             		 아이디 찾기
                                         </a>
-                                        <a href="updatePassword.me" class="btn btn-facebook btn-user btn-block">
+                                        <a href="resetPassword.me" class="btn btn-facebook btn-user btn-block">
                                             		 비밀번호 찾기
                                         </a>
                                     </form>
@@ -152,7 +160,7 @@
 
     </div>
 
-    <jsp:include page="../common/footer1.jsp" />
+    
 
 </body>
 

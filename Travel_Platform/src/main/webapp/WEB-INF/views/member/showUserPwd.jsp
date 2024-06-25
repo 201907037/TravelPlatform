@@ -23,15 +23,8 @@
 
     <!-- Custom styles for this template-->
     <link href="resources/css/sb-admin-2.min.css" rel="stylesheet">
-    
-    
     <!-- jQuery 라이브러리 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
 
     <style>
         body{
@@ -80,33 +73,31 @@
     <div id="oo" class="container animate__animated animate__fadeInDown">
 
         <!-- Outer Row -->
-        <div class="row justify-content-center ">
+        <div class="row justify-content-center">
 
-            <div class="col-xl-10 col-lg-12 col-md-9 ">
+            <div class="col-xl-10 col-lg-12 col-md-9">
 
                 <div id="dd" class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block"><img id="cc" src="resources/image/login.jpg" alt=""></div>
+                            <div  class="col-lg-6 d-none d-lg-block"><img id="cc" src="resources/image/login3.jpg" alt=""></div>
                             <div class="col-lg-6">
                                 <div id="kk" class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-2">비밀번호를 잊으셨나요?</h1>
+                                        <h1 class="h4 text-gray-900 mb-2">이메일을 보내드렸어요!</h1>
                                         <p class="mb-4">간단한 절차를 통해 잊어버린 비밀번호를 찾아보세요!</p>
                                     </div>
    
 
-									<form class="user" action="resetPassword.me" method="post">
-                                        <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
-                                                id="email" name="email" required 
-                                                placeholder="찾고자 하는 비밀번호의 이메일을 입력하세요.">
-                                        </div>
-                                        <button type="submit" class="btn btn-primary btn-user btn-block">
-                                                이메일 전송
+									
+                                        
+                                           
+                                       
+                                        <button onclick="location.href='./'" type="submit" class="btn btn-primary btn-user btn-block">
+                                            	홈으로
                                         </button>
-                                    </form>
+                                   
                                     <hr>
                                     
                                 </div>
@@ -123,7 +114,7 @@
     
     <script>
     
-    
+   
 
  
 
@@ -131,7 +122,11 @@
 </script>
 
 
+     
 
+    
+
+   
 
 </body>
 
