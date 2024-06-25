@@ -362,30 +362,44 @@
 		cursor: pointer;
 	}
 	/* 댓글용 css */
-        .comment-section {
-            width: 800px;
-            margin: auto;
-            padding: 20px;
-        }
-        .comment {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            position: relative; /* 댓글 내의 버튼 위치를 조정하기 위해 추가 */
-        }
-        
-        .comment.active {
-            border: 2px solid rgb(102, 102, 102);
-            border-radius : 10px;
-            padding: 5px;
-        }
-
-        .edit-delete-buttons {
-            display: none;
-            position: absolute;
-            right: 10px;
-            top: 10px;
-        }
+      .comment-content{
+      	border : 1px solid black;
+      	border-radius : 15px;
+      	padding : 10px;
+      	margin-bottom : 10px;
+      }
+      .comment-text{
+        word-wrap: break-word;
+   		overflow-wrap: break-word;
+    	white-space: normal;
+      	padding : 5px;
+      	border : 1px solid black;
+      	border-radius : 15px;
+      }
+      .star {
+	    position: relative;
+	    font-size: 2rem;
+	    color: #ddd;
+	  }
+	  
+	  .star input {
+	    width: 100%;
+	    height: 100%;
+	    position: absolute;
+	    left: 0;
+	    opacity: 0;
+	    cursor: pointer;
+	  }
+	  
+	  .star span {
+	    width: 0;
+	    position: absolute; 
+	    left: 0;
+	    color: red;
+	    overflow: hidden;
+	    pointer-events: none;
+	  }
+	  
 </style>
 <!--  <link rel="stylesheet" href="resources/css/styles.css">-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -592,7 +606,7 @@
 	</div>
 	<!-- 세부정보 모달창 -->
 <div class="modal" id="detailModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="tour_name"></h1>
@@ -612,11 +626,72 @@
         </div>
         <hr>
         <div id="tour-review">
-        	리뷰영역
+        				별점
+      		<c:choose>
+               	<c:when test="${empty sessionScope.loginUser }">
+               	 	<span class="star">
+					  ★★★★★
+					  <span>★★★★★</span>
+					  <input type="range" oninput="drawStar(this);" id="starScore" value="1" step="1" min="0" max="10" readonly>
+					</span>
+               	</c:when>
+               	<c:otherwise>
+               	 	<span class="star">
+					  ★★★★★
+					  <span id="real">★★★★★</span>
+					  <input type="range" oninput="drawStar(this);" id="starScore" value="1" step="1" min="0" max="10">
+					</span>
+               	 </c:otherwise>
+            </c:choose>
+        	
+        	<table id="replyArea" class="table" align="center">
+                <thead>
+                	<tr>
+                	 <c:choose>
+                	 	<c:when test="${empty sessionScope.loginUser }">
+                	 	<th colspan="3">
+	                	 제목  <input type="text" name="titleR" class="form-control"  style="width : 89%;" placeholder="제목을 입력하세요" readonly>
+	                	</th>
+                	 	</c:when>
+                	 	<c:otherwise>
+                	 	<th colspan="3">
+	                	 제목  <input type="text" name="titleR" class="form-control"  style="width : 89%;" placeholder="제목을 입력하세요">
+	                	</th>
+                	 	</c:otherwise>
+                	 </c:choose>
+                	</tr>
+                    <tr>
+                    	<c:choose>
+                    		<c:when test="${empty sessionScope.loginUser }">
+                    			<!-- 로그인 전 -->
+                    			<th colspan="2">
+		                            <textarea class="form-control" name="" id="contentR" cols="55" rows="3" style="resize:none; width:100%;" readonly>로그인한 사용자만 이용 가능한 서비스입니다. 로그인 후 이용해주세요.</textarea>
+		                        </th>
+		                        <th style="vertical-align:middle;text-align:right"><button class="btn btn-secondary" style="padding : 0px;width :100%;height: 60px;margin : auto;" disabled>등록</button></th>
+                    		</c:when>
+                    		<c:otherwise>
+                    			<!-- 로그인 후 -->
+		                        <th colspan="2">
+		                            <textarea class="form-control" name="" id="contentR" cols="60" rows="2" style="resize:none; width:100%;"></textarea>
+		                        </th>
+		                        <th style="vertical-align:middle;text-align:right"><button class="btn-addR btn btn-secondary btn-lg" style="padding : 0px;width :100%;height: 60px;margin : auto;">등록</button></th>
+                    		</c:otherwise>
+                    	</c:choose>
+                    </tr>
+                    <tr>
+                        <td colspan="3">리뷰(<span id="rcount">0</span>)</td>
+                    </tr>
+                </thead>
+            </table>
+            <div id="review-body">
+            </div>
+            <div id="review-button-box" align="center">
+            
+            </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="change-tour" data-bs-dismiss="modal">교체</button>
+        <button type="button" class="btn btn-secondary" id="change-tour" data-bs-dismiss="modal" style="display:none">교체</button>
         <button type="button" class="btn-Delete btn btn-danger" style="display:none;">삭제</button>
       </div>
     </div>
@@ -685,6 +760,7 @@ let type;
 let addTo;
 let datePlanIdx;
 let no = {tPno : 1, aPno : 1,lPno : 1, rPno : 1,sNo:1};
+let reviewNum;
 
 let markerList=[];
 let dateMarkerList=[];
@@ -703,6 +779,9 @@ let mapX;
 let mapY;
 
 let typeFlag=0;
+	const drawStar = function(target) {
+	  $(".star span[id=real]").css({ width: target.value * 10 + '%' });
+	}	
 	function changeImg(inputFile,idx){
 	    if(inputFile.files.length==1){
 	     let reader = new FileReader();
@@ -869,8 +948,9 @@ let typeFlag=0;
 	function getDetail(){
 		$("#detail").html("");
 		$("#detail-body>table").html("");
-		$("#tour-review").html("리뷰영역");
+		$("#tour-review tbody").html("");
 		console.log(tourObj);
+		reviewNum=1;
 		let contentType;
 		if(typeFlag==0){
 			contentType=tourObj.type;
@@ -904,6 +984,7 @@ let typeFlag=0;
 					break;
 				}
 				getImg();
+				getReview();
 				$("#detailModal").modal("show");
 			},
 			error : function(){
@@ -1153,7 +1234,79 @@ let typeFlag=0;
 			}
 		});
 	}
+	function getReview(){
+		$("#review-body").html("");
+		$("#review-button-box").html("");
+		$.ajax({
+			url : "selectReview.to",
+			method : "GET",
+			data : {pno : reviewNum,tno : tourObj.tno,contentId : tourObj.contentId},
+			success : function(e){
+				console.log(e);
+				let list = e.list;
+				let pinfo = e.pinfo;
+				$("#rcount").html(pinfo.listCount);
+				$.each(list,function(i,v){
+					let s = Number(v.score)*2;
+					let div = $("<div>").attr("class","comment");
+					let review = $("<div>").attr("class","comment-content");
+					let header = $("<div>").attr("class","comment-header");
+					let title = $("<span>").attr("class","title").html("제목 : "+v.reviewTitle);
+					let score = $("<span>").attr("class","star").css("float","right");
+					let star = $("<span>").html("★★★★★").css("width",s*10+"%");
+					let input = $("<input>").attr({type : "range",value:s,step : 1, min : 0,max : 10});
+					score.append("★★★★★",star,input);
+					let br = $("<br>").attr("clear","both");
+					div.append(title,score);
+					
+					let userName = $("<span>").attr("class","username").html("작성자 : "+v.nickName);
+					let time = $("<span>").attr("class","time").css("float","right").html(moment(v.createDate).format("YYYY/MM/DD HH:mm"));
+					header.append(userName,time);
+					let content = $("<div>").attr("class","comment-text").html(v.reviewContent);
+					review.append(div,br,header,content);
+					$("#review-body").append(review);	
+				});
+				
+				if(pinfo.startPage!=1){
+                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-left").attr("class","review-left btn btn-success btn-sm").html("&lt;&lt;");
+                    //console.log(btnleft);
+                    $("#review-button-box").append(btnLeft);
+                }
+                for(let i = pinfo.startPage;i<=pinfo.endPage;i++){
+                    if(i==pinfo.currentPage){
+                    	var btnNum = $("<button>").attr("type","button").attr("disabled","ture").attr("class","btn_no btn btn-success btn-sm").text(i);
+                    }else{
+                    	var btnNum = $("<button>").attr("type","button").attr("class","review-no btn btn-success btn-sm").text(i);
+                    }
+                    
+                    //console.log(btnNum);
+                    $("#review-button-box").append(btnNum);
+                }
+                if(pinfo.maxPage!=pinfo.endPage){
+                    
+                    var btnRight = $("<button>").attr("type","button").attr("id","btn-right").attr("class","review-right btn btn-success btn-sm").html("&gt;&gt;");
+                    $("#review-button-box").append(btnRight);
+                }
+			},
+			error : function(){
+				console.log("실패");
+			}
+		});
+	}
 	$(function(){
+		$("#review-button-box").on("click","button[class^=review-no]",function(){
+			reviewNum = $(this).html();
+			getReview();
+		});
+		$("#review-button-box").on("click","button[class^=review-left]",function(){
+			reviewNum--;
+			getReview()
+		});
+		$("#review-button-box").on("click","button[class^=review-right]",function(){
+			reviewNum++;
+			getReview()
+		});
+		
 		$("#nameSearch").attr("checked","true");
 		$("input[type=radio]").click(function(){
 			let iptId = $(this).attr("id");
@@ -1261,6 +1414,31 @@ let typeFlag=0;
 			
 			
 			
+		});
+		$("button[class^=btn-addR]").click(function(){
+			let content = $("#contentR").val();
+			let score = Number($("#starScore").val())/2;
+			let title = $("input[name=titleR]").val();
+			//console.log(content+":"+score+":"+tourObj.tno+":"+tourObj.contentId);
+			$.ajax({
+				url : "addTourR.to",
+				method : "post",
+				async : false,
+				data : {title : title,content : content,score : score,tno : tourObj.tno, contentId:tourObj.contentId},
+				success : function(e){
+					//console.log(e);
+					getReview();
+					$("#starScore").val(0);
+					$(".star span").css("width","0%");
+					$("input[name=titleR]").val("");
+					$("#contentR").val("");
+					alert("리뷰 등록 완료");
+					
+				},
+				error : function(e){
+					console.log("실패");
+				}
+			});
 		});
 		$("#button_box").on("click","button[class^=btn_no]",function(){
 			$(".el_box").html("");
@@ -1938,6 +2116,7 @@ let typeFlag=0;
 		
 		$("#planBox").on("click","div[class=planbody]>div",function(){
 			$("button[class^=btn-Delete]").css("display","inline");
+			$("button[id=change-tour]").css("display","inline");
 			tourListIdx = $(this).parent().children().eq(2).val();
 			getDetail();
 		});

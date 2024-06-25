@@ -2,6 +2,7 @@
 package com.tp.travely.tour.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -130,6 +131,22 @@ public class TourServiceImpl implements TourService {
 	@Override
 	public Districts getLocationArea(int areaCode) {
 		return tourDao.getLocationArea(sqlSession,areaCode);
+	}
+	
+	@Override
+	@Transactional
+	public int addTourReview(TourReview tr) {
+		return tourDao.addTourReview(sqlSession,tr);
+	}
+	
+	@Override
+	public int selectReviewCount(HashMap<String, String> map) {
+		return tourDao.selectReviewCount(sqlSession,map);
+	}
+
+	@Override
+	public ArrayList<TourReview> selectReviewList(HashMap<String, String> map) {
+		return tourDao.selectReviewList(sqlSession,map);
 	}
 
 	// 유진&현성 - 관리자 여행지 상세조회 서비스 (2024.06.14)

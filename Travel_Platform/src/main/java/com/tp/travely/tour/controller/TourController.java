@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.tp.travely.common.model.vo.PageInfo;
 import com.tp.travely.member.model.vo.Member;
+import com.tp.travely.planner.model.service.PlannerService;
 import com.tp.travely.tour.model.service.TourService;
 import com.tp.travely.tour.model.vo.City;
 import com.tp.travely.tour.model.vo.Districts;
@@ -43,7 +44,8 @@ public class TourController {
 	private static final String KEY = "kSu5EX07G5ba6MAXMOBjLbV30e%2B28Xhh3Q3Qo2gqkDtwhS7B7GcUKKKg8D8va2qlva530vfM095CqfAWEGemmw%3D%3D";
 	@Autowired
 	private TourService tourService;
-	
+	@Autowired
+	private PlannerService plannerService;
 	// 유진 - 2024.06.10
 	// 관리자 여행지 목록 조회 컨트롤러
 	@GetMapping("adminTour.ad")
@@ -326,7 +328,54 @@ public class TourController {
 		connectU.disconnect();
 		return result;
 	}
-	
+	// 김동현 - 여행지 리뷰 추가 (2024-06-25)
+	@PostMapping(value="addTourR.to",produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public String addTourReview(String title, String content, double score, int tno, String contentId,HttpSession session) {
+//		System.out.println(content);
+//		System.out.println(score);
+//		System.out.println(tno);
+//		System.out.println(contentId);
+//		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		int userNo = 1;
+		TourReview tr = new TourReview();
+		tr.setUserNo(userNo);
+		tr.setReviewTitle(title);
+		tr.setReviewContent(content);
+		tr.setScore(score);
+		if(tno==0) {
+			int no = plannerService.getTNOBycontentId(contentId);
+			tr.setTourNo(no);
+		}else {
+			tr.setTourNo(tno);
+		}
+		int rs = tourService.addTourReview(tr);
+		return new Gson().toJson(rs);
+	}
+	// 김동현 - 여행지 리스트 조회 (2024-06-25)
+	@GetMapping(value="selectReview.to", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String selectReview(int pno, int tno,String contentId) {
+		System.out.println("pno : "+pno);
+		HashMap<String, String> map = new HashMap<>();
+		if(tno==0) {
+			int no = plannerService.getTNOBycontentId(contentId);
+			map.put("tno", no+"");
+		}else {
+			map.put("tno",tno+"");
+		}
+		int listCount=tourService.selectReviewCount(map);
+		PageInfo pinfo = getPagInfo(listCount,"", pno, map);
+		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
+		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
+		map.put("start", (start+""));
+		map.put("end",(end+""));
+		ArrayList<TourReview> list = tourService.selectReviewList(map);
+		HashMap<String, Object> rsMap = new HashMap<String, Object>();
+		rsMap.put("list", list);
+		rsMap.put("pinfo",pinfo);
+		return new Gson().toJson(rsMap);
+	}
 	// 유진&현성 - 관리자 여행지 상세조회 컨트롤러 (2024.06.14)
 		@ResponseBody
 		@GetMapping(value="tourDetailView.to",produces="application/json; charset=UTF-8")

@@ -31,7 +31,7 @@
 		<typeAlias type="com.tp.travely.tour.model.vo.Districts" alias="area"/>
 		<typeAlias type="com.tp.travely.planner.model.vo.Planner" alias="planner"/>
 		<typeAlias type="com.tp.travely.planner.model.vo.PlanDetail" alias="detail"/>
-
+		<typeAlias type="com.tp.travely.tour.model.vo.TourReview" alias="treview"/>
 		<!-- alias 추가 (전유진) - 2024.06.11 -->
 		<typeAlias type="com.tp.travely.tour.model.vo.Leports" alias="leports" />
 		<typeAlias type="com.tp.travely.tour.model.vo.Lodging" alias="lodging" />

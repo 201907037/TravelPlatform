@@ -118,8 +118,8 @@
        LEFT JOIN CITY ON(SIGUNGUCODENO = SIGUNGU_CODE_NO)
            WHERE P.PL_STATUS = 'Y'
              AND P.STATUS = 'Y'
-             AND LOCATION_NAME LIKE '%'||#{keyword}||'%'
-             AND SIGUNGU)
+             AND (LOCATION_NAME LIKE '%'||#{keyword}||'%'
+             OR SIGUNGU_NAME LIKE '%'||#{keyword}||'%'))
 	</select>
 	<select id="getPlannerByPNO"
 			parameterType="_int">

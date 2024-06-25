@@ -21,6 +21,7 @@
             margin: auto;
             padding: 20px;
      }
+   
 </style>
 </head>
 <body>
@@ -64,22 +65,22 @@ content 영역
                 </thead>
                 <tbody>
                 </tbody>
-            </table>
+            </table>	 
 </div>
 </div>
 <script>
-	let x = ${requestScope.xx};
-	let y = ${requestScope.yy};
-	console.log(x);
-	console.log(y);
+	//let x = ${requestScope.xx};
+	//let y = ${requestScope.yy};
+	//console.log(x);
+	//console.log(y);
 	var container = document.getElementById('map');
 	var options = {
-		center: new kakao.maps.LatLng(y,x),
+		center: new kakao.maps.LatLng(37,126),
 		level: 7
 	};
 	var map = new kakao.maps.Map(container, options); // 지도 생성
 	
-
+	
 </script>
 
 </body>

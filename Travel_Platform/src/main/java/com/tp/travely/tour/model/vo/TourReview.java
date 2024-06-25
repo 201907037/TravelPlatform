@@ -17,9 +17,10 @@ public class TourReview {
 	private String reviewTitle;//	R_TITLE	VARCHAR2(100 BYTE)
 	private String reviewContent;//	R_CONTENT	VARCHAR2(100 BYTE)
 	private Date createDate;//	CREATE_DATE	DATE
-	private int score;//	SCORE	NUMBER
+	private double score;//	SCORE	NUMBER
 	private String status;
 	private int tourNo;//	TOUR_NO	NUMBER
 	private int userNo;//	USER_NO	NUMBER
+	private String nickName; // resultMap에서 사용할 변수
 	
 }
