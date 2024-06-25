@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ef0943861331616097f6a71fe10b40e2"></script>
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
 <style>
 	#imgInput-holder td { padding-right: 20px; }
@@ -198,11 +199,31 @@
 				    <input type="text" class="form-control" name="tourName" required> <br>
 				    <table>
 				    	<tr>
-				    		<td style="width : 1050px; padding-right: 20px;"><label>주소 :</label><input type="text" class="form-control" name="address" required></td>
-				    		<td style="padding-right: 20px;"><label>x좌표 :</label><input type="number" class="form-control" name="mapX" step="0.000001" required></td>
-				    		<td><label>y좌표 :</label><input type="number" class="form-control" name="mapY" step="0.000001" required></td>
+				    		<td style="width : 784px; padding-right: 20px;"><label>주소 :</label><input type="text" class="form-control" id="address" name="address" required></td>
+				    		<td style="padding-right: 20px;"><button type="button" style="margin-top : 22px" onclick="getCoordinates()">좌표 가져오기</button></td>
+				    		<td style="padding-right: 20px;"><label>x좌표 :</label><input type="number" class="form-control" id="mapX" name="mapX" step="0.000001" required></td>
+				    		<td><label>y좌표 :</label><input type="number" class="form-control" id="mapY" name="mapY" step="0.000001" required></td>
 				    	</tr>
 				    </table>
+				    
+				    <script>
+				        function getCoordinates() {
+				            let geocoder = new kakao.maps.services.Geocoder();
+				            let address = $("#address").value;
+				
+				            geocoder.addressSearch(address, function(result, status) {
+				                if (status === kakao.maps.services.Status.OK) {
+				                    let mapX = parseFloat(result[0].y);
+				                    let mapY = parseFloat(result[0].x);
+				
+				                    $("#mapX").value = mapX;
+				                    $("#mapY").value = mapY;
+				                } else {
+				                    alert("좌표를 찾을 수 없습니다.");
+				                }
+				            });
+				        }
+				    </script>
 				    
 				    <br>
 				    

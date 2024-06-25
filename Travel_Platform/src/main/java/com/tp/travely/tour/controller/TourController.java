@@ -500,65 +500,113 @@ public class TourController {
 	        led.setThumbImg(fullThumbImgPath);
 	    }
 		
-		// 기존 추가 이미지 파일 목록 가져오기
+	 // 기존 추가 이미지 파일 목록 가져오기
 	    ArrayList<TourImg> existingTourImgs = tourService.getTourImgsByTourNo(tour.getTourNo());
 	    ArrayList<TourImg> updatedTourImgs = new ArrayList<>();
-	    
+
 	    // 새로 들어온 파일이 있다면
 	    boolean hasNewFiles = reChangeNoFiles != null && !reChangeNoFiles.isEmpty() && reChangeNoFiles.stream().anyMatch(file -> !file.isEmpty());
 
 	    if (hasNewFiles) {
 	        int existingSize = existingTourImgs.size();
 	        int newSize = reChangeNoFiles.size();
-	        
-	        // 새 TourImg 객체 생성
-            TourImg tourImg = new TourImg();
-	        
-	        // 새로운 추가 이미지 파일 처리
-	        for (int i = 0; i < newSize; i++) {
-	            MultipartFile file = reChangeNoFiles.get(i);
-	            System.out.println("-------------------------");
-	            System.out.println(file);
-	            System.out.println("-------------------------");
 
-	            if (!file.isEmpty()) {
-	                // 새 파일 저장
-	                String changeName = savePath(file, session, "changeNo");
-	                String fullChangeNoPath = "resources/tourUpfiles/" + changeName;
+	        if (existingSize > newSize) {
+	            // 새로 들어온 것들만 원래 있던 timgNo대로 업데이트 하고 나머지 기존 파일들은 삭제
+	            for (int i = 0; i < newSize; i++) {
+	                MultipartFile file = reChangeNoFiles.get(i);
+	                if (!file.isEmpty()) {
+	                    // 새 파일 저장
+	                    String changeName = savePath(file, session, "changeNo");
+	                    String fullChangeNoPath = "resources/tourUpfiles/" + changeName;
 
-	                tourImg.setChangeNo(fullChangeNoPath);
-	                tourImg.setRefTno(tour.getTourNo());
+	                    TourImg tourImg = new TourImg();
+	                    tourImg.setChangeNo(fullChangeNoPath);
+	                    tourImg.setRefTno(tour.getTourNo());
+	                    tourImg.setTimgNo(existingTourImgs.get(i).getTimgNo()); // 기존 TimgNo 유지
 
-	                if (i < existingSize) {
 	                    // 기존 파일 삭제
 	                    String realPath = session.getServletContext().getRealPath(existingTourImgs.get(i).getChangeNo());
 	                    if (new File(realPath).exists()) {
 	                        new File(realPath).delete();
 	                    }
-	                    tourImg.setTimgNo(existingTourImgs.get(i).getTimgNo()); // 기존 TimgNo 유지
-	                }
 
-	                updatedTourImgs.add(tourImg);
-	            } else {
-	                // 파일이 비어있으면 기존 파일 유지
-	                if (i < existingSize) {
-	                	tourImg.setTimgNo(existingTourImgs.get(i).getTimgNo()); // 기존 TimgNo 유지
-	                    updatedTourImgs.add(existingTourImgs.get(i));
+	                    updatedTourImgs.add(tourImg);
 	                }
 	            }
-	        }
+	            // 기존 나머지 파일 삭제
+	            for (int i = newSize; i < existingSize; i++) {
+	                String realPath = session.getServletContext().getRealPath(existingTourImgs.get(i).getChangeNo());
+	                if (new File(realPath).exists()) {
+	                    new File(realPath).delete();
+	                }
+	            }
+	        } else if (existingSize == newSize) {
+	            // 원래 있던 timgNo대로 업데이트
+	            for (int i = 0; i < newSize; i++) {
+	                MultipartFile file = reChangeNoFiles.get(i);
+	                if (!file.isEmpty()) {
+	                    // 새 파일 저장
+	                    String changeName = savePath(file, session, "changeNo");
+	                    String fullChangeNoPath = "resources/tourUpfiles/" + changeName;
 
-	        // 기존 파일 중에서 남아 있는 파일 유지
-	        for (int i = newSize; i < existingSize; i++) {
-	            updatedTourImgs.add(existingTourImgs.get(i));
+	                    TourImg tourImg = new TourImg();
+	                    tourImg.setChangeNo(fullChangeNoPath);
+	                    tourImg.setRefTno(tour.getTourNo());
+	                    tourImg.setTimgNo(existingTourImgs.get(i).getTimgNo()); // 기존 TimgNo 유지
+
+	                    // 기존 파일 삭제
+	                    String realPath = session.getServletContext().getRealPath(existingTourImgs.get(i).getChangeNo());
+	                    if (new File(realPath).exists()) {
+	                        new File(realPath).delete();
+	                    }
+
+	                    updatedTourImgs.add(tourImg);
+	                }
+	            }
+	        } else { // existingSize < newSize
+	            // 원래 있던 timgNo대로 업데이트 하고 나머지 파일은 새로 부여해서 insert
+	            for (int i = 0; i < existingSize; i++) {
+	                MultipartFile file = reChangeNoFiles.get(i);
+	                if (!file.isEmpty()) {
+	                    // 새 파일 저장
+	                    String changeName = savePath(file, session, "changeNo");
+	                    String fullChangeNoPath = "resources/tourUpfiles/" + changeName;
+
+	                    TourImg tourImg = new TourImg();
+	                    tourImg.setChangeNo(fullChangeNoPath);
+	                    tourImg.setRefTno(tour.getTourNo());
+	                    tourImg.setTimgNo(existingTourImgs.get(i).getTimgNo()); // 기존 TimgNo 유지
+
+	                    // 기존 파일 삭제
+	                    String realPath = session.getServletContext().getRealPath(existingTourImgs.get(i).getChangeNo());
+	                    if (new File(realPath).exists()) {
+	                        new File(realPath).delete();
+	                    }
+
+	                    updatedTourImgs.add(tourImg);
+	                }
+	            }
+	            for (int i = existingSize; i < newSize; i++) {
+	                MultipartFile file = reChangeNoFiles.get(i);
+	                if (!file.isEmpty()) {
+	                    // 새 파일 저장
+	                    String changeName = savePath(file, session, "changeNo");
+	                    String fullChangeNoPath = "resources/tourUpfiles/" + changeName;
+
+	                    TourImg tourImg = new TourImg();
+	                    tourImg.setChangeNo(fullChangeNoPath);
+	                    tourImg.setRefTno(tour.getTourNo());
+	                    // 새로 부여할 timgNo는 DB에서 시퀀스에 의해 자동 생성
+
+	                    updatedTourImgs.add(tourImg);
+	                }
+	            }
 	        }
 	    } else {
 	        // 새 파일이 없을 경우 기존 파일 유지
 	        updatedTourImgs = existingTourImgs;
 	    }
-
-	    // 결과 확인
-	    System.out.println("변경된 추가이미지들 : " + updatedTourImgs);
 	    
 		// 서비스 호출
 		int result = 0;

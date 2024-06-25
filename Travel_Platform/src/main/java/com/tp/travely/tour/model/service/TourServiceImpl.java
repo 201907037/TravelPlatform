@@ -205,38 +205,32 @@ public class TourServiceImpl implements TourService {
 	@Transactional
 	public int updateTour(TourSpotData tsd, ArrayList<TourImg> updatedTourImgs) {
 		// TourSpotDatas 저장
-	    int result = tourDao.updateTour(sqlSession, tsd);
+	    int result = tourDao.updateTourSpotData(sqlSession, tsd);
 
 	    // 이미지 업데이트 처리
-	    for (TourImg tourImg : updatedTourImgs) {
-	        if (tourImg.getTimgNo() != 0) {
-	            // 기존 이미지 업데이트
-	            result += tourDao.updateTourImg(sqlSession, tourImg);
-	        } else {
-	            // 새 이미지 추가
-	            result += tourDao.insertNewTourImg(sqlSession, tourImg);
-	        }
-	    }
+	    if(result > 0) {
+            tourDao.deleteTourImgsByTourNo(tsd.getRefTno());
+            for(TourImg img : updatedTourImgs) {
+                tourDao.insertTourImg(img);
+            }
+        }
 	    
-	    return result;
+        return result;
 	}
 
 	@Override
 	@Transactional
 	public int updateTour(LodgingData lod, ArrayList<TourImg> updatedTourImgs) {
 		// LodgingData 저장
-	    int result = tourDao.updateTour(sqlSession, lod);
+	    int result = tourDao.updateLodgingData(sqlSession, lod);
 
 	    // 이미지 업데이트 처리
-	    for (TourImg tourImg : updatedTourImgs) {
-	        if (tourImg.getTimgNo() != 0) {
-	            // 기존 이미지 업데이트
-	            result += tourDao.updateTourImg(sqlSession, tourImg);
-	        } else {
-	            // 새 이미지 추가
-	            result += tourDao.insertNewTourImg(sqlSession, tourImg);
-	        }
-	    }
+	    if(result > 0) {
+            tourDao.deleteTourImgsByTourNo(lod.getRefTno());
+            for(TourImg img : updatedTourImgs) {
+                tourDao.insertTourImg(img);
+            }
+        }
 	    
 	    return result;
 	}
@@ -245,18 +239,15 @@ public class TourServiceImpl implements TourService {
 	@Transactional
 	public int updateTour(RestaurantData rd, ArrayList<TourImg> updatedTourImgs) {
 		// RestaurantData 저장
-	    int result = tourDao.updateTour(sqlSession, rd);
+	    int result = tourDao.updateRestaurantData(sqlSession, rd);
 	    
 	    // 이미지 업데이트 처리
-	    for (TourImg tourImg : updatedTourImgs) {
-	        if (tourImg.getTimgNo() != 0) {
-	            // 기존 이미지 업데이트
-	            result += tourDao.updateTourImg(sqlSession, tourImg);
-	        } else {
-	            // 새 이미지 추가
-	            result += tourDao.insertNewTourImg(sqlSession, tourImg);
-	        }
-	    }
+	    if(result > 0) {
+            tourDao.deleteTourImgsByTourNo(rd.getRefTno());
+            for(TourImg img : updatedTourImgs) {
+                tourDao.insertTourImg(img);
+            }
+        }
 	    
 	    return result;
 	}
@@ -265,18 +256,15 @@ public class TourServiceImpl implements TourService {
 	@Transactional
 	public int updateTour(LeportsData led, ArrayList<TourImg> updatedTourImgs) {
 		// LeportsData 저장
-	    int result = tourDao.updateTour(sqlSession, led);
+	    int result = tourDao.updateLeportsData(sqlSession, led);
 
 	    // 이미지 업데이트 처리
-	    for (TourImg tourImg : updatedTourImgs) {
-	        if (tourImg.getTimgNo() != 0) {
-	            // 기존 이미지 업데이트
-	            result += tourDao.updateTourImg(sqlSession, tourImg);
-	        } else {
-	            // 새 이미지 추가
-	            result += tourDao.insertNewTourImg(sqlSession, tourImg);
-	        }
-	    }
+	    if(result > 0) {
+            tourDao.deleteTourImgsByTourNo(led.getRefTno());
+            for(TourImg img : updatedTourImgs) {
+                tourDao.insertTourImg(img);
+            }
+        }
 	    
 	    return result;
 	}
