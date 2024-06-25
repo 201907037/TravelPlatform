@@ -20,7 +20,7 @@ public interface BoardService {
 	
 	ArrayList<Board> selectListBoard(PageInfo pi);
 	
-	ArrayList<BoardImg> selectListBoardImg();
+	ArrayList<BoardImg> selectListBoardImg(PageInfo pi);
 
 	Board selectBoard(int bno);
 
@@ -28,7 +28,7 @@ public interface BoardService {
 
 	int increaseCount(int bno);
 
-	ArrayList<Member> selectMember();
+	ArrayList<Member> selectMember(PageInfo pi);
 
 	Member selectDetailMember(int bno);
 

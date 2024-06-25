@@ -45,9 +45,9 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public ArrayList<BoardImg> selectListBoardImg() {
+	public ArrayList<BoardImg> selectListBoardImg(PageInfo pi) {
 		
-		return boardDao.selectListBoardImg(sqlSession);
+		return boardDao.selectListBoardImg(sqlSession, pi);
 	}
 
 	@Override
@@ -76,9 +76,9 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public ArrayList<Member> selectMember() {
+	public ArrayList<Member> selectMember(PageInfo pi) {
 		
-		return boardDao.selectMember(sqlSession);
+		return boardDao.selectMember(sqlSession, pi);
 	}
 
 	@Override

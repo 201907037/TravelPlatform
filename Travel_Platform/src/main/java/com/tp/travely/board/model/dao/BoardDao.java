@@ -41,9 +41,14 @@ public class BoardDao {
 	}
 
 	// 게시글 목록이미지 조회
-	public ArrayList<BoardImg> selectListBoardImg(SqlSessionTemplate sqlSession) {
+	public ArrayList<BoardImg> selectListBoardImg(SqlSessionTemplate sqlSession, PageInfo pi) {
 		
-		return (ArrayList)sqlSession.selectList("boardMapper.selectListBoardImg");
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.selectListBoardImg", null, rowBounds);
 	}
 
 	// 게시글 갯수 조회
@@ -73,9 +78,14 @@ public class BoardDao {
 	}
 
 	// 게시글 회원 목록조회
-	public ArrayList<Member> selectMember(SqlSessionTemplate sqlSession) {
+	public ArrayList<Member> selectMember(SqlSessionTemplate sqlSession, PageInfo pi) {
 		
-		return (ArrayList)sqlSession.selectList("boardMapper.selectMember");
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.selectMember", null, rowBounds);
 	}
 
 	// 게시글 회원 한명조회

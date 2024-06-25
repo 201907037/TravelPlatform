@@ -47,7 +47,7 @@ public class BoardController {
 		
 		int listCount = boardService.selectListCount();
 		int pageLimit = 10;
-		int boardLimit = 16;
+		int boardLimit = 12;
 		
 		// System.out.println(listCount);
 		
@@ -57,9 +57,9 @@ public class BoardController {
 		
 		// 목록불러오는 기능 추가 예정
 		ArrayList<Board> list1 = boardService.selectListBoard(pi);
-		ArrayList<BoardImg> list2 = boardService.selectListBoardImg();
+		ArrayList<BoardImg> list2 = boardService.selectListBoardImg(pi);
 		
-		ArrayList<Member> list3 = boardService.selectMember();
+		ArrayList<Member> list3 = boardService.selectMember(pi);
 		// 회원 목록조회 메소드도 사용해야함
 		
 		// 각 게시글번호당 좋아요 수 가져오기
@@ -72,11 +72,11 @@ public class BoardController {
 		}
 		// > 이 시점부터 list4에 각 게시글 번호당 좋아요 총 갯수가 담겨있을 것임
 		
-		/*
-		for(Integer i : list4) {
-			System.out.println(i);
+		
+		for(Board b : list1) {
+			System.out.println(b);
 		}
-		*/
+		
 		// System.out.println(list1);
 		// System.out.println(list2);
 		// System.out.println(pi);
@@ -87,6 +87,7 @@ public class BoardController {
 		model.addAttribute("biList", list2);
 		model.addAttribute("mList", list3);
 		model.addAttribute("likeCount", list4);
+		
 		
 		
 		return "board/boardListView";

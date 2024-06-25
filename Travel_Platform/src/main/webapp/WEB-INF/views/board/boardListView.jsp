@@ -15,8 +15,8 @@
         .container {
             display: grid;
             grid-template-columns: repeat(4, 1fr); /* 가로로 4줄 */
-            grid-template-rows: repeat(4, auto); /* 세로로 4줄 */
-            gap: 70px; /* 게시글 간의 간격 */
+            grid-template-rows: repeat(3, auto); /* 세로로 4줄 */
+            gap: 100px; /* 게시글 간의 간격 */
             padding: 20px;
             margin: 50px;
         }
@@ -66,12 +66,47 @@
         }
 
         #pagingArea {
-            width: fit-content; margin: auto;
+            width: fit-content; 
+            margin: 50px auto;
         }
          
+        #pagingArea ul {
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            list-style: none;
+        }
+
         #pagingArea ul>li {
-            display: inline-block; /* 가로 배치 */
-            margin-right: 20px; /* 항목 간 간격 */
+            margin: 0 5px;
+        }
+
+        #pagingArea ul>li>a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: black;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #pagingArea ul>li>a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        #pagingArea ul>li.page-item.active>a,
+        #pagingArea ul>li.page-item.active>a:hover {
+            background-color: #007bff;
+            color: #fff;
+            cursor: default;
+        }
+
+        #pagingArea ul>li.page-item.disabled>a {
+            color: #ddd;
+            background-color: #f4f4f4;
+            cursor: default;
         }
 
         /* 검색창 관련 스타일 */
@@ -185,17 +220,17 @@
         <ul class="pagination">
             <c:choose>
                 <c:when test="${ requestScope.pi.currentPage eq 1 }">
-                    <li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none; display:none;">Previous</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none;">Previous</a></li>
                 </c:when>
                 <c:otherwise>
-                    <li class="page-item"><a class="page-link" href="list.bo?cpage=${ requestScope.pi.currentPage -1 }">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="selectList.bo?cpage=${ requestScope.pi.currentPage -1 }">Previous</a></li>
                 </c:otherwise>
             </c:choose>
             <c:forEach var="p" begin="${ requestScope.pi.startPage }" end="${ requestScope.pi.endPage }" step="1">
                 <c:choose>
                     <c:when test="${ requestScope.pi.currentPage ne p }">           
                         <li class="page-item">
-                            <a class="page-link" href="list.bo?cpage=${ p }">
+                            <a class="page-link" href="selectList.bo?cpage=${ p }">
                                 ${ p }
                             </a>
                         </li>
@@ -213,10 +248,10 @@
             </c:forEach>
             <c:choose>
                 <c:when test="${ requestScope.pi.currentPage eq requestScope.pi.maxPage }">
-                    <li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none; display:none;">Next</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none;">Next</a></li>
                 </c:when>
                 <c:otherwise>
-                    <li class="page-item"><a class="page-link" href="list.bo?cpage=${ requestScope.pi.currentPage + 1 }">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="selectList.bo?cpage=${ requestScope.pi.currentPage + 1 }">Next</a></li>
                 </c:otherwise>
             </c:choose>
         </ul>

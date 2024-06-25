@@ -1,6 +1,5 @@
 package com.tp.travely.event.controller;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,9 +21,11 @@ public class EventController {
 		Date today = new Date();
 		SimpleDateFormat ttday = new SimpleDateFormat("yyyyMMdd");
 		
-//		System.out.println(ttday.format(today));
+		System.out.println(ttday.format(today));
 		
 		ArrayList<Festival> list = new EventApi().eventCall(currentPage, ttday.format(today));
+		
+		System.out.println(list);
 		
 		int listCount = list.get(0).getTotalCount();
 		int pageLimit = 10;
