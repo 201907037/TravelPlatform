@@ -15,6 +15,7 @@
             height: 830px;
             margin: auto;
             padding: 20px;
+            margin-top : 60px;
         }
 
         /* 게시글 정렬 버튼, 지역 검색창, 검색버튼 그룹 */
@@ -117,19 +118,23 @@
             padding: 10px 15px;
             margin: 0px 2px; 
             border-radius: 5px;
-            cursor: pointer;
             transition: background-color 0.3s ease;
         }
-        .paging-area button:hover {
+        button[class^=btn_no]:hover,
+        button[class^=left]:hover,
+        button[class^=right]:hover {
             background-color: #00BFFF;
+            cursor: pointer;
             color: white;
+        }
+        button[class^=btn-dis]{
+        	background-color : blue;
         }
     </style>
 </head>
 <body>
-
-    <br><br><br><br><br><br><br><br>
-    
+<jsp:include page="../common/header1.jsp"/>
+    <br clear="both">
     <div id="outer">
         <!-- 목록 상단 -->
         <input type="button" id="planner-writer" value="플래너 작성하기">
@@ -146,38 +151,103 @@
 
         <!-- 플래너(게시글) 목록 -->
         <div class="planner-gallery">
-        <c:forEach var="i" begin="0" end="11">
-            <div class="planner-thumbnail">
-                <div class="planner-thumbnail-image">
-                    <img src="resources/planImg/2024062415441631522.jpg" width="200px" height="130px">
-                </div>
-                <div class="planner-ex">
-				    <span class="title">나의 첫 제주 여행기</span> <br>
-                    <span class="region">지역 : 제주</span>
-                    <span class="count">조회수 11</span>
-				</div>
-				<input type="hidden" name="plan_no" value="1"/>
-            </div>
-        </c:forEach>  
+        
         </div>
 
         <!-- 페이징바 -->
 		<div align="center" class="paging-area">
-            <button>&lt;&lt;</button>
-            <button>&lt;</button>
-            <c:forEach var="i" begin="1" end="10">
-            <button>${i}</button>
-            </c:forEach>
-            <button>&gt;</button>
-            <button>&gt;&gt;</button>
+            
 		</div>
     </div>
 <script>
+let pno = 1;
 	$(function(){
+		let msg = '${sessionScope.msg}';
+		console.log(msg);
+		if(msg!=""){
+			alert(msg);
+			<c:remove var="msg" scope="session"/>
+		}
+		getPlanList();
+		$("#planner-writer").click(function(){
+			location.href="goPlanner.pl";
+		});
 		$(".planner-gallery").on("click","div[class=planner-thumbnail]",function(){
 			location.href="detail.pl?pno="+$("input[name=plan_no]").val();
 		});
+		$(".paging-area").on("click","button[class^=left]",function(){
+			pno--;
+			getPlanList();
+		});
+		$(".paging-area").on("click","button[class^=btn_no]",function(){
+			pno = $(this).html();
+			getPlanList();
+		});
+		$(".paging-area").on("click","button[class^=right]",function(){
+			pno++;
+			getPlanList();
+		});
 	});
+	
+	function getPlanList(){
+		$(".paging-area").html("");
+		$(".planner-gallery").html("");
+		$.ajax({
+			url : "getPlanList.pl",
+			method : "get",
+			data : {pno : pno},
+			success : function(e){
+				console.log(e);
+				let list = e.list;
+				let pinfo = e.pinfo;
+				$.each(list,function(i,v){
+					let div = $("<div>").attr("class","planner-thumbnail");
+					let planImg = $("<div>").attr("class","planner-thumbnail-imgae").attr("align","center");
+					let img = $("<img>").css({width : "200px",height:"130px"}).attr("src",v.changeName);
+					planImg.append(img);
+					let planexp = $("<div>").attr("class","planner-ex");
+					let title = $("<span>").attr("class","title").html(v.planName);
+					let br = $("<br>");
+					let region;
+					if(v.sigunguName==null){
+						region = $("<span>").attr("class","region").html(v.areaName);
+					}else{
+						region = $("<span>").attr("class","region").html(v.sigunguName);
+					}
+					let count = $("<span>").attr("class","count").html("조회수 : "+v.count);
+					planexp.append(title,br,region,count);
+					let tno = $("<input>").attr({type : "hidden","name":"plan_no","value":v.planNo});
+					
+					div.append(planImg,planexp,tno);
+					$(".planner-gallery").append(div);
+				});
+				
+				if(pinfo.startPage!=1){
+                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-left").attr("class","left btn btn-success btn-sm").html("&lt;&lt;");
+                    //console.log(btnleft);
+                    $(".paging-area").append(btnLeft);
+                }
+                for(let i = pinfo.startPage;i<=pinfo.endPage;i++){
+                    if(i==pinfo.currentPage){
+                    	var btnNum = $("<button>").attr("type","button").attr("disabled","ture").attr("class","btn-dis btn btn-success btn-sm").text(i);
+                    }else{
+                    	var btnNum = $("<button>").attr("type","button").attr("class","btn_no btn btn-success btn-sm").text(i);
+                    }
+                    
+                    //console.log(btnNum);
+                    $(".paging-area").append(btnNum);
+                }
+                if(pinfo.maxPage!=pinfo.endPage){
+                    
+                    var btnRight = $("<button>").attr("type","button").attr("id","btn-right").attr("class","right btn btn-success btn-sm").html("&gt;&gt;");
+                    $(".paging-area").append(btnRight);
+                }
+			},
+			error : function(){
+				console.log("실패");
+			}
+		});
+	}
 </script>
 </body>
 </html>

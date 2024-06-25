@@ -1,5 +1,8 @@
 package com.tp.travely.planner.model.dao;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -24,6 +27,18 @@ public class PlannerDao {
 
 	public Planner getPlannerByPNO(SqlSessionTemplate sqlSession, int pno) {
 		return sqlSession.selectOne("plannerMapper.getPlannerByPNO",pno);
+	}
+
+	public int checkTour(SqlSessionTemplate sqlSession, int contentId) {
+		return sqlSession.selectOne("plannerMapper.checkTour",contentId);
+	}
+
+	public int selectPlanListCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("plannerMapper.selectPlanListCount");
+	}
+
+	public ArrayList<Planner> selectPlanList(SqlSessionTemplate sqlSession, Map<String, String> map) {
+		return (ArrayList)sqlSession.selectList("plannerMapper.selectPlanList",map);
 	}
 
 }

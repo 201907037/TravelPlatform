@@ -1,6 +1,7 @@
 package com.tp.travely.planner.model.service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,18 @@ public class PlannerServiceImpl implements PlannerService{
 	@Override
 	public Planner getPlannerByPNO(int pno) {
 		return plannerDao.getPlannerByPNO(sqlSession,pno);
+	}
+	@Override
+	public int checkTour(int contentId) {
+		return plannerDao.checkTour(sqlSession,contentId);
+	}
+	@Override
+	public int selectPlanListCount() {
+		return plannerDao.selectPlanListCount(sqlSession);
+	}
+	@Override
+	public ArrayList<Planner> selectPlanList(Map<String, String> map) {
+		return plannerDao.selectPlanList(sqlSession,map);
 	}
 	
 }

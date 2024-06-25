@@ -361,6 +361,31 @@
 	#planBox div[class=planbody]:hover{
 		cursor: pointer;
 	}
+	/* 댓글용 css */
+        .comment-section {
+            width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        .comment {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            position: relative; /* 댓글 내의 버튼 위치를 조정하기 위해 추가 */
+        }
+        
+        .comment.active {
+            border: 2px solid rgb(102, 102, 102);
+            border-radius : 10px;
+            padding: 5px;
+        }
+
+        .edit-delete-buttons {
+            display: none;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
 </style>
 <!--  <link rel="stylesheet" href="resources/css/styles.css">-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -677,6 +702,7 @@ let aroundNum;
 let mapX;
 let mapY;
 
+let typeFlag=0;
 	function changeImg(inputFile,idx){
 	    if(inputFile.files.length==1){
 	     let reader = new FileReader();
@@ -766,7 +792,8 @@ let mapY;
 		});
 	}
 		function getSearch(type,pno,keyword,option){
-			console.log(pno);
+			//console.log(pno);
+			typeFlag=0;
 			$.ajax({
 				url : "searchTourList.to",
 				method : "GET",
@@ -844,18 +871,25 @@ let mapY;
 		$("#detail-body>table").html("");
 		$("#tour-review").html("리뷰영역");
 		console.log(tourObj);
+		let contentType;
+		if(typeFlag==0){
+			contentType=tourObj.type;
+		}else{
+			contentType=tourObj.typeSearch;
+		}
+		console.log(contentType);
 		$.ajax({
 			url : "getDetail.to",
 			method : "GET",
 			async : false,
-			data : {tno : tourObj.tno, contentId : tourObj.contentId, type : tourObj.typeSearch},
+			data : {tno : tourObj.tno, contentId : tourObj.contentId, type : contentType},
 			success : function(result){
 				console.log(result);
 				let obj = result.response.body.items.item[0];
 				console.log(obj);
 				console.log(option);
 				$("#tour_name").html(tourObj.name);
-				switch(tourObj.typeSearch){
+				switch(contentType){
 				case "관광지":
 					create12(obj);
 					break;
@@ -1112,8 +1146,7 @@ let mapY;
                     var btnRight = $("<button>").attr("type","button").attr("id","btn-range-right").attr("class","range_right btn btn-success btn-sm").html("&gt;&gt;");
                     $("#button_box").append(btnRight);
                 }
-                $("#skeyword").html(tourObj.name);
-    			$("#skeyword").parent().css("display","block");
+                
 			},
 			error : function(){
 				console.log("실패");
@@ -1434,7 +1467,7 @@ let mapY;
 			$("#station").click();
 		});
 		$("select[name=tour-type]").change(function(){
-			console.log($(this).text());
+			//console.log($(this).text());
 			
 		});
 		$(".el_box").on("click","div[class=t_box]",function(){
@@ -1461,23 +1494,48 @@ let mapY;
 				tourType = $("select[name=tour-type]").val();
 				$("#aroundSearch").prop("checked",false);
 				$("#aroundSearchOption").css("display","none");
+				$("#skeyword").html(tourObj.name);
+    			$("#skeyword").parent().css("display","block");
 				getAroundTourList(mapX,mapY,range,tourType,aroundNum);
 			}else{
 				if(addTo!=null){
-					plan.planList[addTo].tourList[datePlanIdx].name = $(this).children().eq(1).children().children().eq(0).children().eq(0).text();
-					plan.planList[addTo].tourList[datePlanIdx].img = $(this).children().eq(0).children().attr("src");
-					plan.planList[addTo].tourList[datePlanIdx].address = $(this).children().eq(1).children().children().eq(1).children().eq(0).text();
-					plan.planList[addTo].tourList[datePlanIdx].tno = $(this).children().eq(2).val();
-					plan.planList[addTo].tourList[datePlanIdx].contentId=$(this).children().eq(3).val();
-					plan.planList[addTo].tourList[datePlanIdx].XX = $(this).children().eq(4).val();
-					plan.planList[addTo].tourList[datePlanIdx].YY = $(this).children().eq(5).val();
-					//console.log(plan.planList[addTo].tourList[datePlanIdx].address.length);
-					
-					//console.log(plan);
-					$("div[class=date]>input[value="+addTo+"]").parent().click();
-					no = {tPno : 1, aPno : 1,lPno : 1, rPno : 1,sNo:1};
-					addTo=null;
+					let result = 1;
+					if(tourObj.tno==0){
+						$.ajax({
+							url : "ckTour.pl",
+							async : false,
+							method : "get",
+							data : {contentId : tourObj.contentId},
+							success : function(e){
+								//console.log(result);
+								result = result*e.ck;
+								
+							},
+							error : function(){
+								console.log("실패");
+							}
+						});
+						console.log(result);
+					}
+					if(result==1){
+						plan.planList[addTo].tourList[datePlanIdx].name = $(this).children().eq(1).children().children().eq(0).children().eq(0).text();
+						plan.planList[addTo].tourList[datePlanIdx].img = $(this).children().eq(0).children().attr("src");
+						plan.planList[addTo].tourList[datePlanIdx].address = $(this).children().eq(1).children().children().eq(1).children().eq(0).text();
+						plan.planList[addTo].tourList[datePlanIdx].tno = $(this).children().eq(2).val();
+						plan.planList[addTo].tourList[datePlanIdx].contentId=$(this).children().eq(3).val();
+						plan.planList[addTo].tourList[datePlanIdx].XX = $(this).children().eq(4).val();
+						plan.planList[addTo].tourList[datePlanIdx].YY = $(this).children().eq(5).val();
+						//console.log(plan.planList[addTo].tourList[datePlanIdx].address.length);
+						
+						//console.log(plan);
+						$("div[class=date]>input[value="+addTo+"]").parent().click();
+						no = {tPno : 1, aPno : 1,lPno : 1, rPno : 1,sNo:1};
+						addTo=null;
+					}else{
+						alert("추가할 수 없는 여행지 입니다.");
+					}
 				}
+					console.log(tourObj);
 					for(let i=0;i<markerList.length;i++){
 						markerList[i].setMap(null);
 					}
@@ -1505,7 +1563,7 @@ let mapY;
 		});
 		
 		$("button[class=btn-cl]").click(function(){
-			
+			typeFlag=0;
 			let bar_cl = $(this).parent().parent().attr("class");
 			//console.log($(this));
 			if(bar_cl == "left-bar"){
@@ -1518,6 +1576,17 @@ let mapY;
 				},500);
 				//console.log("발동");
 			}else{
+				//console.log(dateMarkerList);
+				for(let i =0;i<dateMarkerList.length;i++){
+					dateMarkerList[i].setMap(null);
+				}
+				for(let i=0;i<markerList.length;i++){
+					markerList[i].setMap(null);
+				}
+				if(polyline!=null){
+					polyline.setMap(null);
+				}
+				dateMarkerList=[];
 				//console.log($(".left-bar").css("width"));
 				setTimeout(function(){
 					$(".left-bar").css("display","none");
@@ -1895,12 +1964,15 @@ let mapY;
 			console.log(plan);
 		});
 		$("#aroundSearch").change(function(){
-			console.log($(this).is(":checked"));
+			//console.log($(this).is(":checked"));
+			//console.log(typeFlag);
 			if($(this).is(":checked")){
+				typeFlag=1;
 				$(this).prop("checked",true);
 				$("#aroundSearchOption").css("display","block");
 			}else{
 				$(this).prop("checked",false);
+				
 				$("#aroundSearchOption").css("display","none");
 			}
 		});

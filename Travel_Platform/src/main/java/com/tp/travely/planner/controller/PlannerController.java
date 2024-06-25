@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -22,6 +23,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.tp.travely.common.model.vo.PageInfo;
+import com.tp.travely.member.model.vo.Member;
 import com.tp.travely.planner.model.service.PlannerService;
 import com.tp.travely.planner.model.vo.PlanDetail;
 import com.tp.travely.planner.model.vo.Planner;
@@ -44,6 +47,8 @@ public class PlannerController {
 		System.out.println(title);
 		System.out.println(content);
 		System.out.println(ckOpen);
+		//int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		int userNo=1;
 		
 		 JsonObject totalObj = JsonParser.parseString(plan).getAsJsonObject();
 		 JsonObject planObj = totalObj.getAsJsonObject("plan"); 
@@ -54,7 +59,8 @@ public class PlannerController {
 		 String startD = planObj.get("startDate").getAsString().substring(0,10); 
 		 String endD = planObj.get("endDate").getAsString().substring(0,10);
 		 
-		 Planner planner = new Planner(); 
+		 Planner planner = new Planner();
+		 planner.setRefUno(userNo);
 		 planner.setPlanName(name);
 		 planner.setPlanExp(exp);
 		 planner.setStartDate(startD);
@@ -89,22 +95,64 @@ public class PlannerController {
 			 if(tourArr.get(j).getAsJsonObject().get("tno").getAsInt()==0) { 
 				 String contentId = tourArr.get(j).getAsJsonObject().get("contentId").getAsString();
 				 int tno = plannerService.getTNOBycontentId(contentId);
-				 //System.out.println(tno); pDetail.setRefTno(tno); 
+				 //System.out.println(tno); 
+				 pDetail.setRefTno(tno); 
 			 }else {
 				 pDetail.setRefTno(tourArr.get(j).getAsJsonObject().get("tno").getAsInt()); }
 			 	 pDetail.setTime(tourArr.get(j).getAsJsonObject().get("time").getAsString());
 			 	 detailList.add(pDetail); 
 			 } 
 		}
+		 for(PlanDetail p : detailList) {
+				System.out.println(p);
+			}
 		int rs = plannerService.insertPlanner(planner,detailList);
 		 //System.out.println(planner); 
-		 
+		
 		if(rs>0) {
-			return "성공";
+			session.setAttribute("msg", "저장 성공!");
+			return "redirect:/goList.pl";
 		}else {
-			return "실패";
+			return "redirect:/index";
 		}
 		
+	}
+	@GetMapping("goList.pl")
+	public String goPlannerList() {
+		
+		
+		return "planner/plannerList";
+	}
+	@GetMapping("goPlanner.pl")
+	public String goPlanner() {
+		return "/planner/plannerView";
+	}
+	
+	@GetMapping(value="getPlanList.pl",produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public String selectPlanList(int pno) {
+		
+		HashMap<String, String> map = new HashMap<>();
+		int listCount = plannerService.selectPlanListCount();
+		PageInfo pinfo = getPagInfo(listCount, pno,10,12);
+		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
+		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
+		map.put("start", (start+""));
+		map.put("end",(end+""));
+		ArrayList<Planner> list = plannerService.selectPlanList(map);
+		HashMap<String, Object> rsMap = new HashMap<String, Object>();
+		rsMap.put("list",list);
+		rsMap.put("pinfo",pinfo);
+		return new Gson().toJson(rsMap);
+	}
+	
+	@GetMapping(value="ckTour.pl",produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String checkTour(int contentId) {
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		int rs = plannerService.checkTour(contentId);
+		map.put("ck", rs);
+		return new Gson().toJson(map);
 	}
 	@GetMapping("detail.pl")
 	public String goDetailForm(int pno,Model model) {
@@ -131,7 +179,7 @@ public class PlannerController {
 		return "planner/planDetail";
 	}
 	
-	// 일반메소드
+	// �씪諛섎찓�냼�뱶
 	public String savePath(MultipartFile upfile,
 			   HttpSession session) {
 
@@ -172,5 +220,20 @@ public class PlannerController {
 		
 		
 		return changeName;
+	}
+	
+	// 일반 메소드
+	public PageInfo getPagInfo(int count,int pno,int pageLimit,int boardLimit) {
+		int listCount = count;
+		int currentPage = pno;
+		
+		int maxPage = (int)Math.ceil((double)listCount/boardLimit);
+		int startPage= (((currentPage-1)/pageLimit)*pageLimit)+1;
+		int endPage = startPage+(pageLimit-1);
+		if(maxPage<endPage) {
+			endPage=maxPage;
+		}
+		
+		return new PageInfo(listCount, currentPage, pageLimit, boardLimit, maxPage, startPage, endPage);
 	}
 }

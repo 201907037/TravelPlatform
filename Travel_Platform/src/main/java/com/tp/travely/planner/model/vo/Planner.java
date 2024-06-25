@@ -14,6 +14,8 @@ public class Planner {
 	private String changeName;
 	private String plStatus;
 	private String createDate;
+	private String areaName;
+	private String sigunguName;
 	private int areaCode;
 	private int sigunguCodeNo;
 	private int count;

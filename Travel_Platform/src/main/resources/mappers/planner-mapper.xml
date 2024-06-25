@@ -6,15 +6,17 @@
 	<resultMap id="plannerResultSet" 
 			   type="planner">
 		<result column="PLAN_NO" property="planNo" />
-		<result column="PLAN_NO" property="planName" />
-		<result column="PLAN_NO" property="planExp" />
-		<result column="PLAN_NO" property="startDate" />
+		<result column="PLAN_NAME" property="planName" />
+		<result column="PLAN_EXP" property="planExp" />
+		<result column="START_DATE" property="startDate" />
 		<result column="END_DATE" property="endDate" />
 		<result column="CHANGE_NAME" property="changeName" />
 		<result column="PL_STATUS" property="plStatus" />
 		<result column="CREATE_DATE" property="createDate" />
 		<result column="AREA_CODE" property="areaCode" />
 		<result column="SIGUNGUCODENO" property="sigunguCodeNo" />
+		<result column="LOCATION_NAME" property="areaName"/>
+		<result column="SIGUNGU_NAME" property="sigunguName"/>
 		<result column="COUNT" property="count" />
 		<result column="STATUS" property="status" />
 		<result column="REF_UNO" property="refUno" />
@@ -40,12 +42,72 @@
 	</select>
 	<insert id="insertPlanner"
 			parameterType="planner">
-			
+	INSERT INTO PLANNER(PLAN_NO
+					  , PLAN_NAME
+					  , PLAN_EXP
+					  , START_DATE
+					  , END_DATE
+					  , AREA_CODE
+					  , SIGUNGUCODENO
+					  , CHANGE_NAME
+					  , REF_UNO)
+			    VALUES(PLANNER_NO.NEXTVAL
+			         , #{planName}
+			         , #{planExp}
+			         , #{startDate}
+			         , #{endDate}
+			         , #{areaCode}	
+			         , #{sigunguCodeNo}
+			         , #{changeName}
+			         , #{refUno})      
 	</insert>
 	<insert id="insertPlanDetail"
 			parameterType="detail">
-			
+	INSERT INTO PLAN_DETAIL(DETAIL_NO
+						  , START_TIME
+						  , END_TIME
+						  , PLAN_DATE
+						  , TIME_AMOUNT
+						  , DAY_COUNT
+						  , REF_TNO
+						  , REF_PNO)
+				     VALUES(PLAN_DETAIL_NO.NEXTVAL
+				     	  , #{startTime}
+				     	  , #{endTime}
+				     	  , #{planDate}
+				     	  , #{time}
+				     	  , #{dayCount}
+				     	  , #{refTno}
+				     	  , PLANNER_NO.CURRVAL)		
 	</insert>
+	<select id="checkTour"
+			parameterType="_int"
+			resultType="_int">
+	SELECT COUNT(*)
+	FROM TOUR
+	WHERE CONTENT_ID = #{contentId}		
+	</select>
+	<select id="selectPlanListCount"
+			resultType="_int">
+	SELECT COUNT(*)
+	FROM PLANNER
+	WHERE PL_STATUS='Y'
+	AND STATUS='Y'	
+	</select>
+	<select id="selectPlanList"
+			parameterType="hashmap"
+			resultMap="plannerResultSet">
+	SELECT *
+	FROM(SELECT ROWNUM RN, PL.*
+           FROM(SELECT P.PLAN_NO,P.PLAN_NAME,P.PLAN_EXP,P.CHANGE_NAME,P.COUNT,LOCATION_NAME,SIGUNGU_NAME
+                  FROM PLANNER P
+                  JOIN DISTRICTS ON(AREA_CODE=LCODE_NO)
+             LEFT JOIN CITY ON(SIGUNGUCODENO = SIGUNGU_CODE_NO)
+                 WHERE P.PL_STATUS = 'Y'
+                   AND P.STATUS = 'Y'
+              ORDER BY P.CREATE_DATE DESC) PL)
+	WHERE RN BETWEEN #{start} AND #{end}		
+	</select>
 	<select id="getPlannerByPNO"
 			parameterType="_int">
 	
