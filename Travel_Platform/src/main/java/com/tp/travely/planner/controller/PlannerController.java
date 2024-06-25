@@ -154,6 +154,22 @@ public class PlannerController {
 		map.put("ck", rs);
 		return new Gson().toJson(map);
 	}
+	@GetMapping(value="getPlanSearchList.pl",produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String searchPlan(int pno,String keyword) {
+		HashMap<String, String> map = new HashMap<>();
+		int listCount = plannerService.searchPlanCount(keyword);
+		PageInfo pinfo = getPagInfo(listCount, pno,10,12);
+		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
+		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
+		map.put("start", (start+""));
+		map.put("end",(end+""));
+		ArrayList<Planner> list = plannerService.selectPlanList(map);
+		HashMap<String, Object> rsMap = new HashMap<String, Object>();
+		rsMap.put("list",list);
+		rsMap.put("pinfo",pinfo);
+		return new Gson().toJson(rsMap);
+	}
 	@GetMapping("detail.pl")
 	public String goDetailForm(int pno,Model model) {
 //		Planner p = plannerService.getPlannerByPNO(pno);

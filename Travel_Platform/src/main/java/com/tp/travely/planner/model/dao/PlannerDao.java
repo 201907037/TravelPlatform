@@ -41,4 +41,8 @@ public class PlannerDao {
 		return (ArrayList)sqlSession.selectList("plannerMapper.selectPlanList",map);
 	}
 
+	public int searchPlanCount(SqlSessionTemplate sqlSession, String keyword) {
+		return sqlSession.selectOne("plannerMapper.searchPlanCount",keyword);
+	}
+
 }

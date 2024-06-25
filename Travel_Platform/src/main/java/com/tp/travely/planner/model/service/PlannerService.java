@@ -14,4 +14,5 @@ public interface PlannerService {
 	int checkTour(int contentId);
 	int selectPlanListCount();
 	ArrayList<Planner> selectPlanList(Map<String, String> map);
+	int searchPlanCount(String keyword);
 }

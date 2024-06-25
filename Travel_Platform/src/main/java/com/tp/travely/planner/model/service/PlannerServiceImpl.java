@@ -49,5 +49,9 @@ public class PlannerServiceImpl implements PlannerService{
 	public ArrayList<Planner> selectPlanList(Map<String, String> map) {
 		return plannerDao.selectPlanList(sqlSession,map);
 	}
+	@Override
+	public int searchPlanCount(String keyword) {
+		return plannerDao.searchPlanCount(sqlSession,keyword);
+	}
 	
 }
