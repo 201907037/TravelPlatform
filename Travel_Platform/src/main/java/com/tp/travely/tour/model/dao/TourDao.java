@@ -132,6 +132,10 @@ public class TourDao {
 		return sqlSession.update("tourMapper.updateTourImg", tourImg);
 	}
 	
+	public int insertNewTourImg(SqlSessionTemplate sqlSession, TourImg tourImg) {
+		return sqlSession.update("tourMapper.insertNewTourImg", tourImg);
+	}
+	
 	public int updateTour(SqlSessionTemplate sqlSession, Tour tour) {
 		return sqlSession.update("tourMapper.updateTour", tour);
 	}

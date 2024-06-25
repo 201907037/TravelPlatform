@@ -214,7 +214,7 @@ public class TourServiceImpl implements TourService {
 	            result += tourDao.updateTourImg(sqlSession, tourImg);
 	        } else {
 	            // 새 이미지 추가
-	            result += tourDao.insertTourImg(sqlSession, tourImg);
+	            result += tourDao.insertNewTourImg(sqlSession, tourImg);
 	        }
 	    }
 	    
@@ -234,7 +234,7 @@ public class TourServiceImpl implements TourService {
 	            result += tourDao.updateTourImg(sqlSession, tourImg);
 	        } else {
 	            // 새 이미지 추가
-	            result += tourDao.insertTourImg(sqlSession, tourImg);
+	            result += tourDao.insertNewTourImg(sqlSession, tourImg);
 	        }
 	    }
 	    
@@ -254,7 +254,7 @@ public class TourServiceImpl implements TourService {
 	            result += tourDao.updateTourImg(sqlSession, tourImg);
 	        } else {
 	            // 새 이미지 추가
-	            result += tourDao.insertTourImg(sqlSession, tourImg);
+	            result += tourDao.insertNewTourImg(sqlSession, tourImg);
 	        }
 	    }
 	    
@@ -274,7 +274,7 @@ public class TourServiceImpl implements TourService {
 	            result += tourDao.updateTourImg(sqlSession, tourImg);
 	        } else {
 	            // 새 이미지 추가
-	            result += tourDao.insertTourImg(sqlSession, tourImg);
+	            result += tourDao.insertNewTourImg(sqlSession, tourImg);
 	        }
 	    }
 	    

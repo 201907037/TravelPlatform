@@ -511,17 +511,21 @@ public class TourController {
 	        int existingSize = existingTourImgs.size();
 	        int newSize = reChangeNoFiles.size();
 	        
+	        // 새 TourImg 객체 생성
+            TourImg tourImg = new TourImg();
+	        
 	        // 새로운 추가 이미지 파일 처리
 	        for (int i = 0; i < newSize; i++) {
 	            MultipartFile file = reChangeNoFiles.get(i);
+	            System.out.println("-------------------------");
+	            System.out.println(file);
+	            System.out.println("-------------------------");
 
 	            if (!file.isEmpty()) {
 	                // 새 파일 저장
 	                String changeName = savePath(file, session, "changeNo");
 	                String fullChangeNoPath = "resources/tourUpfiles/" + changeName;
 
-	                // 새 TourImg 객체 생성
-	                TourImg tourImg = new TourImg();
 	                tourImg.setChangeNo(fullChangeNoPath);
 	                tourImg.setRefTno(tour.getTourNo());
 
@@ -538,6 +542,7 @@ public class TourController {
 	            } else {
 	                // 파일이 비어있으면 기존 파일 유지
 	                if (i < existingSize) {
+	                	tourImg.setTimgNo(existingTourImgs.get(i).getTimgNo()); // 기존 TimgNo 유지
 	                    updatedTourImgs.add(existingTourImgs.get(i));
 	                }
 	            }
