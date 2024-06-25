@@ -2,6 +2,7 @@
 package com.tp.travely.tour.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.tp.travely.member.model.vo.Member;
@@ -33,6 +34,10 @@ public interface TourService {
 	
 	int searchTourListCount(Map<String,String> map);
 	ArrayList<Tour> selectSearchList(Map<String,String> map);
+	
+	// 김동현 - 리뷰 추가
+	int addTourReview(TourReview tr);
+	int selectReviewCount(HashMap<String, String> map);
 	
 	// 유진 - 관리자 여행지 추가 서비스 (2024.06.12)
 	int insertTour(TourSpotData tsd, ArrayList<TourImg> tourImgList);
@@ -68,4 +73,8 @@ public interface TourService {
 	int updateTour(LodgingData lod, ArrayList<TourImg> updatedTourImgs);
 	int updateTour(RestaurantData rd, ArrayList<TourImg> updatedTourImgs);
 	int updateTour(LeportsData led, ArrayList<TourImg> updatedTourImgs);
+
+	ArrayList<TourReview> selectReviewList(HashMap<String, String> map);
+
+	
 }

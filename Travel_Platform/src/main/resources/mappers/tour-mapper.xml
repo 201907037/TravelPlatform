@@ -146,7 +146,7 @@
 	
 	<!-- 현성 - 리뷰 -->
 	<resultMap id="reviewResultSet" 
-			   type="com.tp.travely.tour.model.vo.TourReview">
+			   type="treview">
 		<result column="REVIEW_NO" property="reviewNo" />
 		<result column="REVIEW_TITLE" property="reviewTitle" />
 		<result column="REVIEW_CONTENT" property="reviewContent" />
@@ -154,6 +154,7 @@
 		<result column="SCORE" property="score" />
 		<result column="TOUR_NO" property="tourNo" />
 		<result column="USER_NO" property="userNo" />
+		<result column="NICK_NAME" property="nickName"/>
 	</resultMap>
 	
 	<!-- 현성 - 회원 정보 -->
@@ -420,7 +421,43 @@
 	                ORDER BY TOUR_NAME ASC) TT)
 	WHERE RN BETWEEN ${start} AND ${end}
 	</select>
-	
+	<!-- 김동현 리뷰 추가 -->
+	<insert id="addTourReview"
+			parameterType="treview">
+	INSERT INTO TOUR_REVIEW(REVIEW_NO
+						  , REVIEW_TITLE
+						  , REVIEW_CONTENT
+						  , SCORE
+						  , TOUR_NO
+						  , USER_NO)
+					 VALUES(TREVIEW_NO.NEXTVAL
+					 	  , #{reviewTitle}
+					 	  , #{reviewContent}
+					 	  , #{score}
+					 	  , ${tourNo}
+					 	  , ${userNo})
+	</insert>
+	<select id="selectReviewCount"
+			parameterType="hashmap"
+			resultType="_int">
+	SELECT COUNT(*)
+	FROM TOUR_REVIEW
+	WHERE TOUR_NO = #{tno}
+	AND STATUS = 'Y'		
+	</select>
+	<select id="selectReviewList"
+			parameterType="hashmap"
+			resultMap="reviewResultSet">
+	SELECT *
+	  FROM (SELECT ROWNUM RN, TR.*
+			  FROM ((SELECT REVIEW_NO,REVIEW_TITLE,REVIEW_CONTENT,TOUR_REVIEW.CREATE_DATE,SCORE,NICK_NAME
+    				   FROM TOUR_REVIEW
+    				   JOIN MEMBER USING(USER_NO)
+    				  WHERE TOUR_NO = #{tno}
+    					AND TOUR_REVIEW.STATUS = 'Y'
+   				   ORDER BY TOUR_REVIEW.CREATE_DATE DESC) TR))
+	 WHERE RN BETWEEN #{start} AND #{end}
+	</select>
 	<!-- 나현성 - 상세보기 06.17 -->
 	<!-- 관광지 -->
 	<select id="tourSpotDetail"

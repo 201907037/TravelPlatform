@@ -19,6 +19,8 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
+
+    
    
     
     
@@ -34,7 +36,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 8px;
-            height: 80px;
+            height: 100px;
             z-index: 400;
             width: 100%;
             -webkit-transition-duration:0.4s;
@@ -42,7 +44,28 @@
             transition-duration:0.4s;
             transition-timing-function:ease;
             
+            
   
+        }
+
+        .nav{
+            align-items: center;
+            margin-left: 50px;
+        }
+
+        .h1{
+            height: 60px;
+        }
+
+        .h3{
+            height: 40px;
+            font-size: 32px;
+        }
+
+        .h1 > a{
+            align-items: center;
+            font-size: 32px;
+            
         }
 
         .down {
@@ -53,6 +76,22 @@
             transition-duration:0.4s;
             transition-timing-function:ease;
             }
+
+        #profile{
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+            margin-right: 20px;
+            
+        }
+
+        
+
+       
+
+        
+
+        
     </style>
 
 </head>
@@ -78,12 +117,11 @@
         <div class="h3">
             <c:choose>
                 <c:when test="${not empty sessionScope.loginUser}">
-                <div class="profile">
-           <img src="${sessionScope.loginUser.changeName}" alt="Profile Image">
-
-        </div>
-                    <a href="myPage.me" class="yellow underline">My Page</a>
-                    <a href="logout.me" class="yellow underline">Logout</a>
+                
+                    
+                
+                    <a id="ml" href="myPage1.me" class="yellow underline">My Page</a>
+                    <a id="ml" href="logout.me" class="yellow underline">Logout</a>
                 </c:when>
                 <c:otherwise>
                     <a href="loginPage.me" class="yellow underline">Login</a>

@@ -108,6 +108,7 @@ public class MemberServiceImpl implements MemberService{
 	 @Override
 	    public void sendResetPasswordEmail(String userEmail) {
 	        Member member = memberDao.findMemberByEmail(sqlSession, userEmail);
+	        System.out.println(member);
 
 	        if (member != null) {
 	            String tempPassword = generateTemporaryPassword();

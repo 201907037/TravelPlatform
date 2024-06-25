@@ -239,6 +239,17 @@ public class MemberController {
 		
 	} // insertMember 메소드 영역 끝
 	
+	@GetMapping("myPage1.me")
+	public String myPage1() {
+		
+		// System.out.println("마이페이지 요청됨");
+		log.debug("마이페이지 요청됨");
+		
+		// 마이페이지 화면 포워딩
+		// /WEB-INF/views/member/myPage.jsp
+		return "member/myPage1";
+	}
+	
 	@GetMapping("myPage.me")
 	public String myPage() {
 		
@@ -252,12 +263,32 @@ public class MemberController {
 	
 	@PostMapping("update.me")
 	public String updateMember(@ModelAttribute Member m,
+	                           @RequestParam(value="postcode", required=false) String postcode,
+	                           @RequestParam(value="roadAddress", required=false) String roadAddress,
+	                           @RequestParam(value="jibunAddress", required=false) String jibunAddress,
+	                           @RequestParam(value="detailAddress") String detailAddress,
 	                           HttpSession session) {
-	    
+
+	    // 주소 필드 합치기
+	    String fullAddress = roadAddress + " " + detailAddress;
+	    m.setAddress(fullAddress);
+
 	    MultipartFile profileImage = m.getProfileImageFile();
-	    if (profileImage != null && !profileImage.isEmpty()) {
+
+	    // 기존 프로필 사진 경로 가져오기
+	    Member existingMember = (Member) session.getAttribute("loginUser");
+	    String currentProfileImagePath = existingMember.getChangeName();
+
+	    // 프로필 이미지 업로드가 없을 경우 기존의 프로필 사진 유지
+	    if (profileImage == null || profileImage.isEmpty()) {
+	        m.setChangeName(currentProfileImagePath);
+	    } else {
+	        // 새로운 프로필 이미지가 있는 경우, 업로드된 파일을 저장하고 파일 경로를 설정
 	        String fileName = "resources/profileImages/" + saveFile(profileImage, session);
-	        m.setChangeName(fileName);  // 저장된 파일 이름을 m 객체의 적절한 필드에 설정
+	        m.setChangeName(fileName);
+
+	        // 기존의 프로필 사진 파일 삭제 (선택적으로 처리 가능)
+	        // deleteFile(currentProfileImagePath);
 	    }
 
 	    int result = memberService.updateMember(m);
@@ -266,18 +297,18 @@ public class MemberController {
 	        Member updateMem = memberService.loginMember(m);
 	        session.setAttribute("loginUser", updateMem);
 	        session.setAttribute("alertMsg", "성공적으로 회원정보가 변경되었습니다.");
-	        
-	        // 프로필 이미지를 session에 저장
-	        session.setAttribute("profileImageFile", m.getProfileImageFile());
-	        
-	        // System.out.println(m.getProfileImageFile());
-	        
 	    } else {
 	        session.setAttribute("alertMsg", "회원정보 변경에 실패했습니다.");
 	    }
 
 	    return "redirect:/";
 	}
+
+	
+
+
+
+
 
 
 	private String saveFile(MultipartFile file, HttpSession session) {
@@ -462,12 +493,11 @@ public class MemberController {
     }
 	
 	
-	// 비밀번호 재설정 이메일 보내기
-    @PostMapping("/resetPassword.me")
-    @ResponseBody
+	@PostMapping("resetPassword.me")
+    
     public String resetPassword(@RequestParam("email") String userEmail) {
-        memberService.sendResetPasswordEmail(userEmail);
-        return "Reset password email sent successfully!";
+     memberService.sendResetPasswordEmail(userEmail);
+        return "member/showUserPwd";
     }
     
     @PostMapping("/updatePassword.me")

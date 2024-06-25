@@ -2,6 +2,7 @@
 package com.tp.travely.tour.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -154,5 +155,17 @@ public class TourDao {
 
 	public int updateTour(SqlSessionTemplate sqlSession, LeportsData led) {
 		return sqlSession.update("tourMapper.updateLeportsData", led);
+	}
+	// 리뷰 추가 조회 메소드 김동현
+	public int addTourReview(SqlSessionTemplate sqlSession, TourReview tr) {
+		return sqlSession.insert("tourMapper.addTourReview",tr);
+	}
+
+	public int selectReviewCount(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+		return sqlSession.selectOne("tourMapper.selectReviewCount",map);
+	}
+
+	public ArrayList<TourReview> selectReviewList(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+		return (ArrayList)sqlSession.selectList("tourMapper.selectReviewList",map);
 	}
 }

@@ -6,8 +6,7 @@
 		MEMBER 테이블의 조회결과를 
 		Member VO 객체로 옮겨주는 ResultMap	
 	-->
-	<resultMap id="memberResultSet"
-			   type="member">
+	<resultMap id="memberResultSet" type="member">
 		<result column="USER_NO" property="userNo" />	   
 		<result column="USER_ID" property="userId" />
 		<result column="USER_PWD" property="userPwd" />
@@ -76,11 +75,11 @@
     UPDATE MEMBER
        SET NAME = #{name}
          , NICK_NAME = #{nickName}
-         , EMAIL = #{email}
-         , AGE = #{age}
+        
+         
          , PHONE = #{phone}
          , ADDRESS = #{address}
-         , GENDER = #{gender}
+         
          , MODIFY_DATE = SYSDATE
          , CHANGE_NAME = #{changeName} <!-- 프로필 이미지 필드 추가 -->
      WHERE USER_ID = #{userId}
@@ -128,7 +127,7 @@
         WHERE email = #{email}
     </select>
     
-    <select id="findMemberByEmail" parameterType="String" resultType="member">
+     <select id="findMemberByEmail" parameterType="String" resultMap="memberResultSet">
         SELECT * FROM member WHERE email = #{email}
     </select>
 
