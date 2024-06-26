@@ -116,24 +116,15 @@
 	background-color: whitesmoke;
    }
 
-   #mail-Check-Btn{
-	background-color: cadetblue;
-	border: none;
-   }
+  
 
-   #new{
-	background-color: rgb(176, 196, 222);
-   }
+   
 
-   #reset{
-	background-color: salmon;
-	color: #fff;
-   }
+   
 
-   .btn:focus{
-	border: none;
-	box-shadow: none;
-   }
+  
+
+   
 
    
    
@@ -144,7 +135,7 @@
     <!-- 메뉴바 -->
     <jsp:include page="../common/header1.jsp" />
     
-	<div class="content">
+	<div class="content animate__animated animate__fadeInUp">
         <br><br><br><br><br>
         <div class="innerOuter">
 			<h1 id="title">회원가입</h1>
@@ -202,7 +193,7 @@
 					
 						  
 					<div class="input-group-addon">
-						<button type="button" class="btn" id="mail-Check-Btn" disabled>본인인증</button>
+						<button type="button" class="btn btn-outline-danger" id="mail-Check-Btn" disabled>본인인증</button>
 					</div>
 					</div>
 					<br>
@@ -232,7 +223,7 @@
                     
                     <input type="text" class="form-control" id="sample4_postcode" name="address" placeholder="우편번호" disabled><br>
 					
-					<input type="button" id="mail-Check-Btn" class="btn btn-primary" onclick="sample4_execDaumPostcode()" value="우편번호 찾기"><br><br><br>
+					<input type="button" id="mail-Check-Btn" class="btn btn-outline-secondary" onclick="sample4_execDaumPostcode()" value="우편번호 찾기"><br><br><br>
 					
 					<input type="text" class="form-control" id="sample4_roadAddress" name="address" placeholder="도로명주소" size="60" disabled><br><br>
 					<input type="hidden" id="sample4_jibunAddress" placeholder="지번주소"  size="60">
@@ -250,8 +241,8 @@
                  
                 <br>
                 <div class="btns" align="center">
-                    <button type="submit" class="btn" id="new" disabled>회원가입</button>
-                    <button type="reset" class="btn" id="reset">초기화</button>
+                    <button type="submit" class="btn btn-outline-info" id="new" disabled>회원가입</button>
+                    <button type="reset" class="btn btn-outline-danger" id="reset">초기화</button>
                 </div>
                 </div>
             </form>

@@ -54,17 +54,21 @@
         }
 
         .h1{
-            height: 60px;
+            height: 50px;
+            margin-left: 30px;
+           
+
         }
 
         .h3{
-            height: 40px;
+            height: 42px;
             font-size: 32px;
+            
         }
 
         .h1 > a{
             align-items: center;
-            font-size: 32px;
+            font-size: 35px;
             
         }
 
@@ -86,6 +90,12 @@
         }
 
         
+        #ml{
+            margin-right: 30px;
+            
+        }
+
+        
 
        
 
@@ -99,17 +109,17 @@
 
     <header id="header" class="header">
         <div class="h1">
-            <a href="./	" class="yellow underline">travley</a>
+            <a href="./	" class="yellow underline animate__animated animate__fadeIn">travley</a>
         </div>
     
         <ul id="nav" class="nav">
-            <li><a class="yellow underline" href="./">HOME</a></li>
+            
             <!-- Notice 경로 추가(나현성) -->
-            <li><a class="yellow underline" href="noticeList.bo">NOTICE</a></li>
-            <li><a class="yellow underline" href="selectList.bo">COMUNITY</a></li>
-            <li><a class="yellow underline" href="eventList.bo">SERVICE</a></li>
+            <li><a class="yellow underline animate__animated animate__fadeIn" href="noticeList.bo">NOTICE</a></li>
+            <li><a class="yellow underline animate__animated animate__fadeIn" href="selectList.bo">COMUNITY</a></li>
+            <li><a class="yellow underline animate__animated animate__fadeIn" href="eventList.bo">FESTIVAL</a></li>
             <!-- 채팅경로 추가 (최현호) -->
-            <li><a class="yellow underline" href="msgPage.mg">GROUP MESSAGE</a></li>
+            <li><a class="yellow underline animate__animated animate__fadeIn" href="msgPage.mg">GROUP MESSAGE</a></li>
         </ul>
         
 
@@ -124,8 +134,8 @@
                     <a id="ml" href="logout.me" class="yellow underline">Logout</a>
                 </c:when>
                 <c:otherwise>
-                    <a href="loginPage.me" class="yellow underline">Login</a>
-                    <a href="enrollForm.me" class="yellow underline">Sign Up</a>
+                    <a id="ml" href="loginPage.me" class="yellow underline">Login</a>
+                    <a id="ml" href="enrollForm.me" class="yellow underline">Sign Up</a>
                 </c:otherwise>
             </c:choose>
         </div>

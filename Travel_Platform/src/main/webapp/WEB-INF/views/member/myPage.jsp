@@ -120,24 +120,13 @@
 	background-color: whitesmoke;
    }
 
-   #mail-Check-Btn{
-	background-color: cadetblue;
-	border: none;
-   }
+   
 
-   #new{
-	background-color: rgb(176, 196, 222);
-   }
+   
 
-   #reset{
-	background-color: salmon;
-	color: #fff;
-   }
+  
 
-   .btn:focus{
-	border: none;
-	box-shadow: none;
-   }
+   
 
    #dd{
     font-size: 30px;
@@ -147,7 +136,7 @@
    
    </style>
 </head>
-<body >
+<body background="resources/image/pado.gif">
     
     <!-- 메뉴바 -->
     <jsp:include page="../common/header1.jsp" />
@@ -204,7 +193,7 @@
                     
                     <input type="text" class="form-control" id="sample4_postcode" name="postcode" placeholder="우편번호" disabled><br>
 					
-					<input type="button" id="mail-Check-Btn" class="btn btn-primary" onclick="sample4_execDaumPostcode()" value="우편번호 찾기"><br><br><br>
+					<input type="button" id="mail-Check-Btn" class="btn btn-outline-secondary" onclick="sample4_execDaumPostcode()" value="우편번호 찾기"><br><br><br>
 					
 					<input type="text" class="form-control" id="sample4_roadAddress" name="roadAddress" placeholder="도로명주소"  size="60" disabled><br><br>
 					<input type="hidden" id="sample4_jibunAddress" placeholder="지번주소" name="jibunAddress"  size="60">
@@ -218,8 +207,8 @@
                  
                 <br>
                 <div class="btns" align="center">
-                    <button type="submit" class="btn" id="new" >수정하기</button>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteForm">회원탈퇴</button>
+                    <button type="submit" class="btn btn-outline-info" id="new" disabled>수정하기</button>
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteForm">회원탈퇴</button>
                 </div>
                 </div>
             </form>
@@ -245,8 +234,8 @@
                             정말로 탈퇴 하시겠습니까? <br>
                         </div>
                         <br>
-                            <label for="userPwd" class="mr-sm-2">Password : </label>
-                            <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="userPwd" name="userPwd" required> <br>
+                            <label for="userPwd" class="mr-sm-2">비밀번호 : </label>
+                            <input type="password" class="form-control mb-2 mr-sm-2" placeholder="다시 한번 생각해 보세요." id="userPwd" name="userPwd" required> <br>
                             <!-- 회원 탈퇴 시 PK 에 해당하는 회원의 아이디도 같이 넘겨야함 -->
                             <input type="hidden" name="userId" value="${ sessionScope.loginUser.userId }">
                     </div>
@@ -266,267 +255,86 @@
         $("#phone").keyup(function(event){
         	
         	var inputVal = $(this).val();
-        	$(this).val(inputVal.replace(/[^0-9]/gi,''));
+        	$(this).val(inputVal.replace(/[^0-9]/g, ''));
         	
-        })
-        
-        
-        
-
-
-
-
-		$(function() {
-			const $idInput = $("#updateForm input[name=userId]");
-
-			$idInput.keyup(function() {
-				// 입력된 값이 영어와 숫자로만 구성되고, 6글자부터 14글자까지인지를 확인
-				const regEx = /^[A-Za-z0-9]{6,14}$/;
-				 
-				if(regEx.test($idInput.val())) {
-					// ajax로 아이디 중복 확인 요청 보내기
-					$.ajax({
-						url : "idCheck.me",
-						type : "get",
-						data : {
-							checkId : $idInput.val()
-						},
-						success : function(result) {
-							console.log("성공");
-							if(result == "NNNNN") {
-								// 사용 불가능한 아이디일 경우
-								$("#checkResult").show()
-												.css("color", "red")
-												.text("이미 사용중이거나 탈퇴한 회원의 아이디입니다. 다시 입력해주세요.");
-								
-							} else {
-								// 사용 가능한 아이디일 경우
-								$("#checkResult").show().css("color", "green").text("멋진 아이디네요!");
-								
-							}
-						},
-						error : function() {
-							console.log("아이디 중복 체크용 ajax 통신 실패!");
-						}
-					});
-				} else {
-					// 입력된 값이 조건에 맞지 않을 때	
-					
-					// $("#checkResult").hide(); // 메세지 숨기기
-					$("#checkResult").show()
-												.css("color", "red")
-												.text("사용 할 수 없는 아이디입니다.");
-				}
-			});
-		});
-		
-		
-		
-        $(function() {
-            const $nickInput = $("#updateForm input[name=nickName]");
-            const currentNick = $(".currentNick").val();  // 현재 사용자의 닉네임 가져오기
-
-            $nickInput.keyup(function() {
-                const regEx = /^[A-Za-z가-힣0-9]{2,8}$/;
-
-                if (regEx.test($nickInput.val())) {
-                    // 입력한 닉네임이 현재 사용자의 닉네임과 다를 때만 AJAX 요청 보내기
-                    if ($nickInput.val() !== currentNick) {
-                        $.ajax({
-                            url: "nickCheck.me",
-                            type: "get",
-                            data: {
-                                checkNick: $nickInput.val()
-                            },
-                            success: function(result) {
-                                console.log("성공");
-                                if (result === "NNNNN") {
-                                    $("#checkResult1").show()
-                                        .css("color", "red")
-                                        .text("이미 사용중인 닉네임입니다.");
-                                } else {
-                                    $("#checkResult1").show()
-                                        .css("color", "green")
-                                        .text("멋진 닉네임이에요!");
-                                }
-                            },
-                            error: function() {
-                                console.log("닉네임 중복 체크용 ajax 통신 실패!");
-                            }
-                        });
-                    } else {
-                        // 현재 사용자의 닉네임과 입력한 닉네임이 동일한 경우
-                        $("#checkResult1").show()
-                            .css("color", "green")
-                            .text("");
-                    }
-                } else {
-                    // 입력된 값이 조건에 맞지 않을 때    
-                    $("#checkResult1").show()
-                        .css("color", "red")
-                        .text("사용 할 수 없는 닉네임입니다");
-                }
-            });
         });
 
+        // 프로필 사진 미리보기 기능 추가
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
-		
-		
-		
-		
-		
-		
-        	
-        	
-        	//본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
-            function sample4_execDaumPostcode() {
-                new daum.Postcode({
-                    oncomplete: function(data) {
-                        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+                reader.onload = function (e) {
+                    $('#profile-preview').attr('src', e.target.result).show();
+                };
 
-                        // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
-                        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                        var roadAddr = data.roadAddress; // 도로명 주소 변수
-                        var extraRoadAddr = ''; // 참고 항목 변수
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                $('#profile-preview').hide();
+            }
+            enableSubmitButton();
+        }
 
+        // 수정사항이 있을 때 버튼 활성화
+        function enableSubmitButton() {
+            $('#new').prop('disabled', false);
+        }
+
+        // 모든 입력 필드에 변경 이벤트 리스너 추가
+        $('#name, #nickName, #phone, #sample4_detailAddress').on('input', enableSubmitButton);
+
+        // 우편번호 찾기 기능
+        function sample4_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if(data.userSelectedType === 'R'){
                         // 법정동명이 있을 경우 추가한다. (법정리는 제외)
                         // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
                         if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-                            extraRoadAddr += data.bname;
+                            extraAddr += data.bname;
                         }
                         // 건물명이 있고, 공동주택일 경우 추가한다.
                         if(data.buildingName !== '' && data.apartment === 'Y'){
-                           extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
                         }
                         // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-                        if(extraRoadAddr !== ''){
-                            extraRoadAddr = ' (' + extraRoadAddr + ')';
+                        if(extraAddr !== ''){
+                            extraAddr = ' (' + extraAddr + ')';
                         }
-
-                        // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                        document.getElementById('sample4_postcode').value = data.zonecode;
-                        document.getElementById("sample4_roadAddress").value = roadAddr;
-                        document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
-                 
-                        document.getElementById("sample4_engAddress").value = data.addressEnglish;
-                               
-                        // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
-                        if(roadAddr !== ''){
-                            document.getElementById("sample4_extraAddress").value = extraRoadAddr;
-                        } else {
-                            document.getElementById("sample4_extraAddress").value = '';
-                        }
-
-                        var guideTextBox = document.getElementById("guide");
-                        // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
-                        if(data.autoRoadAddress) {
-                            var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
-                            guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
-                            guideTextBox.style.display = 'block';
-
-                        } else if(data.autoJibunAddress) {
-                            var expJibunAddr = data.autoJibunAddress;
-                            guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
-                            guideTextBox.style.display = 'block';
-                        } else {
-                            guideTextBox.innerHTML = '';
-                            guideTextBox.style.display = 'none';
-                        }
+                        // 조합된 참고항목을 해당 필드에 넣는다.
+                        document.getElementById("sample4_extraAddress").value = extraAddr;
+                    
+                    } else {
+                        document.getElementById("sample4_extraAddress").value = '';
                     }
-                }).open();
-            }
-        	
-        	
-        	
-        	
-        	
-        	
-            	
 
-				
-
-            	
-
-				
-            	
-
-            	
-
-
-            	// 전화번호 유효성 검사
-            	const phone= document.getElementById("phone");
-            	const telMessage = document.getElementById("telMessage");
-
-            	phone.addEventListener("input", ()=>{
-
-            	    if(!phone.value.trim().length ==0){
-
-            	        const regEx = /^0(1[01679]|2|[3-6][1-5]|70)\d{3,4}\d{4}$/;
-
-            	        if(regEx.test(phone.value)){
-						$("#telMessage").css("color", "green");
-
-            	            telMessage.innerText="유효한 전화번호입니다.";
-            	            telMessage.classList.add("confirm");
-            	            telMessage.classList.remove("error");
-            	    
-            	            checkObj.phone=true;
-            	            
-            	        }else{
-						$("#telMessage").css("color", "red");
-
-            	            telMessage.innerText="전화번호가 유효하지 않습니다.";
-            	            telMessage.classList.add("error");
-            	            telMessage.classList.remove("confirm");
-            	    
-            	            checkObj.phone=false;
-            	        }
-
-
-            	    }else{
-						$("#telMessage").css("color", "black");
-						
-            	        telMessage.innerText = ""
-            	        telMessage.classList.remove("confirm", "error");
-
-
-            	        checkObj.phone=false;
-            	       
-            	    }
-            	    
-
-
-            	})
-
-            	
-
-            function previewImage(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#profile-preview').attr('src', e.target.result);
-                    $('#profile-preview').css('display', 'block');
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('sample4_postcode').value = data.zonecode;
+                    document.getElementById("sample4_roadAddress").value = addr;
+                    document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
+                    
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById("sample4_detailAddress").focus();
+                    enableSubmitButton();
                 }
-                reader.readAsDataURL(input.files[0]);
-            }
+            }).open();
         }
-        	
-            
-            
-         
-            
-            
-            
+
         </script>
-
-    </div>
-
-	
-
-    
-
-    <!-- 푸터바 -->
-    
-
 </body>
 </html>
