@@ -176,7 +176,7 @@
     <jsp:include page="../common/header1.jsp"></jsp:include>
 
     <br><br><br><br><br><br><br><br><br>
-    <div align="center" style="font-size: 30px; font-weight: bold;">여러분의 소중한 후기를 남겨주세요 ꒒ ০ ⌵ ୧♡</div>
+    <div align="center" style="font-size: 30px; font-weight: bold;">여러분의 소중한 후기를 남겨주세요. ꒒ ০ ⌵ ୧♡</div>
     <br><br><br>
     <form id="search_form" action="search.ad" method="get">
         <div id="search_text">

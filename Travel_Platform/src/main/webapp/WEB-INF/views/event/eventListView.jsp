@@ -153,7 +153,7 @@ body {
 		<div class="container" align="center">
 			<!-- container 영역 -->
 			<br><br>
-			<h2>이벤트 목록</h2>
+			<h2>축제 정보</h2>
 			<br><br>
 			<div id="boardList">
 				<c:forEach var="b" items="${ requestScope.list }">

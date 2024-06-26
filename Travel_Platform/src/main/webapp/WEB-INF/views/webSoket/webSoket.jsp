@@ -73,7 +73,7 @@
             border-top-left-radius : 30px;
             border-top-right-radius : 30px;
             overflow-y: auto; /* 세로 스크롤 추가 */
-            background-image: url(https://search.pstatic.net/common/?src=http%3A%2F%2Fpost.phinf.naver.net%2FMjAyMDA3MTRfOCAg%2FMDAxNTk0NzAyMDg3ODMy.zhsHqXOolG3axCwoGy4vxQvE8d3jzXd7LLQpJBNsUwEg.KyGvipiDYvZGdXF8vn6n69pXaFT3jsd7gyZtUE7xFskg.PNG%2FIhLmKCQTubpq_hjMWOh2ZN8XiQBM.jpg&type=sc960_832);
+            background-image: url(resources/image/chat_background_IMG.jpg);
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px -4px 8px rgba(0, 0, 0, 0.1), 0px -3px 8px rgba(0, 0, 0, 0.1); /* 위, 왼쪽, 오른쪽 그림자 효과 추가 */
         }
 
@@ -94,21 +94,21 @@
         /* 전송버튼 */
         #msg_input_input{
             border-bottom-left-radius : 30px;
-            padding: 10px;
+            padding: 20px;
 		    vertical-align: top; /* 글씨를 위쪽에 정렬 */
 		    text-align: left; /* 글씨를 왼쪽에 정렬 */
 		    font-size: 20px;
 		    resize: none;
-            
+            border: 0; /* 테두리 제거 */
+    		outline: none; /* 포커스 시 테두리 제거 */
         }
         #msg_button_input {
             border-bottom-right-radius : 30px;
             cursor: pointer;
-            background-color: #f0f0f0;
             color: #000;
             transition: background-color 0.3s ease, color 0.3s ease;
             font-weight: bold;
-            font-size: 15px; /* 글씨 크기를 키움 */
+            font-size: 18px; /* 글씨 크기를 키움 */
             transition: background-color 0.3s ease, color 0.3s ease, font-size 0.3s ease; /* 글씨 크기 변화를 애니메이션으로 */
    		
         }
@@ -116,7 +116,7 @@
         #msg_button_input:hover {
             background-color: #ccc;
             color: #000;
-            font-size: 18px; /* 호버 시 글씨 크기 */
+            font-size: 20px; /* 호버 시 글씨 크기 */
         }
         
         
@@ -280,28 +280,34 @@
             cursor: not-allowed;
         }
         
+        
     </style>
 
 </head>
 <body>
 
 <jsp:include page="../common/header1.jsp"></jsp:include>
-    <br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br>
     
-    
+    <div align="center" style="padding-left: 120px; ">
+    <h2>Travley 그룹채팅 방에 오신걸 환영합니다.⭐️</h2>
+    </div>
     <div class="msg-wrap">
         <div id="webSocket">
             <div id="webSocketContent1" style="text-align: center; margin-top: 100px;">
                 <h2>채팅방 가이드 라인 </h2>
                 <br>
-                <h5><b>오픈채팅방 운영 시간 : 오전 9시~오후 8시</b> <br><br>
+                <h5><b>오픈채팅방 운영 시간 : 오전 9시~오후 8시</b> 
+                	<br><br>
+                	• 로그인후 채팅방을 이용하는 방법은 입장버튼 클릭시 채팅방에 입장하실수 있습니다.
+                	<br><br>
                     • 부득이한 경우가 아니라면 이른 아침 시간, 저녁 늦은 시간 대화는 지양해주세요.
                     <br><br>
                     • 참여자들 사이에 자유로이 의견을 나눌 수 있지만, 타인의 의견을 존중하고 예의를 지켜주세요.
                     <br><br>
                     • 논쟁과 토론을 위한 방이 아니므로 자신의 의견을 반복해서 올리는 것은 삼가주세요.   
                     <br><br>
-                    • 동의없이 오픈카톡방의 대화를 캡쳐하여 다른 곳에 가져가는 일은 삼가주세요.
+                    • 동의없이 오픈채팅방의 대화를 캡쳐하여 다른 곳에 가져가는 일은 삼가주세요.
                     <br><br>
                     • 차별 및 혐오에 기반한 발언, 타인을 조롱하거나 모욕하는 언행을 하는 경우에는 관리자에 의해 제지 및 퇴장조치 될 수 있습니다.
                     <br><br> 
@@ -330,10 +336,10 @@
                         <div id="msg_send">
                             
                             <div id="msg_input" style="width: 80%; height: 100%; display: inline-block;">
-                                <textarea id="msg_input_input" type="text" value="" style="width: 100%; height: 100%; box-sizing: border-box; border: 2px solid lightgray;"></textarea>
+                                <textarea id="msg_input_input" type="text" value="" style="width: 100%; height: 100%; box-sizing: border-box; border: 0px solid #87CEEB;"></textarea>
                             </div>
                             <div id="msg_button" style="width: 20%; height: 100%;">
-                                <input id="msg_button_input" type="submit" style="width: 100%; height: 100%; background-color: lightgray; border: 1px solid lightgray;" value="보내기">
+                                <input id="msg_button_input" type="submit" style="width: 100%; height: 100%; background-color: lightgary; border: 0;" value="전송">
                             </div>
                         </div>
                     </div>
