@@ -3,9 +3,13 @@ package com.tp.travely.planner.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
 
@@ -58,9 +62,29 @@ public class PlannerController {
 		
 		 String name = title;
 		 String exp = content; 
-		 String startD = planObj.get("startDate").getAsString().substring(0,10); 
-		 String endD = planObj.get("endDate").getAsString().substring(0,10);
+		 //String startD = planObj.get("startDate").getAsString().substring(0,10); 
+		 //String endD = planObj.get("endDate").getAsString().substring(0,10);
 		 
+		 DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+
+        // 클라이언트에서 받은 ISO 8601 형식의 시간을 파싱하여 ZonedDateTime으로 변환
+        ZonedDateTime startUTC = ZonedDateTime.parse(planObj.get("startDate").getAsString(), isoFormatter);
+        ZonedDateTime endUTC = ZonedDateTime.parse(planObj.get("endDate").getAsString(), isoFormatter);
+
+        // ZonedDateTime을 한국 표준시(KST)로 변환
+        ZonedDateTime startKST = startUTC.withZoneSameInstant(ZoneId.of("Asia/Seoul"));
+        ZonedDateTime endKST = endUTC.withZoneSameInstant(ZoneId.of("Asia/Seoul"));
+
+        // 결과 포맷터 설정 (원하는 출력 형식으로 변환)
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	           
+	     String startD = startKST.format(outputFormatter);
+	     String endD = endKST.format(outputFormatter);
+
+//		 System.out.println(startKST.format(outputFormatter));
+//		 System.out.println(endKST.format(outputFormatter));
+	     
+	     
 		 Planner planner = new Planner();
 		 planner.setRefUno(userNo);
 		 planner.setPlanName(name);

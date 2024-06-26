@@ -123,7 +123,7 @@ ${requestScope.p.planExp }
 	console.log(tstart);
 	console.log(tend);
 	tDate = Math.ceil(Math.abs((tstart.getTime()-tend.getTime())/(1000 * 60 * 60 * 24)));
-	//console.log(tDate);
+	console.log(tDate);
 	function addReply(){
 		let rno=1;
 		let content = $("#content").val();
@@ -197,7 +197,7 @@ ${requestScope.p.planExp }
 		});
 	}
 	$(function(){
-		for(let i =0;i<tDate;i++){
+		for(let i =0;i<=tDate;i++){
 			let option = $("<option>").attr("value",i).html((i+1)+"일차");
 			$("select[name=dateList]").append(option);
 		}
