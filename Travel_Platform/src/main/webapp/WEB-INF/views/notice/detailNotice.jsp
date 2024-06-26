@@ -1,199 +1,123 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<!-- bootStrap4 -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-<script
-	src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-<title>Insert title here</title>
+<title>공지사항 상세 조회</title>
 <style>
-@font-face {
-	font-family: 'WavvePADO-Regular';
-	src:
-		url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/WavvePADO-Regular.woff2')
-		format('woff2');
-	font-weight: normal;
-	font-style: normal;
-}
-
-div {
-	box-sizing: border-box;
-	/* border : 1px solid darkblue; */
-}
-
 html, body {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7f6;
 }
 
-a {
-	text-decoration: none;
-	color: inherit;
+.container {
+    width: 80%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.outer {
-	width: 1200px;
-	margin: auto;
-	margin-top: 50px;
-	font-family: 'WavvePADO-Regular';
+.title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eaeaea;
 }
 
-.outer table {
-	width: 90%;
-	font-size: 15px;
-	text-align: center;
+.info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eaeaea;
+    color: #666;
 }
 
-.outer table td {
-	padding: 10px;
-	/* white-space: nowrap; */
+.info div {
+    flex: 1;
+    text-align: center;
 }
 
-.border-table tr {
-	border-left: none;
-	border-right: none;
+.info div:first-child {
+    text-align: left;
 }
 
-.title-fbt {
-	color: #23443e;
-	margin: auto;
-	text-align: center;
-	padding-top: 20px;
-	padding-bottom: 5px;
-	font-size: 40px;
+.info div:last-child {
+    text-align: right;
 }
 
-.info-table {
-	font-size: 25px;
-	height: 29px;
-	margin: auto;
+.content {
+    font-size: 18px;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 20px;
 }
 
-.info-table td, .info-table tr {
-	border-top: 1px solid #23443e;
-	border-bottom: 1px solid #23443e;
+.content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.info-table td:nth-child(odd) {
-	background-color: #23443e;
-	color: white;
+.button-container {
+    text-align: center;
 }
 
-.info-table td:nth-child(even) {
-	background-color: lightgray;
+.button-container a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
-/* 내용 */
-.contents {
-	text-align: center;
-	margin-top: 15px;
-	color: #23443e;
+
+.button-container a:hover {
+    background-color: #4cae4c;
 }
-
-.outer p#content {
-	width: 100%;
-	height: 230px;
-	resize: none;
-	font-size: 30px;
-	box-sizing: border-box;
-	border: none;
-	text-align: left;
-	padding: 10px;
-}
-                .fbtns>a {
-                    background-color: #23443e;
-                    color: white;
-                    text-decoration: none;
-                    border-radius: 3px;
-                    padding: 10px;
-                    margin-left: 20px;
-                }
-
-                .fbtns>a:hover {
-                    color: crimson;
-                }
-
-                .fbtns>button {
-                    background-color: #23443e;
-                    color: white;
-                    text-decoration: none;
-                    border-radius: 3px;
-                    padding: 10px;
-                    border: none;
-                }
-
-                .fbtns>button:hover {
-                    color: crimson;
-                }
 </style>
 </head>
 <body>
 
-	<div>
+    <jsp:include page="../common/header1.jsp" />
+    <br><br><br><br><br>
+    <div class="container">
+        <div class="title">${requestScope.n.noticeTitle}</div>
+        <div class="info">
+            <div>작성자: 관리자</div>
+            <div>작성일: ${ requestScope.n.createDate }</div>
+        </div>
+        <br><br>
+        <div class="content" align="center">
+            <c:if test="${not empty requestScope.n.changeName}">
+            	<div style="width: 1000px;"> 
+                	<img src="${requestScope.n.changeName}" alt="공지사항 이미지" style="width: 100%; height: 100%" >
+                </div>
+            </c:if>
+            <br><br>
+            <h3>${requestScope.n.noticeContent}</h3>
+        </div>
+        <br><br>
+        <div class="button-container">
+            <a href="javascript:history.back()">뒤로가기</a>
+        </div>
+    </div>
 
-		<jsp:include page="../common/header1.jsp" />
-		<br>
-		<br>
-		<br>
-		<div class="outer" align="center">
-			<table class="boardTitle border-table">
-				<tr>
-					<td>
-						<div align="center" class="title-fbt">${ requestScope.n.noticeTitle }
-						</div>
-					</td>
-				</tr>
-			</table>
-
-			<table class="info-table">
-				<tr>
-					<td width="10%">작성자</td>
-					<td>관리자</td>
-
-
-					<td width="10%">작성일</td>
-					<td width="30%">${ requestScope.n.createDate }</td>
-
-
-					<td width="10%">조회수</td>
-					<td>0</td>
-				</tr>
-			</table>
-
-			<table class="contents border-table">
-				<tr style="border: none;">
-					<td>				
-						<c:if test="${ not empty requestScope.n.changeName }">
-							<div align="center">
-							<img src="${requestScope.n.changeName }" width="300x" height="300px">
-							</div>
-							</c:if>
-							<div>
-						</div>	
-						<p id="content" name="content">
-							${ requestScope.n.noticeContent }
-						</p>
-					</td>
-				</tr>
-			</table>
-			<br>
-
-		</div>
-			<div align="center" class="fbtns" id="btns-fb-btn">
-
-				<a href="javascript:history.back()" class="btn"> 뒤로가기 </a>
-			</div>
-
-	</div>
+    <jsp:include page="../common/footer1.jsp" />
 
 </body>
 </html>
