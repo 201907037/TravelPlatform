@@ -71,4 +71,12 @@ public class PlannerDao {
 		return sqlSession.selectOne("plannerMapper.selectReplyCount",map);
 	}
 
+	public int getMyPlannerCount(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+		return sqlSession.selectOne("plannerMapper.getMyPlannerCount",map);
+	}
+
+	public ArrayList<Planner> getMyPlannerList(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+		return (ArrayList)sqlSession.selectList("plannerMapper.getMyPlannerList",map);
+	}
+
 }

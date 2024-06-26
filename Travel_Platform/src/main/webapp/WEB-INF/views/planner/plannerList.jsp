@@ -193,7 +193,7 @@ let sortType = $("select[name=sort-select] option:checked").val();
 			<c:remove var="msg" scope="session"/>
 		}
 		getPlanList();
-		console.log($("select[name=sort-select] option:checked").val());
+		//console.log($("select[name=sort-select] option:checked").val());
 		$("#region-select-button").click(function(){
 			keyword = $("#region-select").val();
 			

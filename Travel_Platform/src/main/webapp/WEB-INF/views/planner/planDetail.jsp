@@ -75,7 +75,7 @@ ${requestScope.p.planExp }
                     <tr>
                     	<!-- 댓글 작성은 로그인한 회원만 가능해야함 -->
                     	<c:choose>
-                    		<c:when test="${not empty sessionScope.loginUser }">
+                    		<c:when test="${empty sessionScope.loginUser }">
                     			<!-- 로그인 전 -->
                     			<th colspan="2">
 		                            <textarea class="form-control" name="" id="content" cols="55" rows="2" style="resize:none; width:100%;" readonly>로그인한 사용자만 이용 가능한 서비스입니다. 로그인 후 이용해주세요.</textarea>

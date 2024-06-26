@@ -43,13 +43,14 @@ public class PlannerController {
 	
 	@PostMapping(value="savePlanner.pl")
 	public String savePlanner(MultipartFile file,String plan, String title,String content,String ckOpen,HttpSession session) {
-		System.out.println(plan);
-		System.out.println(file);
-		System.out.println(title);
-		System.out.println(content);
-		System.out.println(ckOpen);
-		//int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-		int userNo=1;
+//		System.out.println(plan);
+//		System.out.println(file);
+//		System.out.println(title);
+//		System.out.println(content);
+//		System.out.println(ckOpen);
+		System.out.println(session.getAttribute("loginUser"));
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		//int userNo=1;
 		
 		 JsonObject totalObj = JsonParser.parseString(plan).getAsJsonObject();
 		 JsonObject planObj = totalObj.getAsJsonObject("plan"); 
@@ -211,9 +212,9 @@ public class PlannerController {
 	}
 	@PostMapping(value="addReply.pl")
 	@ResponseBody
-	public String addReply(String content,int pno) {
-		//int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-		int userNo=1;
+	public String addReply(String content,int pno,HttpSession session) {
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		//int userNo=1;
 		PlanReply pr = new PlanReply();
 		pr.setRefPno(pno);
 		pr.setRefUno(userNo);
@@ -239,6 +240,31 @@ public class PlannerController {
 		HashMap<String,Object> rsMap = new HashMap<String, Object>();
 		rsMap.put("list", list);
 		rsMap.put("pinfo",pinfo);
+		return new Gson().toJson(rsMap);
+	}
+	
+	@GetMapping(value="getMyPlanList.pl", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getMyPlanList(int pno,HttpSession session) {
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo(); 
+		System.out.println(userNo);
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("userNo", userNo+"");
+		int listCount = plannerService.getMyPlannerCount(map);
+		System.out.println(listCount);
+		PageInfo pinfo = getPagInfo(listCount, pno,10,9);
+		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
+		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
+		map.put("start", (start+""));
+		map.put("end",(end+""));
+		System.out.println(pinfo);
+		ArrayList<Planner> list = plannerService.getMyPlannerList(map);
+		for(Planner p : list) {
+			System.out.println(p);
+		}
+		HashMap<String, Object> rsMap = new HashMap<String, Object>();
+		rsMap.put("list", list);
+		rsMap.put("pinfo", pinfo);
 		return new Gson().toJson(rsMap);
 	}
 	

@@ -79,6 +79,14 @@ public class PlannerServiceImpl implements PlannerService{
 	public int selectReplyCount(HashMap<String, String> map) {
 		return plannerDao.selectReplyCount(sqlSession,map);
 	}
+	@Override
+	public int getMyPlannerCount(HashMap<String, String> map) {
+		return plannerDao.getMyPlannerCount(sqlSession,map);
+	}
+	@Override
+	public ArrayList<Planner> getMyPlannerList(HashMap<String, String> map) {
+		return plannerDao.getMyPlannerList(sqlSession,map);
+	}
 	
 	
 	

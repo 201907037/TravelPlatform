@@ -7,10 +7,51 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
+ /* css 변수 */
+  :root {
+    --nav--width: 92px;
+
+    /* Colores */
+    --first-color: #0c5df4;
+    --bg-color: #12192c;
+    --sub-color: #b6cefc;
+    --white-color: #fff;
+
+    /* Fuente y tipografia */
+    --body-font: 'Poppins', sans-serif;
+    --normal-font-size: 1rem;
+    --small-font-size: .875rem;
+
+    /* z index */
+    --z-fixed: 100;
+	}
+	 
     *{
         box-sizing: border-box;
     }
+    body {
+    position: relative;
+    margin: 0;
+    padding: 2rem 0 0 16rem;
+    font-family: var(--body-font);
+    font-size: var(--normal-font-size);
+    transition: .5s;
     
+	}
+	
+	h1 {
+	    margin: 0;
+	}
+	
+	ul {
+	    margin: 0;
+	    padding: 0;
+	    list-style: none;
+	}
+	
+	a {
+	    text-decoration: none;
+	}
    
     .l-navbar {
     position: fixed;
@@ -39,6 +80,9 @@
 		height : 100%;
 		
 	}
+	.body-pd {
+	    padding: 2rem 0 0 16rem;
+	}
 	.nav__brand {
 	    display: grid;
 	    grid-template-columns: max-content max-content;
@@ -47,11 +91,6 @@
 	    margin-bottom: 2rem;
 	}
 	
-	.nav__toggle {
-	    font-size: 1.25rem;
-	    padding: .75rem;
-	    cursor: pointer;
-	}
 	
 	.nav__logo {
 	    color: var(--white-color);
@@ -70,19 +109,20 @@
 	    transition: .3s;
 	    cursor: pointer;
 	}
-	
 	.nav__link:hover {
 	    background-color: cyan;
 	}
-	
-	.nav__icon {
-	    font-size: 1.25rem;
-	}
-	
 	.nav_name {
 	    font-size: var(--small-font-size);
 	}
-	
+	.search-div{
+        width : 90%;
+        margin : auto;
+        border : 1px solid black;
+        border-radius: 20px;
+        vertical-align: middle;
+        background-color : white;
+    }
 	.left-bar,.leftleft-bar{
         position : absolute;
         width : 500px;
@@ -117,104 +157,9 @@
         border: 1px solid black;
         float : right;
     }
-	
-	
-	.expander {
-	    width: calc(var(--nav--width) + 9.25rem); 
-	}
-	
-	
-	.body-pd {
-	    padding: 2rem 0 0 16rem;
-	}
-	
 	.active {
 	    background-color: var(--first-color);
 	}
-	
-	
-	.collapse {
-	    grid-template-columns: 20px max-content 1fr;
-	}
-	
-	.collapse__link {
-	    justify-self: flex-end;
-	    transition: .5;
-	}
-	
-	.collapse__menu {
-	    display: none;
-	    padding: .75rem 2.25rem;
-	}
-	
-	.collapse__sublink {
-	    color: var(--sub-color);
-	    font-size: var(--small-font-size);
-	}
-	
-	.collapse__sublink:hover {
-	    color: var(--white-color);
-	}
-	
-	
-	.showCollapse {
-	    display: block;
-	}
-	
-	
-	.rotate {
-	    transform: rotate(180deg);
-	    transition: .5s;
-	}
-	body {
-    position: relative;
-    margin: 0;
-    
-    padding: 2rem 0 0 16rem;
-    font-family: var(--body-font);
-    font-size: var(--normal-font-size);
-    transition: .5s;
-    
-	}
-	
-	h1 {
-	    margin: 0;
-	}
-	
-	ul {
-	    margin: 0;
-	    padding: 0;
-	    list-style: none;
-	}
-	
-	a {
-	    text-decoration: none;
-	}
-	:root {
-    --nav--width: 92px;
-
-    /* Colores */
-    --first-color: #0c5df4;
-    --bg-color: #12192c;
-    --sub-color: #b6cefc;
-    --white-color: #fff;
-
-    /* Fuente y tipografia */
-    --body-font: 'Poppins', sans-serif;
-    --normal-font-size: 1rem;
-    --small-font-size: .875rem;
-
-    /* z index */
-    --z-fixed: 100;
-	}
-	 .search-div{
-        width : 90%;
-        margin : auto;
-        border : 1px solid black;
-        border-radius: 20px;
-        vertical-align: middle;
-        background-color : white;
-    }
     .search-div>table{
         width : 100%;
     }
@@ -284,13 +229,7 @@
     	padding-bottm : 0px;
     	margin : auto;
     }
-	.material-symbols-outlined {
-	  font-variation-settings:
-	  'FILL' 0,
-	  'wght' 5000,
-	  'GRAD' 0,
-	  'opsz' 48
-	}
+	
 	.d_box>div{
 		text-align : center;
 		border : 1px solid green;
@@ -377,6 +316,7 @@
       	border : 1px solid black;
       	border-radius : 15px;
       }
+      /* 별점 css */
       .star {
 	    position: relative;
 	    font-size: 2rem;
@@ -400,12 +340,7 @@
 	    overflow: hidden;
 	    pointer-events: none;
 	  }
-	  #detailModal-box{
-	  	
-	  }
-	  #detail{
-	  	
-	  }
+	  /* 여행지 세부정보 모달 창 사진 스왑용 버튼 css*/
 	  #right-img {
 		float : right;
 		margin-top : 90px;
@@ -415,8 +350,8 @@
     	color : black;
     	text-aling : center;
     	border : 0px;
-	}
-	#left-img{
+		}
+		#left-img{
 		float : left;
 		margin-top : 90px;
 		margin-left : 180px;
@@ -492,11 +427,13 @@
 							edit_calendar
 				</span>
 	    	</button>
+	    	
 	    	<button class="btn" id="save-plan">
 	    		<span class="material-symbols-outlined" >
 				save
 				</span>
 	    	</button>
+	    	
 	    </div>
 	</div>
 	
@@ -667,7 +604,7 @@
         <div id="tour-review" style="display : none;">
         				별점
       		<c:choose>
-               	<c:when test="${not empty sessionScope.loginUser }">
+               	<c:when test="${empty sessionScope.loginUser }">
                	 	<span class="star">
 					  ★★★★★
 					  <span>★★★★★</span>
@@ -687,7 +624,7 @@
                 <thead>
                 	<tr>
                 	 <c:choose>
-                	 	<c:when test="${not empty sessionScope.loginUser }">
+                	 	<c:when test="${empty sessionScope.loginUser }">
                 	 	<th colspan="3">
 	                	 제목  <input type="text" name="titleR" class="form-control"  style="width : 89%;" placeholder="제목을 입력하세요" readonly>
 	                	</th>
@@ -701,7 +638,7 @@
                 	</tr>
                     <tr>
                     	<c:choose>
-                    		<c:when test="${not empty sessionScope.loginUser }">
+                    		<c:when test="${empty sessionScope.loginUser }">
                     			<!-- 로그인 전 -->
                     			<th colspan="2">
 		                            <textarea class="form-control" name="" id="contentR" cols="55" rows="3" style="resize:none; width:100%;" readonly>로그인한 사용자만 이용 가능한 서비스입니다. 로그인 후 이용해주세요.</textarea>
@@ -1552,6 +1489,7 @@ let typeFlag=0;
 				}
 			});
 		});
+		console.log(plan);
 		$("#button_box").on("click","button[class^=btn_no]",function(){
 			$(".el_box").html("");
 			$("#button_box").html("");
@@ -1910,7 +1848,14 @@ let typeFlag=0;
 			}
 		});
 		$("#save-plan").click(function(){
-			$("#planner-add-modal").modal("show");
+			let user = '${sessionScope.loginUser}';
+			//console.log(user);
+			if(user==""){
+				alert("로그인 후 저장 가능합니다.");
+			}else{
+				$("#planner-add-modal").modal("show");
+			}
+			
 
 		});
 		$("input[name=file]").css("display","none");

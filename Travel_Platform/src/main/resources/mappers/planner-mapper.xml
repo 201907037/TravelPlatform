@@ -217,4 +217,25 @@
 				ORDER BY PR.CREATE_DATE DESC) PP)
 	 WHERE RN BETWEEN ${start} AND ${end}
 	</select>
+	<select id="getMyPlannerCount"
+			parameterType="hashmap"
+			resultType="_int">
+	SELECT COUNT(*)
+	FROM PLANNER
+	WHERE STATUS='Y'
+	AND REF_UNO = #{userNo}		
+	</select>
+	<select id="getMyPlannerList"
+			parameterType="hashmap"
+			resultMap="plannerResultSet">
+	SELECT *
+	FROM (SELECT ROWNUM RN, PP.*
+			FROM(SELECT PL.*,NICK_NAME
+					FROM PLANNER PL
+					JOIN MEMBER ON(PL.REF_UNO = USER_NO)
+					WHERE PL.STATUS='Y'
+					AND REF_UNO = #{userNo}
+					ORDER BY PL.CREATE_DATE DESC) PP)
+	WHERE RN BETWEEN #{start} AND #{end}
+	</select>
 </mapper>

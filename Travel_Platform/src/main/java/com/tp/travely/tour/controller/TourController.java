@@ -356,8 +356,8 @@ public class TourController {
 //		System.out.println(score);
 //		System.out.println(tno);
 //		System.out.println(contentId);
-//		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-		int userNo = 1;
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		//int userNo = 1;
 		TourReview tr = new TourReview();
 		tr.setUserNo(userNo);
 		tr.setReviewTitle(title);

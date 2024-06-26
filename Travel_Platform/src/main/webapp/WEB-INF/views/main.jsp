@@ -439,7 +439,12 @@
         clickable: true,
       },
     });
-        
+  // 플래너 작성 페이지로 이동
+  $(function(){
+	  $("#startButton2").click(function(){
+			location.href="goPlanner.pl";
+	   });
+  });
         
 
   // 버튼 누르면 검색창 나오고 배경바뀜

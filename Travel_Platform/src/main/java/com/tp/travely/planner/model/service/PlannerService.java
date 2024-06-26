@@ -23,4 +23,6 @@ public interface PlannerService {
 	int addReply(PlanReply pr);
 	ArrayList<PlanReply> getReply(HashMap<String, String> map);
 	int selectReplyCount(HashMap<String, String> map);
+	int getMyPlannerCount(HashMap<String, String> map);
+	ArrayList<Planner> getMyPlannerList(HashMap<String, String> map);
 }
