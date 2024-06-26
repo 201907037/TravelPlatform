@@ -627,12 +627,6 @@ public class TourController {
 	                    tourImg.setRefTno(tour.getTourNo());
 	                    tourImg.setTimgNo(existingTourImgs.get(i).getTimgNo()); // 기존 TimgNo 유지
 
-	                    // 기존 파일 삭제
-//	                    String realPath = session.getServletContext().getRealPath(existingTourImgs.get(i).getChangeNo());
-//	                    if (new File(realPath).exists()) {
-//	                        new File(realPath).delete();
-//	                    }
-
 	                    updatedTourImgs.add(tourImg);
 	                }
 	            }

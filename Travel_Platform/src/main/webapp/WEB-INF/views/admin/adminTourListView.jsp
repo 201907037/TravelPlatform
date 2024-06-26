@@ -24,173 +24,173 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 <style>
-/* 댓글용 css */
-        .comment-section {
-            width: 800px;
-            margin: auto;
-            padding: 20px;
-        }
-        .comment {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            position: relative; /* 댓글 내의 버튼 위치를 조정하기 위해 추가 */
-        }
-        
-        .comment.active {
-            border: 2px solid rgb(102, 102, 102);
-            border-radius : 10px;
-            padding: 5px;
-        }
+	/* 댓글용 css */
+    .comment-section {
+        width: 800px;
+        margin: auto;
+        padding: 20px;
+    }
+    .comment {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        position: relative; /* 댓글 내의 버튼 위치를 조정하기 위해 추가 */
+    }
+    
+    .comment.active {
+        border: 2px solid rgb(102, 102, 102);
+        border-radius : 10px;
+        padding: 5px;
+    }
 
-        .edit-delete-buttons {
-            display: none;
-            position: absolute;
-            right: 10px;
-            top: 10px;
-        }
-        
-        /* 댓글 수정, 삭제버튼용 */
-        .edit-button,
-		.delete-button {
-		    border: 1px solid #ddd;
-		    background-color: #f0f0f0;
-		    border-radius: 10px;
-		    font-size: 16px;
-		    font-weight: bold;
-		    padding: 8px 14px;
-		    color: #333;
-		    cursor: pointer;
-		    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
-		    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-		}
-		
-		.edit-button:hover,
-		.delete-button:hover {
-		    background-color: #007bff;
-		    color: #fff;
-		    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-		}
-		
-		.edit-button:active,
-		.delete-button:active {
-		    background-color: #0056b3;
-		    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-		}
-		
-		.edit-button:focus,
-		.delete-button:focus {
-		    outline: none;
-		    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
-		}
-		/* 댓글 버튼 영역 끝*/
-		
+    .edit-delete-buttons {
+        display: none;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+       
+	/* 댓글 수정, 삭제버튼용 */
+    .edit-button,
+	.delete-button {
+	    border: 1px solid #ddd;
+	    background-color: #f0f0f0;
+	    border-radius: 10px;
+	    font-size: 16px;
+	    font-weight: bold;
+	    padding: 8px 14px;
+	    color: #333;
+	    cursor: pointer;
+	    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+	    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	}
+	
+	.edit-button:hover,
+	.delete-button:hover {
+	    background-color: #007bff;
+	    color: #fff;
+	    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+	}
+	
+	.edit-button:active,
+	.delete-button:active {
+	    background-color: #0056b3;
+	    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	}
+	
+	.edit-button:focus,
+	.delete-button:focus {
+	    outline: none;
+	    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+	}
+	/* 댓글 버튼 영역 끝*/
+	
 
-        .comment.active .edit-delete-buttons {
-            display: inline-block;
-        }
+    .comment.active .edit-delete-buttons {
+        display: inline-block;
+    }
+    
+    
+    .comment img.profile {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-right: 10px;
+        transition: width 0.3s ease, height 0.3s ease; /* 프로필 사진 크기 전환 효과 추가 */
+    }
+    .comment.active img.profile {
+        width: 40px;
+        height: 40px;
+    }
+    .comment-content {
+        flex: 1;
+    }
+    .comment-header {
+        display: flex;
+        align-items: center;
+    }
+    .comment-header span.username {
+        font-weight: bold;
+        margin-right: 5px;
+        transition: font-size 0.3s ease; /* 글씨 크기 전환 효과 추가 */
+    }
+    .comment-header span.time {
+        color: #b0b0b0;
+        font-size: 12px;
+    }
+    .comment-text {
+        margin: 5px 0;
+    }
+    
+    .add-comment {
+        display: none;
+        align-items: center;
+        margin-top: 20px;
         
+    }
+    .add-comment img.profile {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .add-comment textarea {
+        flex: 1;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        idth: 300px; /* 고정 가로 크기 */
+        min-height: 40px; /* 최소 높이 */
+        border: 2px solid #9b9b9b;
+        overflow: hidden; /* 스크롤 숨기기 */
+        resize: none; /* 크기 조절 비활성화 */
+        white-space: pre-wrap; /* 줄 바꿈 유지 */
+        word-wrap: break-word; /* 길이가 긴 단어를 줄 바꿈 */
+        font-size: 15px;
+        font-weight: bold;
+    }
+       
+    .add-comment button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 20px;
+        background-color: #0095f6;
+        color: #fff;
+        margin-left: 10px;
+        cursor: pointer;
+        line-height: 10px;
+        width: 60px;
+        height: 60px;
+    }
+    .add-comment button:disabled {
+        background-color: #818181;
+        cursor: not-allowed;
         
-        .comment img.profile {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            margin-right: 10px;
-            transition: width 0.3s ease, height 0.3s ease; /* 프로필 사진 크기 전환 효과 추가 */
-        }
-        .comment.active img.profile {
-            width: 40px;
-            height: 40px;
-        }
-        .comment-content {
-            flex: 1;
-        }
-        .comment-header {
-            display: flex;
-            align-items: center;
-        }
-        .comment-header span.username {
-            font-weight: bold;
-            margin-right: 5px;
-            transition: font-size 0.3s ease; /* 글씨 크기 전환 효과 추가 */
-        }
-        .comment-header span.time {
-            color: #b0b0b0;
-            font-size: 12px;
-        }
-        .comment-text {
-            margin: 5px 0;
-        }
-        
-        .add-comment {
-            display: none;
-            align-items: center;
-            margin-top: 20px;
-            
-        }
-        .add-comment img.profile {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .add-comment textarea {
-            flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            outline: none;
-            idth: 300px; /* 고정 가로 크기 */
-            min-height: 40px; /* 최소 높이 */
-            border: 2px solid #9b9b9b;
-            overflow: hidden; /* 스크롤 숨기기 */
-            resize: none; /* 크기 조절 비활성화 */
-            white-space: pre-wrap; /* 줄 바꿈 유지 */
-            word-wrap: break-word; /* 길이가 긴 단어를 줄 바꿈 */
-            font-size: 15px;
-            font-weight: bold;
-        }
-        
-        .add-comment button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 20px;
-            background-color: #0095f6;
-            color: #fff;
-            margin-left: 10px;
-            cursor: pointer;
-            line-height: 10px;
-            width: 60px;
-            height: 60px;
-        }
-        .add-comment button:disabled {
-            background-color: #818181;
-            cursor: not-allowed;
-            
-        }
-        
-        .add-comment textarea::placeholder {
-		    color: lightgray; /* 원하는 색상으로 변경 */
-		    opacity: 1; /* 플레이스홀더 투명도 설정 */
-		}
-		
-		
-		.reply-icon .reply {
-			font-size:33px; 
-			display: inline-block; 
-			transform: scaleX(0.8); /* 가로 길이 조정 (1.5배 확대) */
-			text-shadow: 
-                -1px -1px 0 #000,  
-                 1px -1px 0 #000,
-                -1px  1px 0 #000,
-                 1px  1px 0 #000; /* 테두리 효과를 위한 그림자 */
-            color: white;
-		}
+    }
+       
+	.add-comment textarea::placeholder {
+		color: lightgray; /* 원하는 색상으로 변경 */
+	    opacity: 1; /* 플레이스홀더 투명도 설정 */
+	}
+	
+	
+	.reply-icon .reply {
+		font-size:33px; 
+		display: inline-block; 
+		transform: scaleX(0.8); /* 가로 길이 조정 (1.5배 확대) */
+		text-shadow: 
+               -1px -1px 0 #000,  
+                1px -1px 0 #000,
+               -1px  1px 0 #000,
+                1px  1px 0 #000; /* 테두리 효과를 위한 그림자 */
+           color: white;
+	}
 
-        .reply-icon:hover {
-            font-weight: bolder;
-            cursor: pointer;
-        }
+    .reply-icon:hover {
+        font-weight: bolder;
+        cursor: pointer;
+    }
         
 	.tour-table>tbody>tr { cursor: pointer; }
 	
@@ -247,7 +247,6 @@
                 <tbody>
 	                <c:forEach var="t" items="${requestScope.tList}">
 	                    <tr>
-							
 	                        <th>
 	                		    <input type="hidden" name="tourNo" value="${ t.tourNo }">
 		                    	<input type="hidden" name="tourType" value="${ t.tourType }">
@@ -276,10 +275,6 @@
 	                        <th>${t.address}</th>
 	                        <th>${t.addDate}</th>
 	                    </tr>
-	                    
-	                    
-
-						
 	                </c:forEach>
                 </tbody>
             </table>
@@ -296,6 +291,15 @@
 						        		</button>
 						      		</div>
 						      		<div class="modal-body">
+						      			<div class="tour-info"></div>
+						      			<hr>
+							      		<div class="comment-section" style="margin-top : -20px; margin-left : -10px; margin-bottom : -30px">
+							        		<div id="rcount" style="font-size:15px; font-weight: bold;"></div>
+								        	<br>
+								        	<div id="commentReply" style="margin-top : -15px;">
+								                <!-- 댓글이 들어갈 자리 -->
+								            </div>
+								        </div>
 						      		</div>
 						      		<div class="modal-footer">
 						      			<form id="modifyTourForm" action="adminTourUpdateForm.ad" method="post">
@@ -309,16 +313,6 @@
 					      					<button type="submit" class="btn btn-danger" id="tourDelete">삭제</button>
 					      				</form>
 						      		</div>
-						      				      		        <div class="comment-section">
-						        	<div id="rcount" style="padding-left: 10px; font-size:15px; font-weight: bold;"></div>
-							        	<br>
-							        	<div id="commentReply">
-							            	
-							                <!-- 댓글이 들어갈 자리 -->
-							             
-							         
-							            </div>
-							        </div>
 						    	</div>
 						  	</div>
 						</div>
@@ -360,7 +354,7 @@
 		      			success : function(z){
 		      				console.log("ajax성공");
 		      				
-		      				let b = $(".modal-body");
+		      				let b = $(".modal-body>.tour-info");
 		      				let result = "";
 		      				result += "<div id='tour-thumbImg'>"
 		      							+ "<img src="+z["list"]["thumbImg"]+" alt='Thumbnail'>"
@@ -456,10 +450,6 @@
 		    	});
 		  	});
 			
-			
-			
-
-////////////////////////////////////////////
 	     	// 해당 게시글에 딸린 댓글리스트 조회용 function
         	function selectReplyList(tourNo) {
         		
@@ -534,16 +524,7 @@
         			}
         			
         		});
-        	}
-			
-			
-			
-			
-			////////////
-			
-			
-			
-			
+        	}	
 		</script>
 		
         <footer class="py-4 bg-light mt-auto">
