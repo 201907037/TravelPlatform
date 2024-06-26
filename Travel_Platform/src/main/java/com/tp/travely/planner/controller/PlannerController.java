@@ -2,6 +2,7 @@ package com.tp.travely.planner.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -150,7 +151,15 @@ public class PlannerController {
 		return "planner/plannerList";
 	}
 	@GetMapping("goPlanner.pl")
-	public String goPlanner() {
+	public String goPlanner() throws ParseException {
+		String start = "2024-06-28 00:00:00";
+		String end = "2024-06-29 23:59:59";
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date sd = formatter.parse(start);
+		Date ed = formatter.parse(end);
+		System.out.println(sd);
+		System.out.println(ed);
+		//System.out.println(ed-sd);
 		return "/planner/plannerView";
 	}
 	

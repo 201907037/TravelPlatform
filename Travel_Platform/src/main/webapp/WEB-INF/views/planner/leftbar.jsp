@@ -1314,6 +1314,12 @@ let typeFlag=0;
 	}
 	
 	$(function(){
+		//let date = new Date("2024-06-28");
+		//date.setHours(23);
+		//date.setMinutes(59);
+		//date.setSeconds(56);
+		//console.log(date);
+		
 		$("#left-img").click(function(){
 			
 			if(imgidx!=0){
