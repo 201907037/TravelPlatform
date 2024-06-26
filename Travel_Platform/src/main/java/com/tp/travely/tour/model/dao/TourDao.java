@@ -129,9 +129,9 @@ public class TourDao {
 	}
 
 	// 유진 - 관리자 여행지 수정 DAO (2024.06.24)
-	public int updateTourImg(SqlSessionTemplate sqlSession, TourImg tourImg) {
-		return sqlSession.update("tourMapper.updateTourImg", tourImg);
-	}
+    public int deleteTourImgsByTourNo(SqlSessionTemplate sqlSession, int tourNo) {
+        return sqlSession.delete("tourMapper.deleteTourImgsByTourNo", tourNo);
+    }
 	
 	public int insertNewTourImg(SqlSessionTemplate sqlSession, TourImg tourImg) {
 		return sqlSession.update("tourMapper.insertNewTourImg", tourImg);
@@ -141,19 +141,19 @@ public class TourDao {
 		return sqlSession.update("tourMapper.updateTour", tour);
 	}
 	
-	public int updateTour(SqlSessionTemplate sqlSession, TourSpotData tsd) {
+	public int updateTourSpotData(SqlSessionTemplate sqlSession, TourSpotData tsd) {
 		return sqlSession.update("tourMapper.updateTourSpotData", tsd);
 	}
 
-	public int updateTour(SqlSessionTemplate sqlSession, LodgingData lod) {
+	public int updateLodgingData(SqlSessionTemplate sqlSession, LodgingData lod) {
 		return sqlSession.update("tourMapper.updateLodgingData", lod);
 	}
 
-	public int updateTour(SqlSessionTemplate sqlSession, RestaurantData rd) {
+	public int updateRestaurantData(SqlSessionTemplate sqlSession, RestaurantData rd) {
 		return sqlSession.update("tourMapper.updateRestaurantData", rd);
 	}
 
-	public int updateTour(SqlSessionTemplate sqlSession, LeportsData led) {
+	public int updateLeportsData(SqlSessionTemplate sqlSession, LeportsData led) {
 		return sqlSession.update("tourMapper.updateLeportsData", led);
 	}
 	// 리뷰 추가 조회 메소드 김동현

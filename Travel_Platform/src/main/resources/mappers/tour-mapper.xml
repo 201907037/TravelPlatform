@@ -623,20 +623,13 @@
 		 WHERE REF_TNO = #{refTno}
 	</update>
 	
- 	<update id="updateTourImg" 
-			parameterType="tourImg">
-		UPDATE TOUR_IMG 
-		   SET CHANGE_NO = #{changeNo} 
-		 WHERE REF_TNO = #{refTno}
-	</update>
+	<delete id="deleteTourImgsByTourNo">
+        DELETE FROM TOUR_IMG
+        WHERE REF_TNO = #{refTno}
+    </delete>
 	
-	<insert id="insertNewTourImg" 
-			parameterType="tourImg">
-		INSERT INTO TOUR_IMG(TIMG_NO, 
-						     REF_TNO, 
-							 CHANGE_NO) 
-					  VALUES(TIMG_NO.NEXTVAL, 
-					  		 #{refTno}, 
-					  		 #{changeNo})
-	</insert>
+ 	<insert id="insertNewTourImg">
+        INSERT INTO TOUR_IMG (TIMG_NO, CHANGE_NO, REF_TNO)
+        VALUES (TIMG_NO.NEXTVAL, #{changeNo}, #{refTno})
+    </insert>
 </mapper>

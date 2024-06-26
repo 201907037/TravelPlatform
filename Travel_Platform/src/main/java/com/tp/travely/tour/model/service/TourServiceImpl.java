@@ -225,11 +225,9 @@ public class TourServiceImpl implements TourService {
 	    int result = tourDao.updateTourSpotData(sqlSession, tsd);
 
 	    // 이미지 업데이트 처리
-	    if(result > 0) {
-            tourDao.deleteTourImgsByTourNo(tsd.getRefTno());
-            for(TourImg img : updatedTourImgs) {
-                tourDao.insertTourImg(img);
-            }
+	    result += tourDao.deleteTourImgsByTourNo(sqlSession, tsd.getRefTno());
+        for(TourImg img : updatedTourImgs) {
+        	result += tourDao.insertNewTourImg(sqlSession, img);
         }
 	    
         return result;
@@ -242,11 +240,9 @@ public class TourServiceImpl implements TourService {
 	    int result = tourDao.updateLodgingData(sqlSession, lod);
 
 	    // 이미지 업데이트 처리
-	    if(result > 0) {
-            tourDao.deleteTourImgsByTourNo(lod.getRefTno());
-            for(TourImg img : updatedTourImgs) {
-                tourDao.insertTourImg(img);
-            }
+	    result += tourDao.deleteTourImgsByTourNo(sqlSession, lod.getRefTno());
+        for(TourImg img : updatedTourImgs) {
+        	result += tourDao.insertNewTourImg(sqlSession, img);
         }
 	    
 	    return result;
@@ -259,11 +255,9 @@ public class TourServiceImpl implements TourService {
 	    int result = tourDao.updateRestaurantData(sqlSession, rd);
 	    
 	    // 이미지 업데이트 처리
-	    if(result > 0) {
-            tourDao.deleteTourImgsByTourNo(rd.getRefTno());
-            for(TourImg img : updatedTourImgs) {
-                tourDao.insertTourImg(img);
-            }
+	    result += tourDao.deleteTourImgsByTourNo(sqlSession, rd.getRefTno());
+        for(TourImg img : updatedTourImgs) {
+        	result += tourDao.insertNewTourImg(sqlSession, img);
         }
 	    
 	    return result;
@@ -276,11 +270,9 @@ public class TourServiceImpl implements TourService {
 	    int result = tourDao.updateLeportsData(sqlSession, led);
 
 	    // 이미지 업데이트 처리
-	    if(result > 0) {
-            tourDao.deleteTourImgsByTourNo(led.getRefTno());
-            for(TourImg img : updatedTourImgs) {
-                tourDao.insertTourImg(img);
-            }
+	    result += tourDao.deleteTourImgsByTourNo(sqlSession, led.getRefTno());
+        for(TourImg img : updatedTourImgs) {
+        	result += tourDao.insertNewTourImg(sqlSession, img);
         }
 	    
 	    return result;
