@@ -32,7 +32,7 @@
             border: 0.5px solid lightgray;
             padding: 30px;
             border-radius: 10px;
-            
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 그림자 효과 추가 */
         }
 
         /* 채팅방 영역 */
@@ -63,7 +63,6 @@
             width: 50%;
             height: 90%;
             margin: auto;
-            
         }
         
         /* 메세지가 보이는 영역 */
@@ -75,6 +74,7 @@
             border-top-right-radius : 30px;
             overflow-y: auto; /* 세로 스크롤 추가 */
             background-image: url(https://search.pstatic.net/common/?src=http%3A%2F%2Fpost.phinf.naver.net%2FMjAyMDA3MTRfOCAg%2FMDAxNTk0NzAyMDg3ODMy.zhsHqXOolG3axCwoGy4vxQvE8d3jzXd7LLQpJBNsUwEg.KyGvipiDYvZGdXF8vn6n69pXaFT3jsd7gyZtUE7xFskg.PNG%2FIhLmKCQTubpq_hjMWOh2ZN8XiQBM.jpg&type=sc960_832);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px -4px 8px rgba(0, 0, 0, 0.1), 0px -3px 8px rgba(0, 0, 0, 0.1); /* 위, 왼쪽, 오른쪽 그림자 효과 추가 */
         }
 
         #msg_send {
@@ -83,6 +83,7 @@
             box-sizing: border-box;
             border-bottom-left-radius : 30px;
             border-bottom-right-radius : 30px;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1), 0px 2px 8px rgba(0, 0, 0, 0.1), 0px 2px 8px rgba(0, 0, 0, 0.1); /* 아래, 왼쪽, 오른쪽 그림자 효과 추가 */
         }
 
         #msg_send {
@@ -414,7 +415,7 @@
 				         data += '        <tr>'; 
 				         data += '            <td class="tdtd">';
 				         data += '                <span class="myMsg_time">'+obj.msgTime+'</span>';
-				         data += '                <div class="chat-message">';
+				         data += '                <div class="chat-message" style="font-weight:bold;">';
 				         data += '                    '+obj.msgContent+'';
 				         data += '                </div>';
 				         data += '            </td>';
@@ -437,7 +438,7 @@
 		        	data += '        </tr>';
 		        	data += '        <tr>';
 		        	data += '            <td>';
-		        	data += '                <div class="message">';
+		        	data += '                <div class="message" style="font-weight:bold;">';
 		        	data += '                    '+obj.msgContent+'';
 		        	data += '                </div>';
 		        	data += '                <span class="msg_time">'+obj.msgTime+'</span>';

@@ -91,8 +91,8 @@
         /* 슬라이드 번호 표시 */
         .slide-number {
             position: absolute;
-            top: 20px; /* 상단에서의 위치 조정 */
-            right: 10px; /* 오른쪽에서의 위치 조정 */
+            top: 10px; /* 상단에서의 위치 조정 */
+            right: 5px; /* 오른쪽에서의 위치 조정 */
             background: rgba(0, 0, 0, 0.5); /* 배경 색상 및 투명도 조정 */
             color: white;
             padding: 5px 10px;
@@ -211,7 +211,7 @@
         /* 댓글 수정, 삭제버튼용 */
         .edit-button,
 		.delete-button {
-		    border: 1px solid #ddd;
+		    border: 0px solid #ddd;
 		    background-color: #f0f0f0;
 		    border-radius: 10px;
 		    font-size: 16px;
@@ -225,7 +225,7 @@
 		
 		.edit-button:hover,
 		.delete-button:hover {
-		    background-color: #007bff;
+		    background-color: #87CEEB;
 		    color: #fff;
 		    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 		}
@@ -356,7 +356,7 @@
 		    background-color: #f0f0f0;
 		    color: #000;
 		    padding: 8px 15px;
-		    border: 2px solid gray;
+		    border: 0px solid lightgray;
 		    border-radius: 5px;
 		    cursor: pointer;
 		    font-size: 15px;
@@ -366,7 +366,7 @@
 		
 		#update-btn:hover,
 		#delete-btn:hover {
-		    background-color: #ccc;
+		    background-color: #87CEEB;
 		    color: #fff;
 		}
     </style>
@@ -615,7 +615,7 @@
        	                    resultStr += '			  	<span class="time">'+reply.modifyDate+'</span>';
        	                    						  }
        	                    resultStr += '        </div>';
-       	                    resultStr += '        <div class="comment-text">';
+       	                    resultStr += '        <div class="comment-text" style="font-weight: 600;">';
        	                    resultStr += '           '+ reply.replyContent +'';
        	                    resultStr += '        </div>';
        	                    resultStr += '        <div class="edit-delete-buttons">';

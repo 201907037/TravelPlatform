@@ -92,46 +92,46 @@ body {
 	margin: 10px 0;
 }
 
-#pagingArea ul {
-	display: flex;
-	justify-content: center;
-	padding: 0;
-	list-style: none;
-	margin: 20px 0;
-	font-size: 16px;
-}
+#pagingArea {
+            text-align: center;
+            margin: 20px 0;
+        }
 
-#pagingArea ul>li {
-	margin: 0 5px;
-}
+        .pagination {
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+        }
 
-#pagingArea ul>li>a {
-	display: block;
-	padding: 10px 15px;
-	text-decoration: none;
-	color: black;
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	transition: background-color 0.3s, color 0.3s;
-}
+        .pagination li {
+            display: inline;
+            margin: 0 5px;
+        }
 
-#pagingArea ul>li>a:hover {
-	background-color: #007bff;
-	color: #fff;
-}
+        .pagination a {
+            color: #555;
+            padding: 8px 16px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
-#pagingArea ul>li.page-item.active>a,
-#pagingArea ul>li.page-item.active>a:hover {
-	background-color: #007bff;
-	color: #fff;
-	cursor: default;
-}
+        .pagination a:hover {
+            background-color: #ddd;
+            color: #333;
+        }
 
-#pagingArea ul>li.page-item.disabled>a {
-	color: #ddd;
-	background-color: #f4f4f4;
-	cursor: default;
-}
+        .pagination .active a {
+            background-color: #555;
+            color: white;
+            border: 1px solid #555;
+        }
+
+        .pagination .disabled a {
+            color: #ddd;
+            pointer-events: none;
+        }
 
 .outer {
 	width: 80%;
@@ -152,7 +152,9 @@ body {
 		<br><br><br>
 		<div class="container" align="center">
 			<!-- container 영역 -->
-			<h2>이벤트 게시판</h2>
+			<br><br>
+			<h2>이벤트 목록</h2>
+			<br><br>
 			<div id="boardList">
 				<c:forEach var="b" items="${ requestScope.list }">
 					<div class="list-area" align="center">
@@ -175,10 +177,10 @@ body {
 				<ul class="pagination">
 					<c:choose>
 						<c:when test="${ requestScope.pi.currentPage eq 1 }">
-							<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+							<li class="page-item disabled"><a class="page-link" href="#">&lt;</a></li>
 						</c:when>
 						<c:otherwise>
-							<li class="page-item"><a class="page-link" href="eventList.bo?cpage=${ requestScope.pi.currentPage - 1 }">Previous</a></li>
+							<li class="page-item"><a class="page-link" href="eventList.bo?cpage=${ requestScope.pi.currentPage - 1 }">&lt;</a></li>
 						</c:otherwise>
 					</c:choose>
 					<c:forEach var="p" begin="${ requestScope.pi.startPage }" end="${ requestScope.pi.endPage }" step="1">
@@ -193,10 +195,10 @@ body {
 					</c:forEach>
 					<c:choose>
 						<c:when test="${ requestScope.pi.currentPage eq requestScope.pi.maxPage }">
-							<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+							<li class="page-item disabled"><a class="page-link" href="#">&gt;</a></li>
 						</c:when>
 						<c:otherwise>
-							<li class="page-item"><a class="page-link" href="eventList.bo?cpage=${ requestScope.pi.currentPage + 1 }">Next</a></li>
+							<li class="page-item"><a class="page-link" href="eventList.bo?cpage=${ requestScope.pi.currentPage + 1 }">&gt;</a></li>
 						</c:otherwise>
 					</c:choose>
 				</ul>

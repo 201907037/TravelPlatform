@@ -66,47 +66,44 @@
         }
 
         #pagingArea {
-            width: fit-content; 
-            margin: 50px auto;
-        }
-         
-        #pagingArea ul {
-            display: flex;
-            justify-content: center;
-            padding: 0;
-            list-style: none;
+            text-align: center;
+            margin: 20px 0;
         }
 
-        #pagingArea ul>li {
+        .pagination {
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pagination li {
+            display: inline;
             margin: 0 5px;
         }
 
-        #pagingArea ul>li>a {
-            display: block;
-            padding: 10px 15px;
+        .pagination a {
+            color: #555;
+            padding: 8px 16px;
             text-decoration: none;
-            color: black;
             border: 1px solid #ddd;
             border-radius: 5px;
             transition: background-color 0.3s, color 0.3s;
         }
 
-        #pagingArea ul>li>a:hover {
-            background-color: #007bff;
-            color: #fff;
+        .pagination a:hover {
+            background-color: #ddd;
+            color: #333;
         }
 
-        #pagingArea ul>li.page-item.active>a,
-        #pagingArea ul>li.page-item.active>a:hover {
-            background-color: #007bff;
-            color: #fff;
-            cursor: default;
+        .pagination .active a {
+            background-color: #555;
+            color: white;
+            border: 1px solid #555;
         }
 
-        #pagingArea ul>li.page-item.disabled>a {
+        .pagination .disabled a {
             color: #ddd;
-            background-color: #f4f4f4;
-            cursor: default;
+            pointer-events: none;
         }
 
         /* 검색창 관련 스타일 */
@@ -157,10 +154,10 @@
 
         /* 글작성 버튼 스타일 */
         .writeBtn {
-            background-color: white;
+            background-color: #f0f0f0;
             color: black;
             padding: 10px 15px;
-            border: 2px solid gray;
+            border: 0px solid gray;
             border-radius: 5px;
             cursor: pointer;
             font-size: 15px;
@@ -169,7 +166,7 @@
         }
 
         .writeBtn:hover {
-            background-color: gray;
+            background-color: #87CEEB;
             color: white;
         }
          
@@ -179,8 +176,8 @@
     <jsp:include page="../common/header1.jsp"></jsp:include>
 
     <br><br><br><br><br><br><br><br><br>
-    <div align="center" style="font-size: 30px; font-weight: bold;">자유게시판</div>
-    <br><br>
+    <div align="center" style="font-size: 30px; font-weight: bold;">여러분의 소중한 후기를 남겨주세요 ꒒ ০ ⌵ ୧♡</div>
+    <br><br><br>
     <form id="search_form" action="search.ad" method="get">
         <div id="search_text">
             <input id="search" type="search" name="keyword" placeholder="검색..">
@@ -220,10 +217,10 @@
         <ul class="pagination">
             <c:choose>
                 <c:when test="${ requestScope.pi.currentPage eq 1 }">
-                    <li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none;">Previous</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none;">&lt;</a></li>
                 </c:when>
                 <c:otherwise>
-                    <li class="page-item"><a class="page-link" href="selectList.bo?cpage=${ requestScope.pi.currentPage -1 }">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="selectList.bo?cpage=${ requestScope.pi.currentPage -1 }">&lt;</a></li>
                 </c:otherwise>
             </c:choose>
             <c:forEach var="p" begin="${ requestScope.pi.startPage }" end="${ requestScope.pi.endPage }" step="1">
@@ -248,10 +245,10 @@
             </c:forEach>
             <c:choose>
                 <c:when test="${ requestScope.pi.currentPage eq requestScope.pi.maxPage }">
-                    <li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none;">Next</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#" style="pointer-events: none;">&gt;</a></li>
                 </c:when>
                 <c:otherwise>
-                    <li class="page-item"><a class="page-link" href="selectList.bo?cpage=${ requestScope.pi.currentPage + 1 }">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="selectList.bo?cpage=${ requestScope.pi.currentPage + 1 }">&gt;</a></li>
                 </c:otherwise>
             </c:choose>
         </ul>

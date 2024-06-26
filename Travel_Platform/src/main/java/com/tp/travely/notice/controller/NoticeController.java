@@ -177,8 +177,8 @@ public class NoticeController {
 		
 		ArrayList<Notice> nList = noticeService.noticetListView(pi);
 		
-//		System.out.println(pi);
-//		System.out.println(nList);
+		System.out.println(pi);
+		System.out.println(nList);
 		
 		model.addAttribute("pi", pi);
 		model.addAttribute("nList", nList);
