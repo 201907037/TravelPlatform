@@ -97,11 +97,18 @@ public class MailSendService {
 		
 		// 비밀번호 재설정 이메일 전송 메서드
 	    public void sendResetPasswordEmail(String userEmail, String tempPassword) {
+	    	
 	        String setFrom = "rhdrjsgml0307@gmail.com"; // 발신자 이메일 주소 설정
 	        String subject = "비밀번호 재설정 안내"; // 이메일 제목 설정
-	        String content = "안녕하세요. 비밀번호가 임시로 변경되었습니다. 새로운 비밀번호: " + tempPassword; // 이메일 내용 설정
+	        
+	        Context context = new Context();
+	        context.setVariable("authNumber", tempPassword);
+	        String content = 
+					templateEngine.process("emailTemplate2", context);
+	        
 
 	        sendEmail(setFrom, userEmail, subject, content); // 이메일 전송
+	        
 	    }
 
 	    // 이메일 전송 메서드
@@ -113,6 +120,14 @@ public class MailSendService {
 	            helper.setTo(toEmail); // 수신자 설정
 	            helper.setSubject(subject); // 이메일 제목 설정
 	            helper.setText(content, true); // 이메일 내용 설정 (HTML 형식)
+	            
+	            helper.addInline("imageResource1", new ClassPathResource("images/image-1.png"));
+				helper.addInline("imageResource2", new ClassPathResource("images/image-2.png"));
+				helper.addInline("imageResource3", new ClassPathResource("images/image-3.png"));
+				helper.addInline("imageResource4", new ClassPathResource("images/image-4.png"));
+				
+				helper.addInline("imageResource7", new ClassPathResource("images/image-7.png"));
+				helper.addInline("imageResource8", new ClassPathResource("images/image-8.png"));
 
 	            mailSender.send(message); // 이메일 전송
 	        } catch (MessagingException e) {

@@ -136,13 +136,13 @@
                                         
                                         
                                         
-                                        <input type="submit" value="로그인"  id="loginBtn" class="btn btn-primary btn-user btn-block">
+                                        <input type="submit" value="로그인"  id="loginBtn" class="btn btn-outline-warning  btn-block">
                                         
                                         <hr>
-                                        <a href="searchId.me" id="mm" class="btn btn-user btn-block">
+                                        <a href="searchId.me"  class="btn btn-outline-secondary  btn-block">
                                             		 아이디 찾기
                                         </a>
-                                        <a href="resetPassword.me" class="btn btn-facebook btn-user btn-block">
+                                        <a href="resetPassword.me" class="btn btn-outline-secondary  btn-block">
                                             		 비밀번호 찾기
                                         </a>
                                     </form>

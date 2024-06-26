@@ -75,6 +75,14 @@
 
 <body background="resources/image/pado.gif">
 
+    <script type="text/javascript">
+        window.onload = function() {
+            <c:if test="${not empty message}">
+                alert("${message}");
+            </c:if>
+        }
+    </script>
+
     <jsp:include page="../common/header1.jsp" />
 
     <div id="oo" class="container animate__animated animate__fadeInDown">
@@ -103,7 +111,7 @@
                                                 id="email" name="email" required 
                                                 placeholder="찾고자 하는 비밀번호의 이메일을 입력하세요.">
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-user btn-block">
+                                        <button type="submit" class="btn btn-outline-info btn-user btn-block">
                                                 이메일 전송
                                         </button>
                                     </form>

@@ -106,25 +106,29 @@ public class MemberServiceImpl implements MemberService{
     }
 	 
 	 @Override
-	    public void sendResetPasswordEmail(String userEmail) {
-	        Member member = memberDao.findMemberByEmail(sqlSession, userEmail);
-	        System.out.println(member);
+	 public boolean sendResetPasswordEmail(String userEmail) {
+	     Member member = memberDao.findMemberByEmail(sqlSession, userEmail);
+	     System.out.println(member);
 
-	        if (member != null) {
-	            String tempPassword = generateTemporaryPassword();
-	            String encTempPassword = bcryptPasswordEncoder.encode(tempPassword);
-	            member.setUserPwd(encTempPassword);
-	            int result = memberDao.updatePassword(sqlSession, member);
+	     if (member != null) {
+	         String tempPassword = generateTemporaryPassword();
+	         String encTempPassword = bcryptPasswordEncoder.encode(tempPassword);
+	         member.setUserPwd(encTempPassword);
+	         int result = memberDao.updatePassword(sqlSession, member);
 
-	            if (result > 0) {
-	                mailSendService.sendResetPasswordEmail(userEmail, tempPassword); // 이메일 전송 시 임시 비밀번호 함께 전달
-	            } else {
-	                System.out.println("비밀번호 업데이트 실패");
-	            }
-	        } else {
-	            System.out.println("해당 이메일로 가입된 회원이 없습니다.");
-	        }
-	    }
+	         if (result > 0) {
+	             mailSendService.sendResetPasswordEmail(userEmail, tempPassword); // 이메일 전송 시 임시 비밀번호 함께 전달
+	             return true;
+	         } else {
+	             System.out.println("비밀번호 업데이트 실패");
+	             return false;
+	         }
+	     } else {
+	         System.out.println("해당 이메일로 가입된 회원이 없습니다.");
+	         return false;
+	     }
+	 }
+
 
 	   
 	 
@@ -137,21 +141,19 @@ public class MemberServiceImpl implements MemberService{
 	     
 	     Member authenticatedMember = memberDao.loginMember(sqlSession, member);
 	     
-	     if (authenticatedMember != null) {
+	     if (authenticatedMember != null && bcryptPasswordEncoder.matches(currentPassword, authenticatedMember.getUserPwd())) {
 	         String encNewPassword = bcryptPasswordEncoder.encode(newPassword);
 	         authenticatedMember.setUserPwd(encNewPassword);
 	         
 	         int result = memberDao.updatePassword(sqlSession, authenticatedMember);
-	         
 	         if (result > 0) {
-	             return true;
+	             return true; // 비밀번호 업데이트 성공
 	         } else {
 	             log.error("Failed to update password for user: {}", userId);
-	             return false;
+	             return false; // 비밀번호 업데이트 실패
 	         }
 	     } else {
-	         log.error("Authentication failed for user: {}", userId);
-	         return false;
+	         return false; // 현재 비밀번호가 일치하지 않는 경우
 	     }
 	 }
 

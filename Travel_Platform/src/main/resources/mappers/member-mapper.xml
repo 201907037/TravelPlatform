@@ -57,6 +57,7 @@
 		                 , AGE
 		                 , GENDER
 		                 , ADDRESS
+		                 , CHANGE_NAME
 		                 , PHONE)
 		            VALUES(SEQ_USER_NO.NEXTVAL
 		            	 , #{userId}
@@ -67,6 +68,7 @@
 		                 , #{age}
 		                 , #{gender}
 		                 , #{address}
+		                 , #{changeName}
 		                 , #{phone})
 	</insert>
 

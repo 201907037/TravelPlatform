@@ -27,7 +27,7 @@ public interface MemberService {
 				String findUserIdByEmail(String email);
 				
 				// 비번찾기
-				void sendResetPasswordEmail(String userEmail);
+				boolean sendResetPasswordEmail(String userEmail);
 				
 				// 비번변경
 				boolean updatePassword(String userId, String currentPassword, String newPassword);

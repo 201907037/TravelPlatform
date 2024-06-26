@@ -71,6 +71,14 @@
 
 <body background="resources/image/pado.gif">
 
+	<script type="text/javascript">
+        window.onload = function() {
+            <c:if test="${not empty alertMsg}">
+                alert("${alertMsg}");
+            </c:if>
+        }
+    </script>
+
     <jsp:include page="../common/header1.jsp" />
 
     <div id="oo" class="container animate__animated animate__fadeInDown">
@@ -88,7 +96,7 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-2">비밀번호를 잊으셨나요?</h1>
+                                        <h1 class="h4 text-gray-900 mb-2">비밀번호 변경</h1>
                                         <p class="mb-4">간단한 절차를 통해 잊어버린 비밀번호를 변경해보세요!</p>
                                     </div>
    
@@ -98,6 +106,7 @@
                                             <input type="text" class="form-control form-control-user"
                                                 id="userId" name="userId" required aria-describedby="emailHelp"
                                                 placeholder="사용자 아이디">
+												<br>
                                                 <div id="checkResult" 
 													 style="font-size : 0.8em; display : none;">
 												</div> <br>
@@ -118,7 +127,7 @@
                                             <span class="signUp-message" id="pwMessage" name="pwMessage"></span>      
                                                  
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-user btn-block" disabled>
+                                        <button type="submit" class="btn btn-outline-info btn-user btn-block" disabled>
                                             	비밀번호 변경
                                         </button>
                                     </form>

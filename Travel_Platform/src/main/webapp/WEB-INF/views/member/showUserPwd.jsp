@@ -94,7 +94,7 @@
                                         
                                            
                                        
-                                        <button onclick="location.href='./'" type="submit" class="btn btn-primary btn-user btn-block">
+                                        <button onclick="location.href='./'" type="submit" class="btn btn-outline-info btn-user btn-block">
                                             	홈으로
                                         </button>
                                    

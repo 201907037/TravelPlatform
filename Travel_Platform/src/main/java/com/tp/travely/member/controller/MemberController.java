@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.NoSuchElementException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -217,6 +219,8 @@ public class MemberController {
 		m.setEmail(email1.concat(email2));
 		System.out.println(m);
 		// > 비밀번호 필드만 암호문으로 대체된 것 확인
+		
+		m.setChangeName("resources/profileImages/to2.jpg");
 		
 		int result = memberService.insertMember(m);
 		
@@ -484,40 +488,70 @@ public class MemberController {
 		}
 		
 	
-	// 아이디 찾기
-	@PostMapping("findId.me")
-    public String findId(@RequestParam("email") String email, Model model) {
-        String userId = memberService.findUserIdByEmail(email);
-        model.addAttribute("userId", userId);
-        return "member/showUserId"; // 아이디를 보여주는 페이지로 이동
+	 @PostMapping("findId.me")
+	    public String findId(@RequestParam("email") String email, Model model, RedirectAttributes redirectAttributes) {
+	        String userId = memberService.findUserIdByEmail(email);
+
+	        if (userId == null) {
+	            redirectAttributes.addFlashAttribute("message", "존재하지 않는 이메일입니다.");
+	            return "redirect:/searchIdPage"; // 아이디 찾기 페이지로 리다이렉트
+	        }
+
+	        model.addAttribute("userId", userId);
+	        return "member/showUserId"; // 아이디를 보여주는 페이지로 이동
+	    }
+
+    @GetMapping("/searchIdPage")
+    public String searchIdPage() {
+        return "member/search_id"; // search_id.jsp를 반환
     }
-	
-	
-	@PostMapping("resetPassword.me")
-    
-    public String resetPassword(@RequestParam("email") String userEmail) {
-     memberService.sendResetPasswordEmail(userEmail);
-        return "member/showUserPwd";
-    }
-    
-    @PostMapping("/updatePassword.me")
-    public ResponseEntity<String> updatePassword(
-            @RequestParam("userId") String userId,
-            @RequestParam("currentPassword") String currentPassword,
-            @RequestParam("newPassword") String newPassword, HttpSession session,RedirectAttributes redirectAttributes) {
 
-        boolean result = memberService.updatePassword(userId, currentPassword, newPassword);
 
-        if (result) {
-        	 session.setAttribute("alertMsg", "성공적으로 비밀번호가 변경되었습니다.");
-             redirectAttributes.addFlashAttribute("alertMsg", "성공적으로 비밀번호가 변경되었습니다.");
-             return ResponseEntity.status(HttpStatus.FOUND).body("<script>window.location.href='/travely';</script>");
-        	
+    @PostMapping("resetPassword.me")
+    public String resetPassword(@RequestParam("email") String userEmail, RedirectAttributes redirectAttributes) {
+        boolean emailExists = memberService.sendResetPasswordEmail(userEmail);
 
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update password");
+        if (!emailExists) {
+            redirectAttributes.addFlashAttribute("message", "존재하지 않는 이메일입니다.");
+            return "redirect:/resetPasswordPage"; // 비밀번호 초기화 페이지로 리다이렉트
         }
+
+        return "member/showUserPwd"; // 비밀번호를 보여주는 페이지로 이동
     }
+	
+	@GetMapping("/resetPasswordPage")
+    public String resetPasswordPage() {
+        return "member/reset_password"; // reset_password.jsp를 반환
+    }
+    
+	@PostMapping("/updatePassword.me")
+	public String updatePassword(
+	        @RequestParam("userId") String userId,
+	        @RequestParam("currentPassword") String currentPassword,
+	        @RequestParam("newPassword") String newPassword,
+	        HttpSession session,
+	        RedirectAttributes redirectAttributes) {
+
+	    boolean result = memberService.updatePassword(userId, currentPassword, newPassword);
+
+	    if (result) {
+	        session.setAttribute("alertMsg", "성공적으로 비밀번호가 변경되었습니다.");
+	        redirectAttributes.addFlashAttribute("alertMsg", "성공적으로 비밀번호가 변경되었습니다.");
+	        return "redirect:/";
+	    } else {
+	    	
+	    	redirectAttributes.addFlashAttribute("alertMsg", "현재 비밀번호가 일치하지 않습니다.");
+	        return "redirect:/updatePasswordPage";
+	    }
+	}
+	
+	 @GetMapping("/updatePasswordPage")
+	    public String updatePasswordPage() {
+	        return "member/update_password"; // search_id.jsp를 반환
+	    }
+	
+	
+
 	// 다른 컨트롤러 메서드들...
 
 
