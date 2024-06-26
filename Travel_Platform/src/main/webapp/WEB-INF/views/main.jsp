@@ -35,6 +35,25 @@
 	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/semantic.min.css"/>
 
 
+    <style>
+        .start-button:hover{
+        background-color: black;
+        color: white;
+
+    }
+
+    #mid3_button:hover{
+        color: grey;
+    }
+
+    #startButton{
+
+        
+    }
+
+
+    </style>
+
     
 </head>
 <body>
@@ -73,7 +92,7 @@
                 <li><a class="menuitem" href="#mid">2</a></li>
                 <li><a class="menuitem" href="#mid2">3</a></li>
                 <li><a class="menuitem" href="#mid3">4</a></li>
-                <li><a class="menuitem" href="#d">5</a></li>
+                <li><a class="menuitem" href="#footer">5</a></li>
             </ul>
         </nav>
         
@@ -91,55 +110,55 @@
                    <jsp:include page="common/header1.jsp" />
                     <div id="kkk" class="kkk">
                         <a class="kkk1">
-                            <img id="city1" class="animated fadeInDown" src="resources/image/to.jpg">
+                            <img id="city1" class="animated fadeInDown" src="resources/image/dd1.jpg">
                             <div id="inner">
                                 <span class="text">
-                                    도쿄
+                                    # 감악산
                                     <hr>
-                                    사람들이 어쩌구 저쩌구
+                                    보랏빛 향기가 가득 일렁이는 곳
                                 </span>
                             </div>
                         </a>
                         <a>
-                            <img id="city2" class="animated fadeInDown" src="resources/image/se.jpg">
+                            <img id="city2" class="animated fadeInDown" src="resources/image/dd2.jpg">
                             <div id="inner2">
                                 <span class="text">
-                                    서울
+                                    # 구엄리돌염전
                                     <hr>
-                                    사람들이 어쩌구 저쩌구
+                                    제주 바다를 배경으로 한 컷
                                 </span>
                             </div>
                         </a>
                     
                         <a>
-                            <img id="city3" class="animated fadeInDown" src="resources/image/ch.jpg">
+                            <img id="city3" class="animated fadeInDown" src="resources/image/dd3.jpg">
                             <div id="inner3">
                                 <span class="text">
-                                    북경
+                                    # 당진팽나무
                                     <hr>
-                                    사람들이 어쩌구 저쩌구
+                                    황금빛 벼 사이 우뚝 선 나
                                 </span>
                             </div>
                         </a>
                     
                         <a>
-                            <img id="city4" class="animated fadeInDown" src="resources/image/fr.jpg">
+                            <img id="city4" class="animated fadeInDown" src="resources/image/dd4.jpg">
                             <div id="inner4">
                                 <span class="text">
-                                    파리
+                                    # 백양사
                                     <hr>
-                                    사람들이 어쩌구 저쩌구
+                                    타오르는 듯한 단풍이 멋진 곳 
                                 </span>
                             </div>
                         </a>
                     
                         <a>
-                            <img id="city5" class="animated fadeInDown" src="resources/image/am.jpg">
+                            <img id="city5" class="animated fadeInDown" src="resources/image/dd5.jpg">
                             <div id="inner5">
-                                <span class="text">
-                                    뉴욕
+                                <span id="last" class="text">
+                                    # 도담정원
                                     <hr>
-                                    사람들이 어쩌구 저쩌구
+                                    동글동글 분홍 댑싸리 정원
                                 </span>
                             </div>
                         </a>
@@ -154,19 +173,20 @@
                 
                 
                 <div id="ment">
-                    <h1 class= "animated fadein">
+                    <h1 class= "animate__animated animate__fadeInLeft animate__delay-1s">
                         지친 당신을 위해 준비했어요
                     </h1>
                 </div>
 
                 
                     
-                        <button class="start-button" id="startButton">떠나고 싶다면.</button>
+                    <button class="start-button animate__animated animate__fadeIn animate__delay-2s" id="startButton">떠나고 싶다면.</button>
                     
                     <div class="search-section" id="searchSection">
                         <div class="search-bar">
-                            <input type="text" placeholder="어디로 여행을 떠나시나요?">
-                            <img src="resources/image/seach.png" alt="search" class="search-icon">
+                            <button class="start-button animate__animated animate__fadeIn" id="startButton2">플래너 작성</button>
+                            
+                            
                         </div>
                         
                     </div>
@@ -204,7 +224,7 @@
                 <img id="midphototop" src="resources/image/city.jpg">
             
             
-                <img id="midphotobot" src="resources/image/jeju.jpg">
+                <img id="midphotobot" src="resources/image/ww1.jpg">
             
             
                 <img id="midphototop" src="resources/image/tra.jpg">
@@ -213,7 +233,7 @@
                 <img id="midphotobot" src="resources/image/se.jpg">
             
             
-                <img id="midphototop" src="resources/image/test1.gif">
+                <img id="midphototop" src="resources/image/ww2.jpg">
             </div>
             
         </div>
@@ -236,15 +256,14 @@
 
                         <div id="ment2">
                             <h1 id="title2" >
-                                도쿄
-                                <hr>
+                                대관령 양떼목장
+                                
+                                
                             </h1>
                             <br><br>
                             
                             <p id="mid2content" >
-                                어쩌구저쩌구어쩌구저쩌구
-                                어쩌구저쩌구어쩌구저쩌구
-                                어쩌구저쩌구어쩌구저쩌구
+                            넓게 펼쳐진 풀밭이 아니라 눈을 돌릴 때마다 달라지는 언덕 풍경이 매력적인 이곳에서 휴식 같은 하루를 즐겨 보세요.
                             </p>
                         </div>
                     </div>
@@ -258,15 +277,14 @@
 
                         <div id="ment2">
                             <h1 id="title2" >
-                                파리
-                                <hr>
+                                인제 자작나무숲
+                                
                             </h1>
                             <br><br>
                             
                             <p id="mid2content" >
-                                어쩌구저쩌구어쩌구저쩌구
-                                어쩌구저쩌구어쩌구저쩌구
-                                어쩌구저쩌구어쩌구저쩌구
+                                이 숲에는 곳곳마다 포토존이 있어 멋진 사진을 찍기에도 좋아요.<br><br>
+                                 겨울에 눈이라도 내리면 더 신비로워지는 이곳은 사계절 언제 찾아도 행복해지는 곳이에요.
                             </p>
                         </div>
                     </div>
@@ -280,15 +298,14 @@
 
                         <div id="ment2">
                             <h1 id="title2" >
-                                베이징
-                                <hr>
+                                부산 더베이 101
+                                
                             </h1>
                             <br><br>
                             
                             <p id="mid2content" >
-                                어쩌구저쩌구어쩌구저쩌구
-                                어쩌구저쩌구어쩌구저쩌구
-                                어쩌구저쩌구어쩌구저쩌구
+                                해운대 앞바다에 반사된 빛으로 더욱 눈부신 해운대의 야경은 사진으로 다 담아낼 수 없을 정도로 환상적이에요.<br><br>
+                                해운대의 낭만적인 밤을 만끽하고 싶은 사람이라면 꼭 방문해 보세요.
                             </p>
                         </div>
                     </div>
@@ -301,15 +318,14 @@
 
                         <div id="ment2">
                             <h1 id="title2" >
-                                서울
-                                <hr>
+                                이가리 닻 전망대
+                                
                             </h1>
                             <br><br>
                             
                             <p id="mid2content" >
-                                어쩌구저쩌구어쩌구저쩌구
-                                어쩌구저쩌구어쩌구저쩌구
-                                어쩌구저쩌구어쩌구저쩌구
+                                이가리 닻 전망대는 우리의 땅 독도 방향으로 뻗은 길이 102m, 높이 10m의 멋진 전망대예요. <br><br>
+                                닻 전망대는 하늘에서 내려다본 모양이 닻을 닮아서 지은 이름인데 멀리서 바라보던 바다를 가까이서 느끼려면 꼭 걸어가 보세요.
                             </p>
                         </div>
                     </div>

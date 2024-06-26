@@ -17,6 +17,12 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
+
+    <style>
+        #leftbutton:hover{
+            color: grey;
+        }
+    </style>
     
 </head>
 <body>
@@ -37,7 +43,7 @@
 
                 <div id="right">
                     <ul id="rightoption1">
-                        <li id="optiontitle" ><a href="">Menu1</a></li>
+                        <li id="optiontitle" ><a href="noticeList.bo">NOTICE</a></li>
                         <br>
                         <li id="option" ><a href="">option1</a></li>
                         <li id="option" ><a href="">option2</a></li>
@@ -46,7 +52,7 @@
                     </ul>
 
                     <ul id="rightoption2">
-                        <li id="optiontitle" ><a href="">Menu2</a></li>
+                        <li id="optiontitle" ><a href="eventList.bo">FESTIVAL</a></li>
                         <br>
                         <li id="option" ><a href="">option1</a></li>
                         <li id="option" ><a href="">option2</a></li>
@@ -55,7 +61,7 @@
                     </ul>
 
                     <ul id="rightoption3">
-                        <li id="optiontitle" ><a href="">Menu3</a></li>
+                        <li id="optiontitle" ><a href="msgPage.mg">GROUP MESSAGE</a></li>
                         <br>
                         <li id="option" ><a href="">option1</a></li>
                         <li id="option" ><a href="">option2</a></li>
