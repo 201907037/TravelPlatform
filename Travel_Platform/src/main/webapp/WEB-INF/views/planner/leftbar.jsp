@@ -280,8 +280,9 @@
     #save-plan:hover,#changeDate:hover,.addEL:hover{
     	background-color : #0036B5;
     }
-    #save-plan>span,#changeDate>span,.addEL>span{
+    #save-plan>span,#changeDate>span,.addEL>span,#left-img,#right-img{
     	padding-bottm : 0px;
+    	margin : auto;
     }
 	.material-symbols-outlined {
 	  font-variation-settings:
@@ -399,7 +400,35 @@
 	    overflow: hidden;
 	    pointer-events: none;
 	  }
-	  
+	  #detailModal-box{
+	  	
+	  }
+	  #detail{
+	  	
+	  }
+	  #right-img {
+		float : right;
+		margin-top : 90px;
+		margin-right : 180px;
+		height : 30px;
+    	background-color : white;
+    	color : black;
+    	text-aling : center;
+    	border : 0px;
+	}
+	#left-img{
+		float : left;
+		margin-top : 90px;
+		margin-left : 180px;
+		height : 30px;
+    	background-color : white;
+    	color : black;
+    	text-aling : center;
+    	border : 0px;
+	}
+	#right-img:hover,#left-img:hover{
+		color : green;
+	}
 </style>
 <!--  <link rel="stylesheet" href="resources/css/styles.css">-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -614,6 +643,16 @@
       </div>
       <div class="modal-body">
         <div id="detailModal-box">
+        	<button id="left-img" style="display : none;">
+	        		<span class="material-symbols-outlined">
+					arrow_back_ios
+					</span>
+        	</button>
+        	<button id="right-img" style="display : none;">
+					<span class="material-symbols-outlined">
+					arrow_forward_ios
+					</span>
+        	</button>
         	<div id="detail" style="width : 300px;height : 200px; border : 1px solid black;margin : auto;">
         		
         	</div>
@@ -625,10 +664,10 @@
         	</table>
         </div>
         <hr>
-        <div id="tour-review">
+        <div id="tour-review" style="display : none;">
         				별점
       		<c:choose>
-               	<c:when test="${empty sessionScope.loginUser }">
+               	<c:when test="${not empty sessionScope.loginUser }">
                	 	<span class="star">
 					  ★★★★★
 					  <span>★★★★★</span>
@@ -648,7 +687,7 @@
                 <thead>
                 	<tr>
                 	 <c:choose>
-                	 	<c:when test="${empty sessionScope.loginUser }">
+                	 	<c:when test="${not empty sessionScope.loginUser }">
                 	 	<th colspan="3">
 	                	 제목  <input type="text" name="titleR" class="form-control"  style="width : 89%;" placeholder="제목을 입력하세요" readonly>
 	                	</th>
@@ -662,7 +701,7 @@
                 	</tr>
                     <tr>
                     	<c:choose>
-                    		<c:when test="${empty sessionScope.loginUser }">
+                    		<c:when test="${not empty sessionScope.loginUser }">
                     			<!-- 로그인 전 -->
                     			<th colspan="2">
 		                            <textarea class="form-control" name="" id="contentR" cols="55" rows="3" style="resize:none; width:100%;" readonly>로그인한 사용자만 이용 가능한 서비스입니다. 로그인 후 이용해주세요.</textarea>
@@ -767,6 +806,7 @@ let dateMarkerList=[];
 let dateUseIdx;
 let tourListIdx;
 var polyline;
+let imgidx;
 
 let flag;
 let flagTL;
@@ -777,6 +817,8 @@ let tourObj;
 let aroundNum;
 let mapX;
 let mapY;
+
+
 
 let typeFlag=0;
 	const drawStar = function(target) {
@@ -951,40 +993,63 @@ let typeFlag=0;
 		$("#tour-review tbody").html("");
 		console.log(tourObj);
 		reviewNum=1;
+		
 		let contentType;
 		if(typeFlag==0){
 			contentType=tourObj.type;
 		}else{
 			contentType=tourObj.typeSearch;
 		}
-		console.log(contentType);
+		//console.log(contentType);
+		
 		$.ajax({
 			url : "getDetail.to",
 			method : "GET",
 			async : false,
-			data : {tno : tourObj.tno, contentId : tourObj.contentId, type : contentType},
+			data : {tno : tourObj.tno, contentId : tourObj.contentId, type : tourObj.typeSearch},
 			success : function(result){
 				console.log(result);
 				let obj = result.response.body.items.item[0];
 				console.log(obj);
 				console.log(option);
 				$("#tour_name").html(tourObj.name);
-				switch(contentType){
-				case "관광지":
+				switch(obj.contenttypeid){
+				case "12":
 					create12(obj);
 					break;
-				case "레포츠":
+				case "28":
 					create28(obj);
 					break;
-				case "숙박":
+				case "32":
 					create32(obj);
 					break;
-				case "음식점":
+				case "39":
 					create39(obj);
 					break;
 				}
 				getImg();
-				getReview();
+				rs = 1;
+				$.ajax({
+					url : "ckTour.pl",
+					async : false,
+					method : "get",
+					data : {contentId : tourObj.contentId},
+					success : function(e){
+						console.log(e);
+						rs = rs*Number(e.ck);
+						
+					},
+					error : function(){
+						console.log("실패");
+					}
+				});
+				console.log("result : "+rs)
+				if(rs==1){
+					getReview();
+					$("#tour-review").css("display","block");
+				}else{
+					$("#tour-review").css("display","none");
+				}
 				$("#detailModal").modal("show");
 			},
 			error : function(){
@@ -992,14 +1057,28 @@ let typeFlag=0;
 			}
 		});
 	}
+	let imgArr;
 	function getImg(){
+		imgArr=[];
+		imgidx=0;
 		$.ajax({
 			url : "getImg.to",
 			method : "GET",
 			async : false,
 			data : {tno : tourObj.tno, contentId : tourObj.contentId, type : tourObj.typeSearch},
 			success : function(result){
-				console.log(result);
+			
+				$.each(result.response.body.items.item,function(i,v){
+					imgArr.push(v.originimgurl);
+				});
+				
+				
+				if(imgArr.length>1){
+					$("#right-img").css("display","inline");
+				}else{
+					$("#left-img").css("display","none");
+					$("#right-img").css("display","none");
+				}
 				if(result.response.body.items==""){
 					let span = $("<span>").attr("class","material-symbols-outlined").html("close");
 					$("#detail").append(span);
@@ -1234,9 +1313,12 @@ let typeFlag=0;
 			}
 		});
 	}
+	
 	function getReview(){
 		$("#review-body").html("");
 		$("#review-button-box").html("");
+		
+		
 		$.ajax({
 			url : "selectReview.to",
 			method : "GET",
@@ -1293,18 +1375,48 @@ let typeFlag=0;
 			}
 		});
 	}
+	
 	$(function(){
+		$("#left-img").click(function(){
+			
+			if(imgidx!=0){
+				imgidx--;
+				$("#detail>img").attr("src",imgArr[imgidx]);
+				if($("#right-img").css("display")=="none"){
+					$("#right-img").css("display","inline");
+				}
+				if(imgidx==0){
+					$(this).css("display","none");
+				}
+			}
+			
+		});
+		$("#right-img").click(function(){
+			if(imgidx!=(imgArr.length-1)){
+				imgidx++;
+				$("#detail>img").attr("src",imgArr[imgidx]);
+				if($("#left-img").css("display")=="none"){
+					$("#left-img").css("display","inline");
+				}
+				if(imgidx==(imgArr.length-1)){
+					$(this).css("display","none");
+				}
+			}
+				
+			
+			
+		});
 		$("#review-button-box").on("click","button[class^=review-no]",function(){
 			reviewNum = $(this).html();
 			getReview();
 		});
 		$("#review-button-box").on("click","button[class^=review-left]",function(){
 			reviewNum--;
-			getReview()
+			getReview();
 		});
 		$("#review-button-box").on("click","button[class^=review-right]",function(){
 			reviewNum++;
-			getReview()
+			getReview();
 		});
 		
 		$("#nameSearch").attr("checked","true");
@@ -2122,7 +2234,10 @@ let typeFlag=0;
 		});
 		$("#detail_close").click(function(){
 			$("button[class^=btn-Delete]").css("display","none");
-			
+			$("#starScore").val(0);
+			$(".star span").css("width","0%");
+			$("input[name=titleR]").val("");
+			$("#contentR").val("");
 			$("#detailModal").modal("hide");
 		});
 		$("button[class^=btn-Delete]").click(function(){

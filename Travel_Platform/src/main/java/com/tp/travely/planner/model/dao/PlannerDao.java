@@ -1,12 +1,14 @@
 package com.tp.travely.planner.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.tp.travely.planner.model.vo.PlanDetail;
+import com.tp.travely.planner.model.vo.PlanReply;
 import com.tp.travely.planner.model.vo.Planner;
 
 @Repository
@@ -43,6 +45,30 @@ public class PlannerDao {
 
 	public int searchPlanCount(SqlSessionTemplate sqlSession, String keyword) {
 		return sqlSession.selectOne("plannerMapper.searchPlanCount",keyword);
+	}
+
+	public ArrayList<Planner> searchPlanList(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+		return (ArrayList)sqlSession.selectList("plannerMapper.searchPlanList", map);
+	}
+
+	public String getTourTypeByContentId(SqlSessionTemplate sqlSession, String contentId) {
+		return sqlSession.selectOne("plannerMapper.getTourTypeByContentId",contentId);
+	}
+
+	public ArrayList<PlanDetail> getDetail(SqlSessionTemplate sqlSession, int pno) {
+		return (ArrayList)sqlSession.selectList("plannerMapper.getDetail",pno);
+	}
+
+	public int addReply(SqlSessionTemplate sqlSession, PlanReply pr) {
+		return sqlSession.insert("plannerMapper.addReply",pr);
+	}
+
+	public ArrayList<PlanReply> getReply(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+		return (ArrayList)sqlSession.selectList("plannerMapper.getReply",map);
+	}
+
+	public int selectReplyCount(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+		return sqlSession.selectOne("plannerMapper.selectReplyCount",map);
 	}
 
 }

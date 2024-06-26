@@ -12,10 +12,13 @@
         #outer {
             /* border: 1px solid black; */
             width: 1100px;
-            height: 830px;
+            height: 790px;
             margin: auto;
             padding: 20px;
-            margin-top : 60px;
+            margin-top : 100px;
+            position : absolute;
+            left : 0px;
+            right : 0px;
         }
 
         /* 게시글 정렬 버튼, 지역 검색창, 검색버튼 그룹 */
@@ -26,6 +29,10 @@
             border-radius: 5px;
             box-sizing: border-box;
             transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 트랜지션 효과 추가 */
+            
+        }
+        select[name=sort-select]{
+        	margin-left : 80px; 
         }
         /* select 그룹 - 포커스 시(마우스로 클릭 시 변화) */
         .select:focus {
@@ -35,7 +42,9 @@
         }
 
         /* 지역 검색창 길이 늘임 */
-        #region-select { width: 300px; }
+        #region-select {
+         	width: 300px;
+         }
         /* 검색 버튼 */
         #region-select-button {
             background-color: skyblue;
@@ -61,6 +70,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease; /* 배경색 변화에 트랜지션 추가 */
             float: right;
+            margin-right : 80px; 
         }
         #planner-writer:hover {
             background-color: #00BFFF;
@@ -110,7 +120,7 @@
         }
 
         /* 페이징 버튼 */
-        .paging-area { margin-top: 30px; }
+        .paging-area { margin-top: 10px; }
         .paging-area button {
             color: skyblue;
             background-color: white;
@@ -130,6 +140,15 @@
         button[class^=btn-dis]{
         	background-color : blue;
         }
+        #search-result{
+        	display : none;
+        }
+        #search-form{
+        	position : relative;
+        	top : 0px;
+        	left : 190px;
+        	display : inline-block;
+        }
     </style>
 </head>
 <body>
@@ -139,16 +158,17 @@
         <!-- 목록 상단 -->
         <input type="button" id="planner-writer" value="플래너 작성하기">
         
-        <select class="select">
-            <option>최신순</option>
-            <option>조회순</option>
+        <select class="select" name="sort-select">
+            <option value="date">최신순</option>
+            <option value="count">조회순</option>
         </select>
-
-        <input type="text" id="region-select" class="select" placeholder="조회하고 싶은 지역을 검색하세요">
-        <input type="button" id="region-select-button" class="select" value="검색">
+		<div id="search-form">
+			<input type="text" id="region-select" class="select" placeholder="조회하고 싶은 지역을 검색하세요">
+	        <input type="button" id="region-select-button" class="select" value="검색">
+		</div>
 
         <br><br>
-
+		<h3 align="center" id="search-result"></h3>
         <!-- 플래너(게시글) 목록 -->
         <div class="planner-gallery">
         
@@ -161,6 +181,10 @@
     </div>
 <script>
 let pno = 1;
+let flag = 0;
+let keyword;
+let sortType = $("select[name=sort-select] option:checked").val();
+
 	$(function(){
 		let msg = '${sessionScope.msg}';
 		console.log(msg);
@@ -169,38 +193,91 @@ let pno = 1;
 			<c:remove var="msg" scope="session"/>
 		}
 		getPlanList();
+		console.log($("select[name=sort-select] option:checked").val());
 		$("#region-select-button").click(function(){
-			let keyword = $("#region-select").val();
+			keyword = $("#region-select").val();
+			
 			pno=1;
-			getPlanSearchList(keyword);
+			if(keyword==""){
+				getPlanList();
+			}else{
+				getPlanSearchList(keyword);
+			}
+			
 		});
-		
+		$("#region-select").keypress(function(e){
+			//console.log(e.code);
+			if(e.code == "Enter"){
+				$("#region-select-button").click();
+			}
+		});
+		$("select[name=sort-select]").change(function(){
+			//console.log($(this).val());
+			pno=1;
+			sortType = $(this).val();
+			switch(flag){
+			case 0:
+				getPlanList();
+				break;
+			case 1:
+				getPlanSearchList(keyword)
+				break;
+			}
+		});
 		$("#planner-writer").click(function(){
 			location.href="goPlanner.pl";
 		});
 		$(".planner-gallery").on("click","div[class=planner-thumbnail]",function(){
-			location.href="detail.pl?pno="+$("input[name=plan_no]").val();
+			location.href="detail.pl?pno="+$(this).children().eq(2).val();
 		});
 		$(".paging-area").on("click","button[class^=left]",function(){
 			pno--;
-			getPlanList();
+			switch(flag){
+			case 0:
+				getPlanList();
+				break;
+			case 1:
+				getPlanSearchList(keyword)
+				break;
+			}
+			
 		});
 		$(".paging-area").on("click","button[class^=btn_no]",function(){
 			pno = $(this).html();
-			getPlanList();
+			switch(flag){
+			case 0:
+				getPlanList();
+				break;
+			case 1:
+				getPlanSearchList(keyword)
+				break;
+			}
+			
 		});
 		$(".paging-area").on("click","button[class^=right]",function(){
 			pno++;
-			getPlanList();
+			switch(flag){
+			case 0:
+				getPlanList();
+				break;
+			case 1:
+				getPlanSearchList(keyword)
+				break;
+			}
+			
 		});
+		
+		
+		
 	});
 		function getPlanSearchList(keyword){
+			flag=1;
 			$(".paging-area").html("");
 			$(".planner-gallery").html("");
 			$.ajax({
 				url : "getPlanSearchList.pl",
 				method : "get",
-				data : {pno : pno,keyword : keyword},
+				data : {pno : pno,keyword : keyword,sortType:sortType},
 				success : function(e){
 					//console.log(e);
 					let list = e.list;
@@ -228,7 +305,7 @@ let pno = 1;
 					});
 					
 					if(pinfo.startPage!=1){
-	                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-left").attr("class","left btn btn-success btn-sm").html("&lt;&lt;");
+	                    var btnLeft = $("<button>").attr("type","button").attr("id","left").attr("class","left btn btn-success btn-sm").html("&lt;&lt;");
 	                    //console.log(btnleft);
 	                    $(".paging-area").append(btnLeft);
 	                }
@@ -244,21 +321,25 @@ let pno = 1;
 	                }
 	                if(pinfo.maxPage!=pinfo.endPage){
 	                    
-	                    var btnRight = $("<button>").attr("type","button").attr("id","btn-right").attr("class","right btn btn-success btn-sm").html("&gt;&gt;");
+	                    var btnRight = $("<button>").attr("type","button").attr("id","right").attr("class","right btn btn-success btn-sm").html("&gt;&gt;");
 	                    $(".paging-area").append(btnRight);
 	                }
+	                $("#search-result").html("'"+keyword+"'검색 결과");
+	                $("#search-result").css("display","block");
 				},
 				error : function(){
 					console.log("실패");
 				}
 			});
+		}
 	function getPlanList(){
+		flag=0;
 		$(".paging-area").html("");
 		$(".planner-gallery").html("");
 		$.ajax({
 			url : "getPlanList.pl",
 			method : "get",
-			data : {pno : pno},
+			data : {pno : pno,sortType:sortType},
 			success : function(e){
 				console.log(e);
 				let list = e.list;
@@ -305,6 +386,7 @@ let pno = 1;
                     var btnRight = $("<button>").attr("type","button").attr("id","btn-right").attr("class","right btn btn-success btn-sm").html("&gt;&gt;");
                     $(".paging-area").append(btnRight);
                 }
+                $("#search-result").css("display","none");
 			},
 			error : function(){
 				console.log("실패");

@@ -1,6 +1,7 @@
 package com.tp.travely.planner.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tp.travely.planner.model.dao.PlannerDao;
 import com.tp.travely.planner.model.vo.PlanDetail;
+import com.tp.travely.planner.model.vo.PlanReply;
 import com.tp.travely.planner.model.vo.Planner;
 
 @Service
@@ -53,5 +55,31 @@ public class PlannerServiceImpl implements PlannerService{
 	public int searchPlanCount(String keyword) {
 		return plannerDao.searchPlanCount(sqlSession,keyword);
 	}
+	@Override
+	public ArrayList<Planner> searchPlanList(HashMap<String, String> map) {
+		return plannerDao.searchPlanList(sqlSession,map);
+	}
+	@Override
+	public String getTourTypeByContentId(String contentId) {
+		return plannerDao.getTourTypeByContentId(sqlSession,contentId);
+	}
+	@Override
+	public ArrayList<PlanDetail> getDetail(int pno) {
+		return plannerDao.getDetail(sqlSession,pno);
+	}
+	@Override
+	public int addReply(PlanReply pr) {
+		return plannerDao.addReply(sqlSession,pr);
+	}
+	@Override
+	public ArrayList<PlanReply> getReply(HashMap<String, String> map) {
+		return plannerDao.getReply(sqlSession,map);
+	}
+	@Override
+	public int selectReplyCount(HashMap<String, String> map) {
+		return plannerDao.selectReplyCount(sqlSession,map);
+	}
+	
+	
 	
 }

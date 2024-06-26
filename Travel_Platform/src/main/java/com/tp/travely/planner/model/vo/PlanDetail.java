@@ -14,4 +14,7 @@ public class PlanDetail {
 	private int dayCount;
 	private int refTno;
 	private int refPno;
+	private String tourName;
+	private double mapX;
+	private double mapY;
 }

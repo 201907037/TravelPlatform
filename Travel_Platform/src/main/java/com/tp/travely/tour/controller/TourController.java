@@ -240,21 +240,41 @@ public class TourController {
 		//System.out.println(tno);
 		//System.out.println(contentId);
 		System.out.println("type : "+type);
+		String tp = plannerService.getTourTypeByContentId(contentId);
 		int contentTypeId=0;
-		switch(type) {
-		case "관광지":
-			contentTypeId=12;
-			break;
-		case "레포츠":
-			contentTypeId=28;
-			break;
-		case "숙박":
-			contentTypeId=32;
-			break;
-		case "음식점":
-			contentTypeId=39;
-			break;
+		if(tp==null) {
+			switch(type) {
+			case "관광지":
+				contentTypeId=12;
+				break;
+			case "레포츠":
+				contentTypeId=28;
+				break;
+			case "숙박":
+				contentTypeId=32;
+				break;
+			case "음식점":
+				contentTypeId=39;
+				break;
+			}
+		}else {
+			switch(tp) {
+			case "관광지":
+				contentTypeId=12;
+				break;
+			case "레포츠":
+				contentTypeId=28;
+				break;
+			case "숙박":
+				contentTypeId=32;
+				break;
+			case "음식점":
+				contentTypeId=39;
+				break;
+			}
 		}
+		
+		
 		
 		String url = "https://apis.data.go.kr/B551011/KorService1/detailIntro1?";
 		url+="MobileOS=ETC";

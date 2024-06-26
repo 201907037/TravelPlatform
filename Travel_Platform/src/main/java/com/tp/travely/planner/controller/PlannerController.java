@@ -27,6 +27,7 @@ import com.tp.travely.common.model.vo.PageInfo;
 import com.tp.travely.member.model.vo.Member;
 import com.tp.travely.planner.model.service.PlannerService;
 import com.tp.travely.planner.model.vo.PlanDetail;
+import com.tp.travely.planner.model.vo.PlanReply;
 import com.tp.travely.planner.model.vo.Planner;
 import com.tp.travely.tour.model.service.TourService;
 import com.tp.travely.tour.model.vo.City;
@@ -130,9 +131,10 @@ public class PlannerController {
 	
 	@GetMapping(value="getPlanList.pl",produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public String selectPlanList(int pno) {
+	public String selectPlanList(int pno,String sortType) {
 		
 		HashMap<String, String> map = new HashMap<>();
+		map.put("sortType", sortType);
 		int listCount = plannerService.selectPlanListCount();
 		PageInfo pinfo = getPagInfo(listCount, pno,10,12);
 		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
@@ -156,15 +158,17 @@ public class PlannerController {
 	}
 	@GetMapping(value="getPlanSearchList.pl",produces="application/json; charset=UTF-8")
 	@ResponseBody
-	public String searchPlan(int pno,String keyword) {
+	public String searchPlan(int pno,String keyword,String sortType) {
 		HashMap<String, String> map = new HashMap<>();
+		map.put("keyword",keyword);
+		map.put("sortType", sortType);
 		int listCount = plannerService.searchPlanCount(keyword);
 		PageInfo pinfo = getPagInfo(listCount, pno,10,12);
 		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
 		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
 		map.put("start", (start+""));
 		map.put("end",(end+""));
-		ArrayList<Planner> list = plannerService.selectPlanList(map);
+		ArrayList<Planner> list = plannerService.searchPlanList(map);
 		HashMap<String, Object> rsMap = new HashMap<String, Object>();
 		rsMap.put("list",list);
 		rsMap.put("pinfo",pinfo);
@@ -172,27 +176,70 @@ public class PlannerController {
 	}
 	@GetMapping("detail.pl")
 	public String goDetailForm(int pno,Model model) {
-//		Planner p = plannerService.getPlannerByPNO(pno);
+		Planner p = plannerService.getPlannerByPNO(pno);
 //		Planner p = new Planner();
 //		p.setAreaCode(3);
 //		p.setSigunguCodeNo(0);
-//		Double xx=0.0;
-//		Double yy=0.0;
-//		if(p.getSigunguCodeNo()!=0) {
-//			City c = tourService.getLocationCity(p.getSigunguCodeNo());
-//			xx = c.getLocationXX();
-//			yy = c.getLocationYY();
-//		}else {
-//			Districts d = tourService.getLocationArea(p.getAreaCode());
-//			xx = d.getLocationXX();
-//			yy = d.getLocationYY();
-//		}
-//		model.addAttribute("xx", xx);
-//		model.addAttribute("yy", yy);
+		Double xx=0.0;
+		Double yy=0.0;
+		if(p.getSigunguCodeNo()!=0) {
+			City c = tourService.getLocationCity(p.getSigunguCodeNo());
+			xx = c.getLocationXX();
+			yy = c.getLocationYY();
+		}else {
+			Districts d = tourService.getLocationArea(p.getAreaCode());
+			xx = d.getLocationXX();
+			yy = d.getLocationYY();
+		}
+		//System.out.println(xx);
+		//System.out.println(yy);
 		
-		model.addAttribute("xx", 127.928144444444);
-		model.addAttribute("yy", 36.9881805555555);
+		ArrayList<PlanDetail> list = plannerService.getDetail(pno);
+//		for(PlanDetail pd : list) {
+//			System.out.println(pd);
+//		}
+		model.addAttribute("planner",new Gson().toJson(p));
+		model.addAttribute("p", p);
+		model.addAttribute("l", list);
+		model.addAttribute("list",new Gson().toJson(list));
+		model.addAttribute("xx", xx);
+		model.addAttribute("yy", yy);
+		//System.out.println(p);
+		//model.addAttribute("xx", 127.928144444444);
+		//model.addAttribute("yy", 36.9881805555555);
 		return "planner/planDetail";
+	}
+	@PostMapping(value="addReply.pl")
+	@ResponseBody
+	public String addReply(String content,int pno) {
+		//int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		int userNo=1;
+		PlanReply pr = new PlanReply();
+		pr.setRefPno(pno);
+		pr.setRefUno(userNo);
+		pr.setPrContent(content);
+		//System.out.println(pno);
+		//System.out.println(content);
+		int rs = plannerService.addReply(pr);
+		return new Gson().toJson(rs);
+	}
+	@GetMapping(value="getReply.pl", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getReply(int pno,int rno) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("pno", pno+"");
+		int listCount = plannerService.selectReplyCount(map);
+		PageInfo pinfo = getPagInfo(listCount, rno,10,5);
+		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
+		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
+		map.put("start", (start+""));
+		map.put("end",(end+""));
+		
+		ArrayList<PlanReply> list = plannerService.getReply(map);
+		HashMap<String,Object> rsMap = new HashMap<String, Object>();
+		rsMap.put("list", list);
+		rsMap.put("pinfo",pinfo);
+		return new Gson().toJson(rsMap);
 	}
 	
 	// �씪諛섎찓�냼�뱶

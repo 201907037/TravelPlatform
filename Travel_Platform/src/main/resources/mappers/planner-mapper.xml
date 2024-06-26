@@ -17,6 +17,10 @@
 		<result column="SIGUNGUCODENO" property="sigunguCodeNo" />
 		<result column="LOCATION_NAME" property="areaName"/>
 		<result column="SIGUNGU_NAME" property="sigunguName"/>
+		<result column="LOCATION_XX" property="locationX"/>
+		<result column="LOCATION_YY" property="locationY"/>
+		<result column="CITY_XX" property="cityX"/>
+		<result column="CITY_XX" property="cityY"/>
 		<result column="COUNT" property="count" />
 		<result column="STATUS" property="status" />
 		<result column="REF_UNO" property="refUno" />
@@ -32,6 +36,18 @@
 		<result column="DAY_COUNT" property="dayCount" />
 		<result column="REF_TNO" property="refTno" />
 		<result column="REF_PNO" property="refPno" />
+		<result column="TOUR_NAME" property="tourName"/>
+		<result column="MAP_X" property="mapX"/>
+		<result column="MAP_Y" property="mapY"/>
+	</resultMap>
+	<resultMap id="replyResultMap"
+			   type="pr">
+		<result column="PR_NO" property="prNo" />
+		<result column="PR_CONTENT" property="prContent" />
+		<result column="REF_PNO" property="refPno" />
+		<result column="REF_UNO" property="refUno" />
+		<result column="NICK_NAME" property="nickName" />
+		<result column="CREATE_DATE" property="createDate" />
 	</resultMap>
 	<select id="getTNOBycontentId"
 			parameterType="_int"
@@ -105,7 +121,15 @@
              LEFT JOIN CITY ON(SIGUNGUCODENO = SIGUNGU_CODE_NO)
                  WHERE P.PL_STATUS = 'Y'
                    AND P.STATUS = 'Y'
-              ORDER BY P.CREATE_DATE DESC) PL)
+              <choose>
+             	  	<when test="sortType=='date'">
+             	  	ORDER BY P.CREATE_DATE DESC
+             	  	</when>
+             	  	<otherwise>
+             	  	ORDER BY P.COUNT DESC
+             	  	</otherwise>
+             	  </choose>
+              ) PL)
 	WHERE RN BETWEEN #{start} AND #{end}		
 	</select>
 	<select id="searchPlanCount"
@@ -121,8 +145,76 @@
              AND (LOCATION_NAME LIKE '%'||#{keyword}||'%'
              OR SIGUNGU_NAME LIKE '%'||#{keyword}||'%'))
 	</select>
+	<select id="searchPlanList"
+			parameterType="hashmap"
+			resultMap="plannerResultSet">
+	SELECT *
+	  FROM (SELECT ROWNUM RN, PL.*
+			  FROM (SELECT P.PLAN_NO,P.PLAN_NAME,P.PLAN_EXP,P.CHANGE_NAME,P.COUNT,LOCATION_NAME,SIGUNGU_NAME
+            		  FROM PLANNER P
+            		  JOIN DISTRICTS ON(AREA_CODE=LCODE_NO)
+       		     LEFT JOIN CITY ON(SIGUNGUCODENO = SIGUNGU_CODE_NO)
+          			 WHERE P.PL_STATUS = 'Y'
+            		   AND P.STATUS = 'Y'
+             		   AND (LOCATION_NAME LIKE '%'||#{keyword}||'%'
+             			OR SIGUNGU_NAME LIKE '%'||#{keyword}||'%')
+             	  <choose>
+             	  	<when test="sortType=='date'">
+             	  	ORDER BY P.CREATE_DATE DESC
+             	  	</when>
+             	  	<otherwise>
+             	  	ORDER BY P.COUNT DESC
+             	  	</otherwise>
+             	  </choose>
+             	  ) PL)
+	WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+	<select id="getTourTypeByContentId"
+			parameterType="string"
+			resultType="string">
+	SELECT TOUR_TYPE
+	FROM TOUR
+	WHERE CONTENT_ID = #{contentId}
+	</select>
 	<select id="getPlannerByPNO"
-			parameterType="_int">
-	
+			parameterType="_int"
+			resultMap="plannerResultSet">
+	SELECT *
+	FROM PLANNER
+	WHERE PLAN_NO = ${pno}
+	</select>
+	<select id="getDetail"
+			parameterType="_int"
+			resultMap="detailResultSet">
+	SELECT P.*, TOUR.TOUR_NAME, TOUR.MAP_X,TOUR.MAP_Y
+	FROM PLAN_DETAIL P
+	JOIN TOUR ON(REF_TNO = TOUR_NO)
+	WHERE REF_PNO = #{pno}
+	</select>
+	<insert id="addReply"
+			parameterType="pr">
+	INSERT INTO PLAN_REPLY(PR_NO,PR_CONTENT,REF_PNO,REF_UNO) VALUES(SEQ_TR_NO.NEXTVAL
+								, #{prContent}
+								, #{refPno}
+								, #{refUno})		
+	</insert>
+	<select id="selectReplyCount"
+			parameterType="hashmap"
+			resultType="_int">
+	SELECT COUNT(*)
+	FROM PLAN_REPLY
+	WHERE REF_PNO = ${pno}
+	</select>
+	<select id="getReply"
+			parameterType="hashmap"
+			resultMap="replyResultMap">
+	SELECT *
+	  FROM (SELECT ROWNUM RN, PP.*
+			 FROM(SELECT PR.*, NICK_NAME
+					FROM PLAN_REPLY PR
+				    JOIN MEMBER ON(REF_UNO = USER_NO)
+				   WHERE REF_PNO = ${pno}
+				ORDER BY PR.CREATE_DATE DESC) PP)
+	 WHERE RN BETWEEN ${start} AND ${end}
 	</select>
 </mapper>

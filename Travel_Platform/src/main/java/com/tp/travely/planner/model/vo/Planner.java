@@ -16,6 +16,10 @@ public class Planner {
 	private String createDate;
 	private String areaName;
 	private String sigunguName;
+	private double locationX;
+	private double locationY;
+	private double cityX;
+	private double cityY;
 	private int areaCode;
 	private int sigunguCodeNo;
 	private int count;
