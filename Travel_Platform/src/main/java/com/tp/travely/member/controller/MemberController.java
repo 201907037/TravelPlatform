@@ -254,6 +254,17 @@ public class MemberController {
 		return "member/myPage1";
 	}
 	
+	@GetMapping("myPageList.me")
+	public String myPageList() {
+		
+		// System.out.println("마이페이지 요청됨");
+		log.debug("마이페이지 요청됨");
+		
+		// 마이페이지 화면 포워딩
+		// /WEB-INF/views/member/myPage.jsp
+		return "member/myPageList";
+	}
+	
 	@GetMapping("myPage.me")
 	public String myPage() {
 		

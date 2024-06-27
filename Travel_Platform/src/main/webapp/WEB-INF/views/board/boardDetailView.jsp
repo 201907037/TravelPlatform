@@ -453,7 +453,7 @@
     <div class="item">
     	<div align="center">
     	<div class="header">
-                <img src="${ requestScope.m.changeName }" alt="Profile Picture">
+                <a href="myPageList.me"><img src="${ requestScope.m.changeName }" alt="Profile Picture"></a>
                 <span>${ requestScope.m.nickName }</span>
             </div>
         </div>
