@@ -7,12 +7,24 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+
+
+
  /* css 변수 */
   :root {
     --nav--width: 92px;
 
     /* Colores */
-    --first-color: #0c5df4;
+    --first-color: rgb(176, 196, 222);
     --bg-color: #12192c;
     --sub-color: #b6cefc;
     --white-color: #fff;
@@ -28,6 +40,9 @@
 	 
     *{
         box-sizing: border-box;
+		font-family: 'Pretendard-Regular';
+
+
     }
     body {
     position: relative;
@@ -59,8 +74,8 @@
     left: 0;
     width: 240px;
     height: 100vh;
-    background-color: var(--bg-color);
-    color: var(--white-color);
+    background-color: whitesmoke;
+    color: black;
     padding: 1.5rem 1.5rem 2rem;
     transition: .5s;
     z-index: var(--z-fixed);
@@ -93,7 +108,7 @@
 	
 	
 	.nav__logo {
-	    color: var(--white-color);
+	    color: black;
 	    font-weight: 600;
 	}
 	
@@ -103,58 +118,93 @@
 	    align-items: center;
 	    column-gap: .75rem;
 	    padding: .75rem;
-	    color: var(--white-color);
+	    color: black;
 	    border-radius: .5rem;
 	    margin-bottom: 1rem;
 	    transition: .3s;
 	    cursor: pointer;
+	    font-family: 'Pretendard-Regular';
+		font-weight: bold;
+		background-color: rgb(176, 196, 222);
 	}
+
+	
 	.nav__link:hover {
-	    background-color: cyan;
+		color: whitesmoke;
+		background-color: grey;
+	    
 	}
+
 	.nav_name {
 	    font-size: var(--small-font-size);
+		
+
+		
 	}
 	.search-div{
         width : 90%;
         margin : auto;
-        border : 1px solid black;
-        border-radius: 20px;
+        
+        border: 1px solid grey;
+		border-radius: 30px;
+
+        
         vertical-align: middle;
-        background-color : white;
+        background-color : whitesmoke;
     }
 	.left-bar,.leftleft-bar{
         position : absolute;
         width : 500px;
         border-radius : 15px;
-        background-color: var(--bg-color);
-   		color: var(--white-color);
+        background-color: whitesmoke;
+   		color: black;
         height: 95vh;
         z-index : 10;  
        	padding : 5px;
+		border-right: 2px solid lightgrey;
     }
     .t_box{
         width : 100%;
         height : 100px;
-        border : 1px solid green;
-        border-radius : 15px;
+		border: none;
+        border-top: 1px solid grey;
+        border-bottom: 1px solid grey;
         margin: auto;
         margin-top: 15px;
+	    transition: .3s;
+
+
     }
+
+	.t_box:hover{
+		background-color: rgb(176, 196, 222);
+	    transition: .3s;
+		border-color: rgb(176, 196, 222);
+
+
+
+
+	}
+
+
     .t_img{
-        width : 40%;
-        height : 100%;
-        border : 1px solid black;
-        float : left
+        width : 120px;
+        height : 100px;
+        
+        float : left;
+		padding: 12px;
+		
     }
     .t_img>img{
         width : 100%;
         height : 100%;
+        border-radius: 60px;
+
     }
     .t_name{
         width: 60%;
         height: 100%;
-        border: 1px solid black;
+        
         float : right;
     }
 	.active {
@@ -173,6 +223,8 @@
         font-size: 14px;
         border-radius: 15px;
         border : 0px;
+        background-color : whitesmoke;
+
     }   
     .search-div input[name=keyword]:focus{
         outline: none;
@@ -187,7 +239,8 @@
         cursor: pointer;
         height: 100%;
         text-align : "center";
-        background-color: white;
+        background-color : whitesmoke;
+        
         border: 0px;
     }
     .search{
@@ -206,7 +259,7 @@
     	right : 20px;
     	bottom : 10px;
     	color : white;
-    	text-aling : center;
+    	
     }
     .addEL{
     	height : 40px;
@@ -220,26 +273,35 @@
     	left : 20px;
     	bottom : 10px;
     	color : white;
-    	text-aling : center;
+    	
     }
     #save-plan:hover,#changeDate:hover,.addEL:hover{
-    	background-color : #0036B5;
+    	color: whitesmoke;
+		background-color: grey;
     }
     #save-plan>span,#changeDate>span,.addEL>span,#left-img,#right-img{
-    	padding-bottm : 0px;
+    	
     	margin : auto;
     }
 	
 	.d_box>div{
 		text-align : center;
-		border : 1px solid green;
-		border-radius : 20px;
-		margin-top : 10px;
-		margin-bottom : 10px;
+	    transition: .3s;
+		border-radius : 22px;
+		margin-top : 30px;
+		margin-bottom : 30px;
+		background-color: rgb(176, 196, 222);
+		
+		color: black;
+		
 	}
 	.date:hover{
 		cursor: pointer;
-		border: 3px solid green;
+		color: whitesmoke;
+		background-color: grey;
+	    transition: .3s;
+
+		
 	}
 	input[type=number]{
 		width : 48px;
@@ -258,7 +320,8 @@
 		
 	}
 	.adv_search{
-		height : 15%;	
+		height : 15%;
+		
 	}
 	.el_box{
 		height : 68%;
@@ -289,7 +352,7 @@
 	}
 	.ics>span,.desc>span{
 		font-size : 13px;
-		text-aign : center;
+		
 	}
 	input[type=radio]{
 		width : 40px;	
@@ -348,7 +411,7 @@
 		height : 30px;
     	background-color : white;
     	color : black;
-    	text-aling : center;
+    	
     	border : 0px;
 		}
 		#left-img{
@@ -358,12 +421,35 @@
 		height : 30px;
     	background-color : white;
     	color : black;
-    	text-aling : center;
+    	
     	border : 0px;
 	}
 	#right-img:hover,#left-img:hover{
 		color : green;
 	}
+
+	#btn1{
+		border: none;
+	}
+
+	#tt{
+		font-weight: bold;
+		margin-left: 30px;
+	}
+
+	#oo{
+		
+		
+	}
+
+
+
+
+
+
+
+
+
 </style>
 <!--  <link rel="stylesheet" href="resources/css/styles.css">-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -379,7 +465,7 @@
 					<span class="material-symbols-outlined">
 					travel_explore
 					</span>
-	                <a id="plan" class="nav__logo">플래너</a>
+	                <a id="plan" class="nav__logo">Travley</a>
 	            </div>
 	            <div class="nav__list">
 	            	<!-- <a id="plan" class="dateList nav__link active">
@@ -438,10 +524,11 @@
 	</div>
 	
 	<div class="left-bar" style="display : none; width : 0px;">
-		<div style="float : right;">
-			<button class="btn-cl">&lt;&lt;</button>
+		<div id="btn1" style="float : right;">
+			<button id="btn1" class="btn-cl">&lt;&lt;</button>
 		</div>
-		<h3 align="center">여행지</h3>
+		<h3 id="tt" align="center">여행지</h3>
+		<br>
 		
 		<div align="center" class="search-div">
 	       
@@ -461,15 +548,15 @@
 	    <div class="adv_search">
 	    	 <div align="center">
 	    	 <table>
-	    	 	<tr>
+	    	 	<tr >
 	    	 		<th style="text-align : right;"><label for="nameSearch">관광지명 검색</label></th>
-	    	 		<td style="width : 40px; text-align : left;"><input type="radio" id="nameSearch" name="search-type" value="nameSearch" style="width : 100%;"></td>
+	    	 		<td style="width : 40px; text-align : left;"><input  type="radio" id="nameSearch" name="search-type" value="nameSearch" style="width : 100%;"></td>
 	    	 		<th style="text-align : right;"><label for="areaSearch">주소로 검색</label></th>
-	    	 		<td style="width : 40px; text-align : left;"><input type="radio" id="addressSearch" name="search-type" value="addressSearch" style="width : 100%;"></td>
+	    	 		<td style="width : 40px; text-align : left;"><input  type="radio" id="addressSearch" name="search-type" value="addressSearch" style="width : 100%;"></td>
 	    	 	</tr>
 	    	 	<tr>
-	    	 		<th style="text-align : right;"><label for="aroundSearch">주변 여행지 찾기</label></th>
-	    	 		<td style="width : 40px; text-align : left;"><input type="checkbox" id="aroundSearch" name="aroundSearch" style="width : 100%;"></td>
+	    	 		<th style="text-align : right;"><labelfor="aroundSearch">주변 여행지 찾기</labelfor=></th>
+	    	 		<td style="width : 80px; text-align : left;"><input type="checkbox" id="aroundSearch" name="aroundSearch" style="width : 100%;"></td>
 	    	 	</tr>
 	    	 </table>
 	         </div>
@@ -830,9 +917,9 @@ let typeFlag=0;
                 }
                 for(let i = pinfo.startPage;i<=pinfo.endPage;i++){
                     if(i==pinfo.currentPage){
-                    	var btnNum = $("<button>").attr("type","button").attr("disabled","ture").attr("class","btn_no btn btn-success btn-sm").text(i);
+                    	var btnNum = $("<button>").attr("type","button").attr("disabled","ture").attr("class","btn_no btn btn-secondary btn-sm").text(i);
                     }else{
-                    	var btnNum = $("<button>").attr("type","button").attr("class","btn_no btn btn-success btn-sm").text(i);
+                    	var btnNum = $("<button>").attr("type","button").attr("class","btn_no btn btn-secondary btn-sm").text(i);
                     }
                     
                     //console.log(btnNum);
@@ -840,7 +927,7 @@ let typeFlag=0;
                 }
                 if(pinfo.maxPage!=pinfo.endPage){
                     
-                    var btnRight = $("<button>").attr("type","button").attr("id","btn-right").attr("class","right btn btn-success btn-sm").html("&gt;&gt;");
+                    var btnRight = $("<button>").attr("type","button").attr("id","btn-right").attr("class","right btn btn-secondary btn-sm").html("&gt;&gt;");
                     $("#button_box").append(btnRight);
                 }
 			},
@@ -945,7 +1032,10 @@ let typeFlag=0;
 			async : false,
 			data : {tno : tourObj.tno, contentId : tourObj.contentId, type : tourObj.typeSearch},
 			success : function(result){
+				console.log(result);
 				let obj = result.response.body.items.item[0];
+				console.log(obj);
+				console.log(option);
 				$("#tour_name").html(tourObj.name);
 				switch(obj.contenttypeid){
 				case "12":
@@ -1714,7 +1804,7 @@ let typeFlag=0;
 			//console.log($(this).children().eq(2).val());
 			//console.log(addTo);
 			//console.log($(this).children().eq(3).val());
-			console.log(plan);
+			console.log(tourObj.typeSearch);
 			if($("#aroundSearch").is(":checked")){
 				//console.log("클릭");
 				aroundNum = 1;
@@ -1851,8 +1941,8 @@ let typeFlag=0;
 			}
 		});
 		$("#save-plan").click(function(){
-			let user = '${sessionScope.loginUser.nickName}';
-			console.log(user);
+			let user = '${sessionScope.loginUser}';
+			//console.log(user);
 			if(user==""){
 				alert("로그인 후 저장 가능합니다.");
 			}else{
@@ -2177,13 +2267,7 @@ let typeFlag=0;
 		$("#planBox").on("click","div[class=planbody]>div",function(){
 			$("button[class^=btn-Delete]").css("display","inline");
 			$("button[id=change-tour]").css("display","inline");
-			console.log(dateUseIdx);
 			tourListIdx = $(this).parent().children().eq(2).val();
-			tourObj = {tno : plan.planList[dateUseIdx].tourList[tourListIdx].tno
-					 , contentId : plan.planList[dateUseIdx].tourList[tourListIdx].contentId
-					 , name : plan.planList[dateUseIdx].tourList[tourListIdx].name
-					 , address : plan.planList[dateUseIdx].tourList[tourListIdx].address};
-			
 			getDetail();
 		});
 		$("#detail_close").click(function(){
@@ -2297,13 +2381,10 @@ let typeFlag=0;
 		
 		$("#planBox").on("change","input[type=number]",function(){
 			//console.log($(this).parent().parent().children().eq(1).children().eq(1).val());
-			idx = $(this).parent().parent().children().eq(1).children().eq(2).val();
+			idx = $(this).parent().parent().children().eq(1).children().eq(1).val();
 			let time = $(this).val();
-			console.log(idx);
-			console.log(time);
 			plan.planList[dateUseIdx].tourList[idx].time = time;
-			
-			console.log(plan);
+			//console.log(plan);
 		});
 		
 	});
