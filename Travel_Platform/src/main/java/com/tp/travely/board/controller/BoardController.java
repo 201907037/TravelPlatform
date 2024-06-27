@@ -478,6 +478,21 @@ public class BoardController {
 	}
 
 
+	// 회원 프로필페이지로 이동
+	@GetMapping("profilePage.bo")
+	public String profileEnrollForm(int uno,
+									Model model) {
+		
+		// System.out.println(uno);
+		
+		Member m = boardService.selectProfileMember(uno);
+		
+		model.addAttribute("m", m);
+		// System.out.println(m);
+		
+		return "member/profilePage";
+	}
+	
 	
 	
 	

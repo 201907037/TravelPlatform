@@ -144,6 +144,34 @@
         	background-color : blue;
         }
     
+    	/* 테이블 스타일 */
+	    #tb {
+	        width: 80%;
+	        margin: 20px auto;
+	        border-collapse: collapse;
+	        background-color: #fff;
+	        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	        border-radius: 10px;
+	        overflow: hidden;
+	    }
+	
+	    #tb th, #tb td {
+	        padding: 15px;
+	        text-align: center;
+	        border-bottom: 1px solid #f2f2f2;
+	    }
+	
+	    #tb th {
+	        background-color: #007bff;
+	        color: #fff;
+	        font-weight: bold;
+	    }
+	
+	    #tb tr:nth-child(even) {
+	        background-color: #f9f9f9;
+	    }
+	
+	   
 </style>
 </head>
 <body background="resources/image/pado.gif">
@@ -156,22 +184,37 @@
 
         <div id="first">
             <div>
-                <img id="profile" class="profile" src="${sessionScope.loginUser.changeName}" alt="Profile Image" style="width: 120px; height: 120px; border-radius: 70px;">
+                <img id="profile" class="profile" src="${requestScope.m.changeName}" alt="Profile Image" style="width: 300px; height: 300px; border-radius: 50%;">
             </div>
             <br><br>
-            <h2>${ sessionScope.loginUser.nickName }</h2>
+            <h1>${ requestScope.m.nickName }</h1>
             <br><br>
-            
-            
-
-            
-
             
 
             
         </div>
 
-            <h1>xx님의 플래너</h1>
+
+			<div>
+            <table id="tb">
+            	<tr>
+            		<td>닉네임</td>
+            		<td>나이</td>
+            		<td>성별</td>
+            		<td>가입일</td>
+            	</tr>
+            	<tr>
+            		<td>${ requestScope.m.nickName }</td>
+            		<td>${ requestScope.m.age }</td>
+            		<td>${ requestScope.m.gender }</td>
+            		<td>${ requestScope.m.createDate }</td>
+            	</tr>
+            	
+            </table>
+            </div>
+			<br><br><br>            
+            
+            <h1>${ requestScope.m.nickName }님의 플래너</h1>
 
             <div class="planner-gallery">
             </div>

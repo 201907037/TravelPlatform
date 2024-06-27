@@ -194,6 +194,11 @@ public class BoardDao {
 		return (ArrayList)sqlSession.selectList("boardMapper.searchMember", keyword);
 	}
 
+	public Member selectProfileMember(SqlSessionTemplate sqlSession, int userNo) {
+		
+		return sqlSession.selectOne("boardMapper.selectProfileMember", userNo);
+	}
+
 	
 
 	

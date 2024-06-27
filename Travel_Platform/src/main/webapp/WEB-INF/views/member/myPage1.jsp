@@ -143,6 +143,33 @@
         button[class^=btn-dis]{
         	background-color : blue;
         }
+        
+        /* 테이블 스타일 */
+	    #tb {
+	        width: 80%;
+	        margin: 20px auto;
+	        border-collapse: collapse;
+	        background-color: #fff;
+	        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	        border-radius: 10px;
+	        overflow: hidden;
+	    }
+	
+	    #tb th, #tb td {
+	        padding: 15px;
+	        text-align: center;
+	        border-bottom: 1px solid #f2f2f2;
+	    }
+	
+	    #tb th {
+	        background-color: #007bff;
+	        color: #fff;
+	        font-weight: bold;
+	    }
+	
+	    #tb tr:nth-child(even) {
+	        background-color: #f9f9f9;
+	    }
     
 </style>
 </head>
@@ -151,34 +178,61 @@
     <br><br><br><br><br><br><br>
     <div id="wrap" class="animate__animated animate__fadeInLeft">
         
-        <h1 align="center">마이페이지</h1>
+        <h1 align="center">MyPage</h1>
         <br><br>
 
         <div id="first">
             <div>
-                <img id="profile" class="profile" src="${sessionScope.loginUser.changeName}" alt="Profile Image" style="width: 120px; height: 120px; border-radius: 70px;">
+                <img id="profile" class="profile" src="${sessionScope.loginUser.changeName}" alt="Profile Image" style="width: 300px; height: 300px; border-radius: 50%;">
             </div>
             <br><br>
             <h2>${ sessionScope.loginUser.nickName }</h2>
             <br><br>
-            <button id="btn" onclick="location.href='myPage.me'">
-                프로필 편집
-            </button>
-
-            <button id="btn" onclick="location.href='updatePassword.me'">
-                비밀번호 변경
-            </button>
-            <br><br>
-
-            <button id="btn2" class="nn" onclick="location.href=''">
-                플래너 수정
-            </button>
-
             
-
             
         </div>
-
+        
+        	<div>
+            <table id="tb">
+            	<tr>
+            		<td>닉네임</td>
+            		<td>나이</td>
+            		<td>전화번호</td>
+            		<td>주소</td>
+            		<td>이메일</td>
+            		<td>성별</td>
+            		<td>가입일</td>
+            	</tr>
+            	<tr>
+            		<td>${ sessionScope.loginUser.nickName }</td>
+            		<td>${ sessionScope.loginUser.age }</td>
+            		<td>${ sessionScope.loginUser.phone }</td>
+            		<td>${ sessionScope.loginUser.address }</td>
+            		<td>${ sessionScope.loginUser.email }</td>
+            		<td>${ sessionScope.loginUser.gender }</td>
+            		<td>${ sessionScope.loginUser.createDate }</td>
+            	</tr>
+            	
+            </table>
+            </div>
+			<br><br><br>    
+        
+        	<div align="center">
+	        	<button id="btn" onclick="location.href='myPage.me'">
+	                프로필 편집
+	            </button>
+	
+	            <button id="btn" onclick="location.href='updatePassword.me'">
+	                비밀번호 변경
+	            </button>
+	            <br><br>
+	
+	            <button id="btn2" class="nn" onclick="location.href=''">
+	                플래너 수정
+	            </button>
+			</div>
+			<br><br>
+			
             <h1>내 플래너</h1>
 
             <div class="planner-gallery">

@@ -68,6 +68,8 @@ public interface BoardService {
 
 	ArrayList<Member> searchMember(String keyword);
 
+	Member selectProfileMember(int uno);
+
 	
 	
 	
