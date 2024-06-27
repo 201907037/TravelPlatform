@@ -238,62 +238,70 @@
     </div>
 
     <script>
+    let mno = "${requestScope.m.userNo}";
+    //console.log(mno);
     let pno = 1;
     // 김동현 플래너 리스트 호출용  함수
     function getPlanList(){
 		$(".paging-area").html("");
 		$(".planner-gallery").html("");
 		$.ajax({
-			url : "getMyPlanList.pl",
+			url : "getOtherPlanList.pl",
 			method : "get",
-			data : {pno : pno},
+			data : {pno : pno,mno : mno},
 			success : function(e){
 				console.log(e);
 				let list = e.list;
 				let pinfo = e.pinfo;
-				$.each(list,function(i,v){
-					let div = $("<div>").attr("class","planner-thumbnail");
-					let planImg = $("<div>").attr("class","planner-thumbnail-imgae").attr("align","center");
-					let img = $("<img>").css({width : "200px",height:"130px"}).attr("src",v.changeName);
-					planImg.append(img);
-					let planexp = $("<div>").attr("class","planner-ex");
-					let title = $("<span>").attr("class","title").html(v.planName);
-					let br = $("<br>");
-					let region;
-					if(v.sigunguName==null){
-						region = $("<span>").attr("class","region").html(v.areaName);
-					}else{
-						region = $("<span>").attr("class","region").html(v.sigunguName);
-					}
-					let count = $("<span>").attr("class","count").html("조회수 : "+v.count);
-					planexp.append(title,br,region,count);
-					let tno = $("<input>").attr({type : "hidden","name":"plan_no","value":v.planNo});
+				if(list.length!=0){
+					$.each(list,function(i,v){
+						let div = $("<div>").attr("class","planner-thumbnail");
+						let planImg = $("<div>").attr("class","planner-thumbnail-imgae").attr("align","center");
+						let img = $("<img>").css({width : "200px",height:"130px"}).attr("src",v.changeName);
+						planImg.append(img);
+						let planexp = $("<div>").attr("class","planner-ex");
+						let title = $("<span>").attr("class","title").html(v.planName);
+						let br = $("<br>");
+						let region;
+						if(v.sigunguName==null){
+							region = $("<span>").attr("class","region").html(v.areaName);
+						}else{
+							region = $("<span>").attr("class","region").html(v.sigunguName);
+						}
+						let count = $("<span>").attr("class","count").html("조회수 : "+v.count);
+						planexp.append(title,br,region,count);
+						let tno = $("<input>").attr({type : "hidden","name":"plan_no","value":v.planNo});
+						
+						div.append(planImg,planexp,tno);
+						$(".planner-gallery").append(div);
+					});
 					
-					div.append(planImg,planexp,tno);
-					$(".planner-gallery").append(div);
-				});
-				
-				if(pinfo.startPage!=1){
-                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-left").attr("class","left btn btn-success btn-sm").html("&lt;&lt;");
-                    //console.log(btnleft);
-                    $(".paging-area").append(btnLeft);
-                }
-                for(let i = pinfo.startPage;i<=pinfo.endPage;i++){
-                    if(i==pinfo.currentPage){
-                    	var btnNum = $("<button>").attr("type","button").attr("disabled","ture").attr("class","btn-dis btn btn-success btn-sm").text(i);
-                    }else{
-                    	var btnNum = $("<button>").attr("type","button").attr("class","btn_no btn btn-success btn-sm").text(i);
-                    }
-                    
-                    //console.log(btnNum);
-                    $(".paging-area").append(btnNum);
-                }
-                if(pinfo.maxPage!=pinfo.endPage){
-                    
-                    var btnRight = $("<button>").attr("type","button").attr("id","btn-right").attr("class","right btn btn-success btn-sm").html("&gt;&gt;");
-                    $(".paging-area").append(btnRight);
-                }
-                $("#search-result").css("display","none");
+					if(pinfo.startPage!=1){
+	                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-left").attr("class","left btn btn-success btn-sm").html("&lt;&lt;");
+	                    //console.log(btnleft);
+	                    $(".paging-area").append(btnLeft);
+	                }
+	                for(let i = pinfo.startPage;i<=pinfo.endPage;i++){
+	                    if(i==pinfo.currentPage){
+	                    	var btnNum = $("<button>").attr("type","button").attr("disabled","ture").attr("class","btn-dis btn btn-success btn-sm").text(i);
+	                    }else{
+	                    	var btnNum = $("<button>").attr("type","button").attr("class","btn_no btn btn-success btn-sm").text(i);
+	                    }
+	                    
+	                    //console.log(btnNum);
+	                    $(".paging-area").append(btnNum);
+	                }
+	                if(pinfo.maxPage!=pinfo.endPage){
+	                    
+	                    var btnRight = $("<button>").attr("type","button").attr("id","btn-right").attr("class","right btn btn-success btn-sm").html("&gt;&gt;");
+	                    $(".paging-area").append(btnRight);
+	                }
+	                $("#search-result").css("display","none");
+				}else{
+					let br = $("<br>");
+					let div = $("<div>").css("margin-top","100px").html("작성한 플래너가 없습니다.")
+					$(".planner-gallery").append(br,div);
+				}
 			},
 			error : function(){
 				console.log("실패");
@@ -318,6 +326,10 @@
     			pno++;
     			
     			getPlanList();
+    		});
+    		
+    		$(".planner-gallery").on("click","div[class=planner-thumbnail]",function(){
+    			location.href="detail.pl?pno="+$(this).children().eq(2).val();
     		});
     	});
     

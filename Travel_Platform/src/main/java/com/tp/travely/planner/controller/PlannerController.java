@@ -289,6 +289,16 @@ public class PlannerController {
 		map.put("ck", rs);
 		return new Gson().toJson(map);
 	}
+	
+	@GetMapping(value="delete.pl",produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public String deletePlan(int planNo) {
+		int rs = plannerService.deletePlan(planNo);
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("rs",rs);
+		return new Gson().toJson(map);
+	}
+	
 	@GetMapping(value="getPlanSearchList.pl",produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String searchPlan(int pno,String keyword,String sortType) {
@@ -349,6 +359,29 @@ public class PlannerController {
 			return "common/errorPage";
 		}
 	}
+	
+	@GetMapping(value="getOtherPlanList.pl",produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public String getOtherPlanner(int pno,int mno,HttpSession session) {
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("mno", mno+"");
+		int listCount = plannerService.getOtherPlannerCount(map);
+		//System.out.println(listCount);
+		PageInfo pinfo = getPagInfo(listCount, pno,10,9);
+		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
+		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
+		map.put("start", (start+""));
+		map.put("end",(end+""));
+		System.out.println(pinfo);
+		ArrayList<Planner> list = plannerService.getOtherPlannerList(map);
+		HashMap<String, Object> rsMap = new HashMap<String, Object>();
+		rsMap.put("list", list);
+		rsMap.put("pinfo", pinfo);
+		return new Gson().toJson(rsMap);
+		
+	}
+	
 	@PostMapping(value="addReply.pl")
 	@ResponseBody
 	public String addReply(String content,int pno,HttpSession session) {

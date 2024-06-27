@@ -105,6 +105,18 @@ public class PlannerServiceImpl implements PlannerService{
 	public int addCount(int pno) {
 		return plannerDao.addCount(sqlSession,pno);
 	}
+	@Override
+	public int getOtherPlannerCount(HashMap<String, String> map) {
+		return plannerDao.getOtherPlannerCount(sqlSession,map);
+	}
+	@Override
+	public ArrayList<Planner> getOtherPlannerList(HashMap<String, String> map) {
+		return plannerDao.getOtherPlannerList(sqlSession,map);
+	}
+	@Override
+	public int deletePlan(int planNo) {
+		return plannerDao.deletePlan(sqlSession,planNo);
+	}
 	
 	
 	

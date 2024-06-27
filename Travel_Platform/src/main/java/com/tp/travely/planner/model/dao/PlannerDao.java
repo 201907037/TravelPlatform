@@ -95,6 +95,18 @@ public class PlannerDao {
 		return sqlSession.update("plannerMapper.addCount",pno);
 	}
 
+	public int getOtherPlannerCount(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+		return sqlSession.selectOne("plannerMapper.getOtherPlannerCount",map);
+	}
+
+	public ArrayList<Planner> getOtherPlannerList(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+		return (ArrayList)sqlSession.selectList("plannerMapper.getOtherPlannerList",map);
+	}
+
+	public int deletePlan(SqlSessionTemplate sqlSession, int planNo) {
+		return sqlSession.delete("plannerMapper.deletePlan",planNo);
+	}
+
 	
 
 }

@@ -27,5 +27,8 @@ public interface PlannerService {
 	ArrayList<Planner> getMyPlannerList(HashMap<String, String> map);
 	int updatePlanner(Planner planner, ArrayList<PlanDetail> detailList);
 	int addCount(int pno);
+	int getOtherPlannerCount(HashMap<String, String> map);
+	ArrayList<Planner> getOtherPlannerList(HashMap<String, String> map);
+	int deletePlan(int planNo);
 	
 }

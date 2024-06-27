@@ -555,7 +555,7 @@
 	    	 		<td style="width : 40px; text-align : left;"><input  type="radio" id="addressSearch" name="search-type" value="addressSearch" style="width : 100%;"></td>
 	    	 	</tr>
 	    	 	<tr>
-	    	 		<th style="text-align : right;"><labelfor="aroundSearch">주변 여행지 찾기</labelfor=></th>
+	    	 		<th style="text-align : right;"><label for="aroundSearch">주변 여행지 찾기</labelfor=></th>
 	    	 		<td style="width : 80px; text-align : left;"><input type="checkbox" id="aroundSearch" name="aroundSearch" style="width : 100%;"></td>
 	    	 	</tr>
 	    	 </table>
@@ -1517,9 +1517,9 @@ let typeFlag=0;
 		$(".nav__list>a[class^=tourList]").click(function(){
 				if(dateUseIdx!=null){
 					$(".btn-cl").click();
-					setTimeout(function(){
+					//setTimeout(function(){
 						$(".left-bar").css("display","inline");
-					},600);
+					//},350);
 				}else{
 					$(".left-bar").css("width","0px");
 					$(".left-bar").css("display","inline");
@@ -1638,14 +1638,7 @@ let typeFlag=0;
 			pno++;
 			getList(type,pno);
 		});
-		$(".nav__list>a[class^=dateList]").click(function(){
-			$(".left-bar").css("display","none").css("width","0px");
-			$(".leftleft-bar").css("display","inline");
-			
-			$(".leftleft-bar").animate({width : '380px'},500);
-			$(".leftleft-bar>h3").html($(this).children().eq(1).html());
-			
-		});
+		
 		$(".d_box").on("click","div[class=date]",function(){
 			for(let i =0;i<dateMarkerList.length;i++){
 				dateMarkerList[i].setMap(null);
@@ -1658,15 +1651,12 @@ let typeFlag=0;
 			}	
 			if(flag==null){
 				if(dateUseIdx!=null){
-					$(".left-bar").css("display","none").css("width","0px");
+					
 					$(".btn-cl").click();
 					if(status=="NN"){
 						return;
 					}
-					setTimeout(function(){
-						$(".leftleft-bar").css("display","inline");
-					},500);
-					
+					$(".leftleft-bar").css("display","inline");
 				}else{
 					$(".left-bar").css("display","none").css("width","0px");
 					$(".leftleft-bar").css("display","inline");
@@ -1886,15 +1876,18 @@ let typeFlag=0;
 		$("button[class=btn-cl]").click(function(){
 			typeFlag=0;
 			let bar_cl = $(this).parent().parent().attr("class");
+			//console.log(bar_cl);
+			$("input[name=keyword]").val("");
 			//console.log($(this));
+			//console.log(1);
 			if(bar_cl == "left-bar"){
 				for(let i=0;i<markerList.length;i++){
 					markerList[i].setMap(null);
 				}
-				$(".left-bar").animate({width : '0px'},500);
-				setTimeout(function(){
+				//$(".left-bar").animate({width : '0px'},500);
+				
 					$(".left-bar").css("display","none");
-				},500);
+					$(".left-bar").css("width","0px");
 				//console.log("발동");
 			}else{
 				//console.log(dateMarkerList);
@@ -1909,9 +1902,9 @@ let typeFlag=0;
 				}
 				dateMarkerList=[];
 				//console.log($(".left-bar").css("width"));
-				setTimeout(function(){
-					$(".left-bar").css("display","none");
-				},400);
+				
+				$(".left-bar").css("display","none");
+				
 				let dateObj = plan.planList[dateUseIdx];
 				//console.log(dateObj);
 				let startTime = new Date(new Date().setHours(dateObj.startTimeH));
@@ -1927,10 +1920,12 @@ let typeFlag=0;
 				 //console.log(Number(maxTime)==total);
 				 if(Number(maxTime)==total){
 					 status = "YY";
-					$(".leftleft-bar").animate({width : '0px'},500);
-					setTimeout(function(){
-						$(".leftleft-bar").css("display","none");
-					},400);
+					 $(".leftleft-bar").css("width","0px");
+					 $(".leftleft-bar").css("display","none");
+					// $(".leftleft-bar").animate({width : '0px'},300);
+					//	setTimeout(function(){
+					//		$(".leftleft-bar").css("display","none");
+					//	},300);
 					dateUseIdx = null;	
 					//console.log("발동");
 				 }else{
@@ -1941,7 +1936,7 @@ let typeFlag=0;
 			}
 		});
 		$("#save-plan").click(function(){
-			let user = '${sessionScope.loginUser}';
+			let user = '${sessionScope.loginUser.nickName}';
 			//console.log(user);
 			if(user==""){
 				alert("로그인 후 저장 가능합니다.");
@@ -2268,6 +2263,11 @@ let typeFlag=0;
 			$("button[class^=btn-Delete]").css("display","inline");
 			$("button[id=change-tour]").css("display","inline");
 			tourListIdx = $(this).parent().children().eq(2).val();
+			
+			tourObj = {tno : plan.planList[dateUseIdx].tourList[tourListIdx].tno
+					 , contentId : plan.planList[dateUseIdx].tourList[tourListIdx].contentId
+					 , name : plan.planList[dateUseIdx].tourList[tourListIdx].name
+					 , address : plan.planList[dateUseIdx].tourList[tourListIdx].address};
 			getDetail();
 		});
 		$("#detail_close").click(function(){
@@ -2382,9 +2382,14 @@ let typeFlag=0;
 		$("#planBox").on("change","input[type=number]",function(){
 			//console.log($(this).parent().parent().children().eq(1).children().eq(1).val());
 			idx = $(this).parent().parent().children().eq(1).children().eq(1).val();
+			idx = $(this).parent().parent().children().eq(1).children().eq(2).val();
 			let time = $(this).val();
+			console.log(idx);
+			console.log(time);
 			plan.planList[dateUseIdx].tourList[idx].time = time;
 			//console.log(plan);
+			
+			console.log(plan);
 		});
 		
 	});

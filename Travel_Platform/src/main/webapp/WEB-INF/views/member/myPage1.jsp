@@ -7,7 +7,10 @@
 <meta charset="UTF-8">
 <title></title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
 <style>
 
@@ -255,9 +258,29 @@
 
 
     </div>
-
+<!-- 수정 삭제 모달 -->
+<div class="modal fade" id="controll-planner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">플래너 관리</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" align="center">
+         원하는 작업을 선택하세요.
+      </div>
+      <div class="modal-footer">
+        
+        <button type="button" class="btn btn-success" id="see">보기</button>
+        <button type="button" class="btn btn-primary" id="alert">수정</button>
+        <button type="button" class="btn btn-secondary" id="delete">삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
     <script>
     let pno = 1;
+    let planNo;
     // 김동현 플래너 리스트 호출용  함수
     function getPlanList(){
 		$(".paging-area").html("");
@@ -316,7 +339,7 @@
 	                }
 	                $("#search-result").css("display","none");
 				}else{
-					let btn = $("<button>").attr({type : "button",id:"make-plan"}).html("플래너 작성하러가기");
+					let btn = $("<button>").attr({type : "button",id:"btn2"}).html("플래너 작성하러가기");
 					$(".planner-gallery").append(btn);
 				}
 			},
@@ -345,7 +368,34 @@
     			getPlanList();
     		});
     		$(".planner-gallery").on("click","div[class=planner-thumbnail]",function(){
-    			location.href="changePlan.pl?pno="+$(this).children().eq(2).val();
+    			//location.href="changePlan.pl?pno="+$(this).children().eq(2).val();
+    			planNo = $(this).children().eq(2).val();
+    			$("#controll-planner").modal("show");
+    		});
+    		$("#alert").click(function(){
+    			location.href="changePlan.pl?pno="+planNo;
+    		});
+    		$("#see").click(function(){
+    			location.href="detail.pl?pno="+planNo;
+    		});
+    		$("#delete").click(function(){
+    			pno = 1;
+    			$.ajax({
+    				url : "delete.pl",
+    				method : "get",
+    				data : {planNo : planNo},
+    				success : function(e){
+    					//console.log(e);
+    					if(e.rs>0){
+    						getPlanList();
+    						alert("삭제 완료");
+    						$("#controll-planner").modal("hide");
+    					}
+    				},
+    				error : function(){
+    					alert("삭제 실패!");
+    				}
+    			});
     		});
     	});
     

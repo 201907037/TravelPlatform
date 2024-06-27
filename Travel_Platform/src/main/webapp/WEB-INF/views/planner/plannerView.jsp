@@ -36,29 +36,6 @@
 		
 		
 	}
-
-	#all{
-		width: 600px;
-		height: 500px;
-		background-color: whitesmoke;
-	}
-
-	#areaCode{
-		background-color: whitesmoke;
-		border : none;
-		border-bottom: 1px solid grey;
-	}
-
-	#daterange{
-		background-color: whitesmoke;
-		border: none;
-		cursor: pointer;
-		border-bottom: 1px solid grey;
-		
-	}
-
-
-
 </style>
 </head>
 <body>
@@ -84,17 +61,16 @@
 <!-- 시작할 때 뜨는 모달창 -->
 <div class="modal fade" id="DATEPICK" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div id="all" class="modal-content">
+    <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="staticBackdropLabel">플래너 기본 설정</h1>
         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
       </div>
       <div class="modal-body">
         <div>
-        	<div style="padding-left : 255px;">
-        		여행날짜
+        	<div style="padding-left : 130px;">
+        		<span>여행날짜</span><br>
         	</div>
-			<br>
         	<div align="center">
         		<input type="text" name="daterange" id="daterange" readonly style="width:200px;">
         	</div>
@@ -105,8 +81,8 @@
         	</div>
         </div>
         <br>
-        <div id="ch" align="center">
-        	여행지역  <br><br><select id="areaCode" name="areaCode">
+        <div align="center">
+        	여행지역 <select id="areaCode" name="areaCode">
         				<option value="0">선택</option>
 						<option value="1">서울특별시</option>
 						<option value="2">인천광역시</option>
@@ -137,7 +113,33 @@
       </div>
       <div class="modal-footer">
         <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-        <button type="button" class="btn-right btn btn-outline-success">적용</button>
+        <button type="button" class="btn-right btn btn-primary">적용</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 날짜 변경 모달 -->
+<div class="modal fade" id="dateChanger" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">날짜 변경</h1>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body">
+        <div>
+        	<div style="padding-left : 130px;">
+        		<span>여행날짜</span><br>
+        	</div>
+        	<div align="center">
+        		<input type="text" name="daterange" id="dchanger" readonly style="width:200px;">
+        	</div>
+        	<br>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+        <button type="button" class="btn-changer btn btn-primary" id="btn-changer">적용</button>
       </div>
     </div>
   </div>
@@ -146,6 +148,7 @@
 let tstart;
 let tend;
 let tDate;
+let dayCount;
 let areaCode;
 let areaName;
 let sigunguCode;
@@ -153,8 +156,117 @@ let sigunguCodeNo;
 let sigunguName;
 let locationXX;
 let locationYY;
+let planNo = '${requestScope.p.planNo}';
 let plan = {};
 let planner = [];
+let list;
+let pObj;
+
+if(planNo!=''){
+	pObj = JSON.parse('${requestScope.planner}');
+	list = JSON.parse('${requestScope.list}');
+	pObj.startDate = pObj.startDate+" 00:00:00";
+	pObj.endDate = pObj.endDate+" 23:59:59";
+	let startD=new Date(pObj.startDate);
+	let endD=new Date(pObj.endDate);
+	areaName = '${requestScope.areaName}';
+	
+	$("#planner-add-modal input[id=title]").val(pObj.planName);
+	$("#message-text").val(pObj.planExp);
+	$("#insert-img-box>img").attr("src",pObj.changeName);
+	
+	if(pObj.sigunguCodeNo==0){
+		areaCode = pObj.areaCode;
+	}else{
+		areaCode = pObj.sigunguCodeNo;
+	}
+	 
+	dayCount = Math.ceil(Math.abs((startD.getTime()-endD.getTime())/(1000 * 60 * 60 * 24)));
+	let planList=[];
+	for(let i=0;i<dayCount;i++){
+		
+		let tourList = [];
+		let startArr;
+		let endArr;
+		$.each(list,function(j,v){
+			if(v.dayCount==i){
+				//console.log(v);
+				startArr = v.startTime.split(":");
+				endArr = v.endTime.split(":");
+				let tour = {
+					address : v.address,
+					contentId : v.contentId,
+					img : v.timg,
+					name : v.tourName,
+					time : v.time,
+					XX : v.mapX,
+					YY : v.mapY,
+					tno : v.refTno,
+					detailNo : v.detailNo
+				};
+				tourList.push(tour);
+			}
+		});
+		
+		let obj = {
+			date : new Date(new Date().setDate(startD.getDate()+i)),
+			dayCount : i,
+			startTimeH : startArr[0],
+			startTimeM : startArr[1],
+			endTimeH : endArr[0],
+			endTimeM : endArr[1],
+			tourList : tourList
+		};
+		planList.push(obj);
+	}
+	plan = {areaCode : pObj.areaCode
+		   ,sigunguCodeNo:pObj.sigunguCodeNo
+		   ,startDate : startD
+		   ,endDate : endD
+		   ,planList : planList,
+			planNo : pObj.planNo	   
+		   };
+	for(let i=0;i<dayCount;i++){
+		let day = plan.planList[i].date;;
+		
+		let div =  $("<div>").attr("class","date").html((i+1)+"일차 : "+moment(day).format("YYYY/MM/DD"));
+		 let hidden = $("<input>").attr({type:"hidden",name:"plannerIndex",value:(i)});
+		 //console.log(i);
+		 div.append(hidden);
+		 $(".d_box").append(div);
+	}
+	
+	$.ajax({
+		  url : "getLocation.to",
+		  method : "GET",
+		  async : false,
+		  data : {areaCode : areaCode,
+			  	  sigunguCodeNo : sigunguCodeNo},
+		  success : function(e){
+			  console.log(e);
+			  locationXX = e.locationXX;
+			  locationYY = e.locationYY;
+		  },
+		  error : function(){
+			  console.log("실패");
+		  }
+	  });
+	
+	 var newloc =new kakao.maps.LatLng(locationYY,locationXX);
+	  map.setCenter(newloc);
+	  if(Number(areaCode)==39){
+		  map.setLevel(9);
+	  }else{
+		  map.setLevel(7); 
+	  }
+	  id="reForm"
+	  $("#reForm").attr("action","updatePlan.pl")
+}
+console.log(areaCode);
+console.log(areaName);
+console.log(pObj);
+console.log(list);
+console.log(planNo);
 		$(function() {
 			let today = new Date();
 			let nextday = new Date(new Date().setDate(today.getDate()+1));
@@ -177,26 +289,7 @@ let planner = [];
 		  	  tstart = drp.startDate._d;
 			  tend = drp.endDate._d;
 			  tDate = Math.ceil(Math.abs((tstart.getTime()-tend.getTime())/(1000 * 60 * 60 * 24)));
-			  //console.log(tDate);
-			  //console.log("출력");
-			 /* $(".dateSetter>table").html("");
-			  for(let i=0;i<tDate;i++){
-				 let tr = $("<tr>");
-				 let td = $("<td>");
-				 //let tdS = $("<td>");
-				 //let tdE = $("<td>");
-				 let startH = $("<input>").attr({"class" : "dateSelect","type":"number","min" : "01","max" : "24","step" : "1","value":"10","name" : "startH"}).css("background-color","white").css("color","black");
-				 let startM = $("<input>").attr({"class" : "dateSelect","type":"number","min" : "00","max" : "60","step" : "30","value":"00","name" : "startM"}).css("background-color","white").css("color","black");
-				 //tdS.append(startH," : ",startM);
-				 let endH = $("<input>").attr({"class" : "dateSelect","type":"number","min" : "01","max" : "24","step" : "1","value":"20","name" : "endH"}).css("background-color","white").css("color","black");
-				 let endM = $("<input>").attr({"class" : "dateSelect","type":"number","min" : "01","max" : "60","step" : "30","value":"00","name" : "endM"}).css("background-color","white").css("color","black");
-				 //tdE.append(endH," : ",endM);
-				 //tr.append(tdS,tdE);
-				 let hidden = $("<input>").attr({"type":"hidden","name" : "idx","value":i});
-				 td.append((i+1)+"일차 ",startH," : ",startM," ~ ",endH," : ",endM,hidden);
-				 tr.append(td);
-			  	$(".dateSetter>table").append(tr); 
-			  }*/
+			  
 		  	});
 		    $("#daterange").on('showCalendar.daterangepicker',function(){
 		    	
@@ -205,6 +298,7 @@ let planner = [];
 			$(".btn-default").html("취소");
 			$(".btn-primary").html("적용");
 		  var drp = $('#daterange').data('daterangepicker');
+		 
 		  $(".dateSetter").on("change","input[class=dateSelect]",function(){
 			  //console.log($(this).val());
 			  
@@ -322,7 +416,7 @@ let planner = [];
 							  if(i==0){ 
 								  day = tstart;
 							  }else{
-								  day = new Date(new Date().setDate(tstart.getDate()+i));
+								  day = new Date(tstart.getFullYear(),tstart.getMonth(),tstart.getDate()+i);
 							  }
 							 
 							 let div =  $("<div>").attr("class","date").html((i+1)+"일차 : "+moment(day).format("YYYY/MM/DD"));
@@ -371,15 +465,103 @@ let planner = [];
 			  }
 			  
 		  });
-	  		$("#DATEPICK").modal("show");
+	  		if(planNo==""){
+	  			$("#DATEPICK").modal("show");
+	  		}
 	  	 $("#changeDate").click(function(){
-	  		  $("#DATEPICK").modal("show");	
+	  		 if(dateUseIdx!=null){
+	  			$(".btn-cl").click(); 
+	  		 }
+	  		
+	  		 if(planNo==''){
+	  			 $("#DATEPICK").modal("show");
+	  		 }else{
+	  			 $("#dateChanger").modal("show");
+	  		 }
+	  		 	
 	  	  });
 	  	
+	  	 $("#btn-changer").click(function(){
+	  		 //console.log(tstart);
+	  		 //console.log(tend);
+	  		 //console.log(tDate);
+	  		 $(".date").remove();
+	  		 plan.startDate=tstart;
+	  		 plan.endDate = tend;
+	  		 //console.log(dayCount);
+	  		for(let i=0;i<tDate;i++){
+	  			let day;
+	  			 if(i==0){ 
+					  day = tstart;
+				  }else{
+					  day = new Date(tstart.getFullYear(),tstart.getMonth(),tstart.getDate()+i);
+				  }
+	  			 //console.log(day);
+	  			let div =  $("<div>").attr("class","date").html((i+1)+"일차 : "+moment(day).format("YYYY/MM/DD"));
+	  			 let hidden = $("<input>").attr({type:"hidden",name:"plannerIndex",value:(i)});
+	  			 //console.log(i);
+	  			 div.append(hidden);
+	  			 $(".d_box").append(div);
+	  			 if(i<dayCount){
+	  				 plan.planList[i].date = day;
+		  			 plan.planList[i].dayCount = i;
+	  			 }else{
+	  				 let list = [];
+	  				for(let j=0;j<=5;j++){
+						let p = {};
+						p.time = 2;
+						p.detailNo = 0;
+						if(j==1||j==4){
+							p.time = 1;
+						}
+						list.push(p);
+					 }
+	  				 let obj = {
+	  						 date : day,
+	  						dayCount:i,
+	  						startTimeH : 10,
+	  						startTimeM : "00",
+	  						endTimeH: 20,
+	  						endTimeM:"00",
+	  						tourList : list
+	  				 };
+	  				 
+	  				plan.planList.push(obj);
+	  			 }
+	  			
+	  		}
+	  		dayCount=tDate;
+	  		$("#dateChanger").modal("hide");
+	  		console.log(plan);
+	  	 });
 	  	 
-});
+	  	 $("#dchanger").daterangepicker({
+			 	locale: {
+				      format: 'YYYY/MM/DD'
+				    },
+				    opens : 'center',
+				    startDate : plan.startDate,
+				    endDate : plan.endDate,
+				    minDate : today
+			  }, function(start, end, label) {
+			    //console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+			   	
+			    $('#dchanger').on('apply.daterangepicker', function(ev, picker) {
+			  	  $("#dchanger").val(start.format('YYYY/MM/DD')+" - "+end.format('YYYY/MM/DD'));
+			  	  //console.log(drp);
+			  	  tstart = dlp.startDate._d;
+				  tend = dlp.endDate._d;
+				  
+				  tDate = Math.ceil(Math.abs((tstart.getTime()-tend.getTime())/(1000 * 60 * 60 * 24)));
+				  console.log("시작 시 : "+tstart);
+			  		 console.log("끝"+tend);
+			  		 
+			  		 console.log(tDate);
+			  	});
+			});
+	  	 var dlp = $("#dchanger").data('daterangepicker');
 
-
+		});
 </script>
 </body>
 </html>

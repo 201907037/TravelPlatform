@@ -237,7 +237,7 @@
 			FROM(SELECT PL.*,NICK_NAME
 					FROM PLANNER PL
 					JOIN MEMBER ON(PL.REF_UNO = USER_NO)
-					WHERE PL.STATUS='Y'
+					WHERE PL.STATUS='Y'	
 					AND REF_UNO = #{userNo}
 					ORDER BY PL.CREATE_DATE DESC) PP)
 	WHERE RN BETWEEN #{start} AND #{end}
@@ -290,5 +290,34 @@
     UPDATE PLANNER
     SET COUNT = COUNT+1
     WHERE PLAN_NO = #{pno}		
+    </update>
+    <select id="getOtherPlannerCount"
+    		parameterType="hashmap"
+    		resultType="_int">
+    SELECT COUNT(*)
+    FROM PLANNER
+    WHERE PL_STATUS = 'Y'
+    AND STATUS = 'Y'
+    AND REF_UNO = #{mno}
+    </select>
+    <select id="getOtherPlannerList"
+    		parameterType="hashmap"
+    		resultMap="plannerResultSet">
+    SELECT *
+	FROM (SELECT ROWNUM RN, PP.*
+			FROM(SELECT PL.*,NICK_NAME
+					FROM PLANNER PL
+					JOIN MEMBER ON(PL.REF_UNO = USER_NO)
+					WHERE PL.STATUS='Y'
+					AND PL.PL_STATUS='Y'	
+					AND REF_UNO = #{mno}
+					ORDER BY PL.CREATE_DATE DESC) PP)
+	WHERE RN BETWEEN #{start} AND #{end}
+    </select>
+    <update id="deletePlan"
+    		parameterType="_int">
+    UPDATE PLANNER
+    SET STATUS = 'N'
+    WHERE PLAN_NO = #{planNo}
     </update>
 </mapper>

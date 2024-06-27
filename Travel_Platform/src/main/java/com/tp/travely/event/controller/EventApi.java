@@ -38,7 +38,7 @@ public class EventApi {
             HttpURLConnection urlConnection = (HttpURLConnection) requestUrl.openConnection();
             urlConnection.setRequestMethod("GET");
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(),"UTF-8"));
             StringBuilder responseText = new StringBuilder();
             String line;
             while ((line = br.readLine()) != null) {
