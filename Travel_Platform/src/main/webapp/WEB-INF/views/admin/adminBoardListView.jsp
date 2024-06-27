@@ -48,12 +48,12 @@
                         	onchange="test1(this)">
                         <c:choose>
                         <c:when test="${b.status eq 'Y'}">
-                            <option value="Y">가입</option>
-                            <option value="N">탈퇴</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
                         </c:when>
                         <c:otherwise>
-                          	<option value="N">탈퇴</option>
-                            <option value="Y">가입</option>
+                          	<option value="N">Y</option>
+                            <option value="Y">N</option>
                         </c:otherwise>
                         </c:choose>
                         </select>

@@ -59,7 +59,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">main</div>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="dashBoard.ad">
                                 <div class="sb-nav-link-icon"></div><i class="fas fa-tachometer-alt"></i>&nbsp;
                                 &nbsp;대시보드 통계
                             </a>
@@ -78,7 +78,6 @@
                                 	<!-- Notice 경로 추가 (나현성) -->
                                     <a class="nav-link" href="noticeList.ad"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;공지사항 관리</a>
                                     <a class="nav-link" href="adminBoardListView.ad"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;여행후기게시판 관리</a>
-                                    <a class="nav-link" href="#"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;그룹채팅방 관리</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -88,15 +87,9 @@
                             </a>
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;
-                                        플랜 관리
-                                    </a>
                                     <!-- 유진 - 여행지 관리 부분 포워딩 처리 (2024.06.10) -->
                                     <a class="nav-link collapsed" href="adminTour.ad"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;
                                         여행지 관리
-                                    </a>
-                                    <a class="nav-link collapsed" href="#"><i class="fa-solid fa-angle-right"></i>&nbsp;&nbsp;
-                                        여행지후기 관리
                                     </a>
                                 </nav>
                             </div>

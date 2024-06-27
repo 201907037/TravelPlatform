@@ -57,5 +57,34 @@ SET STATUS='N'
 WHERE BOARD_NO = #{boardNo}
 </update>
 
+<select id="genderCount"
+		resultType="com.tp.travely.admin.service.GenderCount">
+SELECT 
+    GENDER,
+    COUNT(*) AS COUNT
+FROM 
+    MEMBER
+WHERE STATUS='Y'
+GROUP BY 
+    GENDER	
+</select>
+
+<select id="tourTypeCount"
+	resultType="map">
+SELECT COUNT(CASE WHEN TOUR_TYPE='관광지' THEN 1 END) AS "SPOT",
+COUNT(CASE WHEN TOUR_TYPE='레포츠' THEN 2 END) AS "LEPORTS",
+COUNT(CASE WHEN TOUR_TYPE='숙박' THEN 3 END) AS "LODGING",
+COUNT(CASE WHEN TOUR_TYPE='음식점' THEN 4 END) AS "RESTAURANT"
+FROM TOUR
+</select>
+
+<select id="uploadCount"
+	resultType="map">
+SELECT CREATE_DATE AS "CREATE",COUNT(*) AS "COUNT"
+FROM BOARD
+WHERE CREATE_DATE > SYSDATE-7
+GROUP BY CREATE_DATE
+ORDER BY CREATE_DATE
+</select>
 
 </mapper>

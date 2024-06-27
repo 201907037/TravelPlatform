@@ -1,6 +1,7 @@
 package com.tp.travely.admin.service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,24 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int boardDelate(int boardNo) {
 		return adminDao.boardDelate(sqlSession, boardNo);
+	}
+
+
+	@Override
+	public ArrayList<GenderCount> genderCount() {
+		return adminDao.genderCount(sqlSession);
+	}
+
+
+	@Override
+	public ArrayList<Map> tourTypeCount() {
+		return adminDao.tourTypeCount(sqlSession);
+	}
+
+
+	@Override
+	public ArrayList<Map> uploadCount() {
+		return adminDao.uploadCount(sqlSession);
 	}
 	
 	
