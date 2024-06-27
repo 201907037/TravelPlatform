@@ -39,6 +39,9 @@
 		<result column="TOUR_NAME" property="tourName"/>
 		<result column="MAP_X" property="mapX"/>
 		<result column="MAP_Y" property="mapY"/>
+		<result column="THUMB_IMG" property="timg"/>
+		<result column="ADDRESS" property="address"/>
+		<result column="CONTENT_ID" property="contentId"/>
 	</resultMap>
 	<resultMap id="replyResultMap"
 			   type="pr">
@@ -183,10 +186,11 @@
 	FROM PLANNER
 	WHERE PLAN_NO = ${pno}
 	</select>
+	
 	<select id="getDetail"
 			parameterType="_int"
 			resultMap="detailResultSet">
-	SELECT P.*, TOUR.TOUR_NAME, TOUR.MAP_X,TOUR.MAP_Y
+	SELECT P.*, TOUR.TOUR_NAME, TOUR.MAP_X,TOUR.MAP_Y,TOUR.ADDRESS,TOUR.THUMB_IMG,TOUR.CONTENT_ID
 	FROM PLAN_DETAIL P
 	JOIN TOUR ON(REF_TNO = TOUR_NO)
 	WHERE REF_PNO = #{pno}
@@ -238,4 +242,53 @@
 					ORDER BY PL.CREATE_DATE DESC) PP)
 	WHERE RN BETWEEN #{start} AND #{end}
 	</select>
+	<update id="updatePlanner"
+    		parameterType="planner">
+    UPDATE PLANNER
+    SET PLAN_NAME = #{planName},
+    	PLAN_EXP = #{planExp},
+    	START_DATE = #{startDate}, 
+    	END_DATE = #{endDate},
+    	<if test="changeName!=null">
+    	CHANGE_NAME = #{changeName},
+    	</if>
+    	PL_STATUS = #{plStatus}
+    WHERE PLAN_NO = #{planNo}
+    </update>
+    <update id="updatePlanDetail"
+    		parameterType="detail">
+    UPDATE PLAN_DETAIL
+    SET START_TIME = #{startTime},
+    	END_TIME = #{endTime},
+    	PLAN_DATE = #{planDate},
+    	TIME_AMOUNT = #{time},
+    	DAY_COUNT = #{dayCount},
+    	REF_TNO = #{refTno}
+    WHERE DETAIL_NO = #{detailNo}
+    </update>
+    <insert id="insertPlanDetailwithUpdate"
+    		parameterType="detail">
+    INSERT INTO PLAN_DETAIL(DETAIL_NO
+						  , START_TIME
+						  , END_TIME
+						  , PLAN_DATE
+						  , TIME_AMOUNT
+						  , DAY_COUNT
+						  , REF_TNO
+						  , REF_PNO)
+				     VALUES(PLAN_DETAIL_NO.NEXTVAL
+				     	  , #{startTime}
+				     	  , #{endTime}
+				     	  , #{planDate}
+				     	  , #{time}
+				     	  , #{dayCount}
+				     	  , #{refTno}
+				     	  , #{refPno})			
+    </insert>
+    <update id="addCount"
+    		parameterType="_int">
+    UPDATE PLANNER
+    SET COUNT = COUNT+1
+    WHERE PLAN_NO = #{pno}		
+    </update>
 </mapper>

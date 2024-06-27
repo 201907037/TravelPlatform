@@ -632,4 +632,5 @@
         INSERT INTO TOUR_IMG (TIMG_NO, CHANGE_NO, REF_TNO)
         VALUES (TIMG_NO.NEXTVAL, #{changeNo}, #{refTno})
     </insert>
+    
 </mapper>

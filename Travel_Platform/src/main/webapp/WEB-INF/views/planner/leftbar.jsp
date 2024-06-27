@@ -945,10 +945,7 @@ let typeFlag=0;
 			async : false,
 			data : {tno : tourObj.tno, contentId : tourObj.contentId, type : tourObj.typeSearch},
 			success : function(result){
-				console.log(result);
 				let obj = result.response.body.items.item[0];
-				console.log(obj);
-				console.log(option);
 				$("#tour_name").html(tourObj.name);
 				switch(obj.contenttypeid){
 				case "12":
@@ -1717,7 +1714,7 @@ let typeFlag=0;
 			//console.log($(this).children().eq(2).val());
 			//console.log(addTo);
 			//console.log($(this).children().eq(3).val());
-			console.log(tourObj.typeSearch);
+			console.log(plan);
 			if($("#aroundSearch").is(":checked")){
 				//console.log("클릭");
 				aroundNum = 1;
@@ -1854,8 +1851,8 @@ let typeFlag=0;
 			}
 		});
 		$("#save-plan").click(function(){
-			let user = '${sessionScope.loginUser}';
-			//console.log(user);
+			let user = '${sessionScope.loginUser.nickName}';
+			console.log(user);
 			if(user==""){
 				alert("로그인 후 저장 가능합니다.");
 			}else{
@@ -2180,7 +2177,13 @@ let typeFlag=0;
 		$("#planBox").on("click","div[class=planbody]>div",function(){
 			$("button[class^=btn-Delete]").css("display","inline");
 			$("button[id=change-tour]").css("display","inline");
+			console.log(dateUseIdx);
 			tourListIdx = $(this).parent().children().eq(2).val();
+			tourObj = {tno : plan.planList[dateUseIdx].tourList[tourListIdx].tno
+					 , contentId : plan.planList[dateUseIdx].tourList[tourListIdx].contentId
+					 , name : plan.planList[dateUseIdx].tourList[tourListIdx].name
+					 , address : plan.planList[dateUseIdx].tourList[tourListIdx].address};
+			
 			getDetail();
 		});
 		$("#detail_close").click(function(){
@@ -2294,10 +2297,13 @@ let typeFlag=0;
 		
 		$("#planBox").on("change","input[type=number]",function(){
 			//console.log($(this).parent().parent().children().eq(1).children().eq(1).val());
-			idx = $(this).parent().parent().children().eq(1).children().eq(1).val();
+			idx = $(this).parent().parent().children().eq(1).children().eq(2).val();
 			let time = $(this).val();
+			console.log(idx);
+			console.log(time);
 			plan.planList[dateUseIdx].tourList[idx].time = time;
-			//console.log(plan);
+			
+			console.log(plan);
 		});
 		
 	});

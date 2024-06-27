@@ -53,7 +53,7 @@ public class PlannerController {
 //		System.out.println(title);
 //		System.out.println(content);
 //		System.out.println(ckOpen);
-		System.out.println(session.getAttribute("loginUser"));
+		//System.out.println(session.getAttribute("loginUser"));
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 		//int userNo=1;
 		
@@ -108,7 +108,7 @@ public class PlannerController {
 				String changeName = "resources/planImg/"+savePath(file, session);
 				planner.setChangeName(changeName);
 		}
-		 System.out.println(planner);
+		 //System.out.println(planner);
 		 ArrayList<PlanDetail> detailList = new ArrayList<PlanDetail>(); 
 		 for(int i =0;i<planArr.size();i++) { 
 			 JsonObject item = planArr.get(i).getAsJsonObject();
@@ -116,7 +116,10 @@ public class PlannerController {
 			 //System.out.println(tourArr); 
 			 for(int j=0;j<tourArr.size();j++) { 
 			 PlanDetail pDetail = new PlanDetail();
-			 pDetail.setPlanDate(item.get("date").getAsString().substring(0, 10));
+			 ZonedDateTime dateUTC = ZonedDateTime.parse(item.get("date").getAsString(), isoFormatter);
+		     ZonedDateTime dateKST = dateUTC.withZoneSameInstant(ZoneId.of("Asia/Seoul"));
+		     String DateD = dateKST.format(outputFormatter);
+		     pDetail.setPlanDate(DateD);
 			 pDetail.setStartTime(item.get("startTimeH").getAsString()+":"+item.get("startTimeM").getAsString());
 			 pDetail.setEndTime(item.get("endTimeH").getAsString()+":"+item.get("endTimeM").getAsString()); pDetail.setDayCount(item.get("dayCount").getAsInt());
 			 if(tourArr.get(j).getAsJsonObject().get("tno").getAsInt()==0) { 
@@ -144,6 +147,102 @@ public class PlannerController {
 		}
 		
 	}
+	@PostMapping(value="updatePlan.pl")
+	public String changePlanner(MultipartFile file,String plan, String title,String content,String ckOpen,HttpSession session) {
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		
+		JsonObject totalObj = JsonParser.parseString(plan).getAsJsonObject();
+		JsonObject planObj = totalObj.getAsJsonObject("plan"); 
+		JsonArray planArr = planObj.getAsJsonArray("planList");
+		
+		String name = title;
+		String exp = content;
+		
+		DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+
+        // 클라이언트에서 받은 ISO 8601 형식의 시간을 파싱하여 ZonedDateTime으로 변환
+        ZonedDateTime startUTC = ZonedDateTime.parse(planObj.get("startDate").getAsString(), isoFormatter);
+        ZonedDateTime endUTC = ZonedDateTime.parse(planObj.get("endDate").getAsString(), isoFormatter);
+        
+        // ZonedDateTime을 한국 표준시(KST)로 변환
+        ZonedDateTime startKST = startUTC.withZoneSameInstant(ZoneId.of("Asia/Seoul"));
+        ZonedDateTime endKST = endUTC.withZoneSameInstant(ZoneId.of("Asia/Seoul"));
+
+        // 결과 포맷터 설정 (원하는 출력 형식으로 변환)
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	           
+	    String startD = startKST.format(outputFormatter);
+	    String endD = endKST.format(outputFormatter);
+	    
+	    Planner planner = new Planner();
+	    int pk = planObj.get("planNo").getAsInt();
+		planner.setRefUno(userNo);
+		planner.setPlanName(name);
+		planner.setPlanExp(exp);
+		planner.setStartDate(startD);
+		planner.setEndDate(endD);
+		planner.setAreaCode(planObj.get("areaCode").getAsInt());
+		planner.setPlanNo(pk);
+		if(planObj.get("sigunguCodeNo").getAsInt()!=0) {
+			 planner.setSigunguCodeNo(planObj.get("sigunguCodeNo").getAsInt());
+		}
+		 
+		if(ckOpen!=null) {
+			 planner.setPlStatus("Y");
+		}else {
+			 planner.setPlStatus("N");
+		}
+		 
+		 
+		if(!file.getOriginalFilename().equals("")) {
+				String changeName = "resources/planImg/"+savePath(file, session);
+				planner.setChangeName(changeName);
+		}
+		
+		ArrayList<PlanDetail> detailList = new ArrayList<PlanDetail>(); 
+		 for(int i =0;i<planArr.size();i++) { 
+			 JsonObject item = planArr.get(i).getAsJsonObject();
+			 JsonArray tourArr = item.getAsJsonArray("tourList");
+			 //System.out.println(tourArr); 
+			 for(int j=0;j<tourArr.size();j++) { 
+			 PlanDetail pDetail = new PlanDetail();
+			 ZonedDateTime dateUTC = ZonedDateTime.parse(item.get("date").getAsString(), isoFormatter);
+		     ZonedDateTime dateKST = dateUTC.withZoneSameInstant(ZoneId.of("Asia/Seoul"));
+		     String DateD = dateKST.format(outputFormatter);
+		     pDetail.setPlanDate(DateD);
+		     pDetail.setDetailNo(tourArr.get(j).getAsJsonObject().get("detailNo").getAsInt());
+		     pDetail.setRefPno(pk);
+		     //System.out.println(DateD);
+			 pDetail.setStartTime(item.get("startTimeH").getAsString()+":"+item.get("startTimeM").getAsString());
+			 pDetail.setEndTime(item.get("endTimeH").getAsString()+":"+item.get("endTimeM").getAsString()); pDetail.setDayCount(item.get("dayCount").getAsInt());
+			 if(tourArr.get(j).getAsJsonObject().get("tno").getAsInt()==0) { 
+				 String contentId = tourArr.get(j).getAsJsonObject().get("contentId").getAsString();
+				 int tno = plannerService.getTNOBycontentId(contentId);
+				 //System.out.println(tno); 
+				 pDetail.setRefTno(tno); 
+			 }else {
+				 pDetail.setRefTno(tourArr.get(j).getAsJsonObject().get("tno").getAsInt()); }
+			 	 pDetail.setTime(tourArr.get(j).getAsJsonObject().get("time").getAsString());
+			 	 detailList.add(pDetail); 
+			 } 
+		}
+		 System.out.println(planner);
+		 for(PlanDetail p : detailList) {
+				System.out.println(p);
+			}
+		 
+		 int rs = plannerService.updatePlanner(planner, detailList);
+		 //System.out.println(planner); 
+		
+		if(rs>0) {
+			session.setAttribute("msg", "저장 성공!");
+			return "redirect:/goList.pl";
+		}else {
+			return "redirect:/index";
+		}
+		
+	}
+	
 	@GetMapping("goList.pl")
 	public String goPlannerList() {
 		
@@ -210,38 +309,45 @@ public class PlannerController {
 	}
 	@GetMapping("detail.pl")
 	public String goDetailForm(int pno,Model model) {
-		Planner p = plannerService.getPlannerByPNO(pno);
-//		Planner p = new Planner();
-//		p.setAreaCode(3);
-//		p.setSigunguCodeNo(0);
-		Double xx=0.0;
-		Double yy=0.0;
-		if(p.getSigunguCodeNo()!=0) {
-			City c = tourService.getLocationCity(p.getSigunguCodeNo());
-			xx = c.getLocationXX();
-			yy = c.getLocationYY();
-		}else {
-			Districts d = tourService.getLocationArea(p.getAreaCode());
-			xx = d.getLocationXX();
-			yy = d.getLocationYY();
-		}
-		//System.out.println(xx);
-		//System.out.println(yy);
+		int rs = plannerService.addCount(pno);
 		
-		ArrayList<PlanDetail> list = plannerService.getDetail(pno);
-//		for(PlanDetail pd : list) {
-//			System.out.println(pd);
-//		}
-		model.addAttribute("planner",new Gson().toJson(p));
-		model.addAttribute("p", p);
-		model.addAttribute("l", list);
-		model.addAttribute("list",new Gson().toJson(list));
-		model.addAttribute("xx", xx);
-		model.addAttribute("yy", yy);
-		//System.out.println(p);
-		//model.addAttribute("xx", 127.928144444444);
-		//model.addAttribute("yy", 36.9881805555555);
-		return "planner/planDetail";
+		if(rs>0) {
+			Planner p = plannerService.getPlannerByPNO(pno);
+//			Planner p = new Planner();
+//			p.setAreaCode(3);
+//			p.setSigunguCodeNo(0);
+			Double xx=0.0;
+			Double yy=0.0;
+			if(p.getSigunguCodeNo()!=0) {
+				City c = tourService.getLocationCity(p.getSigunguCodeNo());
+				xx = c.getLocationXX();
+				yy = c.getLocationYY();
+			}else {
+				Districts d = tourService.getLocationArea(p.getAreaCode());
+				xx = d.getLocationXX();
+				yy = d.getLocationYY();
+			}
+			//System.out.println(xx);
+			//System.out.println(yy);
+			
+			ArrayList<PlanDetail> list = plannerService.getDetail(pno);
+//			for(PlanDetail pd : list) {
+//				System.out.println(pd);
+//			}
+			model.addAttribute("planner",new Gson().toJson(p));
+			model.addAttribute("p", p);
+			model.addAttribute("l", list);
+			model.addAttribute("list",new Gson().toJson(list));
+			model.addAttribute("xx", xx);
+			model.addAttribute("yy", yy);
+			//System.out.println(p);
+			//model.addAttribute("xx", 127.928144444444);
+			//model.addAttribute("yy", 36.9881805555555);
+			return "planner/planDetail";
+		}else {
+			model.addAttribute("errorMsg", "요류 발생");
+			return "common/errorPage";
+		}
 	}
 	@PostMapping(value="addReply.pl")
 	@ResponseBody
@@ -300,6 +406,30 @@ public class PlannerController {
 		rsMap.put("pinfo", pinfo);
 		return new Gson().toJson(rsMap);
 	}
+	@GetMapping(value="changePlan.pl")
+	public String changePlanForm(int pno, Model model) {
+		Planner p = plannerService.getPlannerByPNO(pno);
+		ArrayList<PlanDetail> list = plannerService.getDetail(pno);
+		
+		if(p.getSigunguCodeNo()!=0) {
+			City c = tourService.getLocationCity(p.getSigunguCodeNo());
+			model.addAttribute("areaName", c.getSigunguName());
+		}else {
+			Districts d = tourService.getLocationArea(p.getAreaCode());
+			model.addAttribute("areaName", d.getLocationName());
+		}
+		System.out.println(p);
+		for(PlanDetail pd : list) {
+			System.out.println(pd);
+		}
+		
+		model.addAttribute("p", p);
+		model.addAttribute("planner",new Gson().toJson(p));
+		model.addAttribute("list",new Gson().toJson(list));
+		
+		return "/planner/plannerView";
+	}
+	
 	
 	// �씪諛섎찓�냼�뱶
 	public String savePath(MultipartFile upfile,

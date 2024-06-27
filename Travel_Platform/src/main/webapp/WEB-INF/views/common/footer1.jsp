@@ -90,7 +90,13 @@
             
         </div>
    
-            
+        <script>
+        	$(function(){
+        		$("#leftbutton").click(function(){
+        			location.href="goList.pl";
+        		});
+        	});
+        </script>
     </footer>
 
 </body>

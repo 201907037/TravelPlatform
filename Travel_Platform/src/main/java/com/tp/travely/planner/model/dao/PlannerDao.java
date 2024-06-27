@@ -79,4 +79,22 @@ public class PlannerDao {
 		return (ArrayList)sqlSession.selectList("plannerMapper.getMyPlannerList",map);
 	}
 
+	public int updatePlanner(SqlSessionTemplate sqlSession, Planner planner) {
+		return sqlSession.update("plannerMapper.updatePlanner",planner);
+	}
+
+	public int insertPlanDetailwithUpdate(SqlSessionTemplate sqlSession, PlanDetail pd) {
+		return sqlSession.insert("plannerMapper.insertPlanDetailwithUpdate", pd);
+	}
+
+	public int updatePlanDetail(SqlSessionTemplate sqlSession, PlanDetail pd) {
+		return sqlSession.update("plannerMapper.updatePlanDetail",pd);
+	}
+
+	public int addCount(SqlSessionTemplate sqlSession, int pno) {
+		return sqlSession.update("plannerMapper.addCount",pno);
+	}
+
+	
+
 }

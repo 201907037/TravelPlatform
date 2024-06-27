@@ -87,6 +87,25 @@ public class PlannerServiceImpl implements PlannerService{
 	public ArrayList<Planner> getMyPlannerList(HashMap<String, String> map) {
 		return plannerDao.getMyPlannerList(sqlSession,map);
 	}
+	@Override
+	@Transactional
+	public int updatePlanner(Planner planner, ArrayList<PlanDetail> detailList) {
+		int rs = plannerDao.updatePlanner(sqlSession, planner);
+		for(PlanDetail pd : detailList) {
+			if(pd.getDetailNo()==0) {
+				rs*=plannerDao.insertPlanDetailwithUpdate(sqlSession,pd);
+			}else {
+				rs*=plannerDao.updatePlanDetail(sqlSession,pd);
+			}
+		}
+		return rs;
+	}
+	@Override
+	@Transactional
+	public int addCount(int pno) {
+		return plannerDao.addCount(sqlSession,pno);
+	}
+	
 	
 	
 	
