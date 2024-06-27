@@ -24,7 +24,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 <style>
-	/* 댓글용 css */
+	/* 리뷰용 css */
     .comment-section {
         width: 800px;
         margin: auto;
@@ -34,7 +34,7 @@
         display: flex;
         align-items: flex-start;
         margin-bottom: 15px;
-        position: relative; /* 댓글 내의 버튼 위치를 조정하기 위해 추가 */
+        position: relative; /* 리뷰 내의 버튼 위치를 조정하기 위해 추가 */
     }
     
     .comment.active {
@@ -50,7 +50,7 @@
         top: 10px;
     }
        
-	/* 댓글 수정, 삭제버튼용 */
+	/* 리뷰 수정, 삭제버튼용 */
     .edit-button,
 	.delete-button {
 	    border: 1px solid #ddd;
@@ -83,7 +83,7 @@
 	    outline: none;
 	    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
 	}
-	/* 댓글 버튼 영역 끝*/
+	/* 리뷰 버튼 영역 끝*/
 	
 
     .comment.active .edit-delete-buttons {
@@ -299,7 +299,7 @@
 							        		<div id="rcount" style="font-size:15px; font-weight: bold;"></div>
 								        	<br>
 								        	<div id="commentReply" style="margin-top : -15px;">
-								                <!-- 댓글이 들어갈 자리 -->
+								                <!-- 리뷰이 들어갈 자리 -->
 								            </div>
 								        </div>
 						      		</div>
@@ -309,7 +309,7 @@
 						      				<input type="hidden" id="tourType" name="tourType">
 						      				<button type="submit" class="btn btn-primary" id="tourModify">수정</button>
 						      			</form>
-  										<form id="deleteTourForm" action="deleteTour.to" method="post">
+  										<form id="deleteTourForm" action="deleteTour.to" method="post"  onsubmit="return confirm('해당 여행지를 정말 삭제하시겠습니까?');">
   											<input type="hidden" class="tourNo" name="tourNo">
   											<input type="hidden" id="thumbImg" name="thumbImg">
 					      					<button type="submit" class="btn btn-danger" id="tourDelete">삭제</button>
@@ -420,18 +420,18 @@
 		    	
 		    	$(document).on('click', '.delete-button', function () {
 
-		    	    var replyNo = $(this).data('replyno'); // 수정하려는 댓글의 replyNo를 가져옵니다.
-		    	    let number = $(this).next().val(); // 수정하려는 댓글 게시물 번호
-		    	    let checkDelete = confirm("정말 삭제하시겠습니까 ?");
+		    	    var replyNo = $(this).data('replyno'); // 수정하려는 리뷰의 replyNo를 가져옵니다.
+		    	    let number = $(this).next().val(); // 수정하려는 리뷰 게시물 번호
+		    	    let checkDelete = confirm("해당 리뷰를 정말 삭제하시겠습니까?");
 		    	    if(checkDelete == true){
 	    	            $.ajax({
 	    	                url: 'reviewDelete.ad', // API 엔드포인트로 변경
 	    	                type: 'POST',
 	    	                data: {
-	    	                    reviewNo: replyNo, // 수정할 댓글의 번호
+	    	                    reviewNo: replyNo, // 수정할 리뷰의 번호
 	    	                },
 	    	                success: function(response) {
-    	                        // 댓글 목록을 다시 로드
+    	                        // 리뷰 목록을 다시 로드
     	                        selectReplyList(number);
 	    	                },
 	    	                error: function() {
@@ -452,7 +452,7 @@
 		    	});
 		  	});
 			
-	     	// 해당 게시글에 딸린 댓글리스트 조회용 function
+	     	// 해당 게시글에 딸린 리뷰리스트 조회용 function
         	function selectReplyList(tourNo) {
         		
         		$.ajax({
@@ -470,7 +470,7 @@
         				
         				let resultStr = "";
         				let reviewCount=0;
-        				// 댓글 목록 조회
+        				// 리뷰 목록 조회
         				if(mList != null){
         					reviewCount = rList.length; // 리뷰 개수
         				for (let i = 0; i < rList.length; i++) {
@@ -503,11 +503,11 @@
         				
         				$("#commentReply").html(resultStr);			   
         			
-        				// 댓글 갯수 추가
-        				$("#rcount").text("댓글 "+reviewCount +"개");
+        				// 리뷰 갯수 추가
+        				$("#rcount").text("리뷰 "+reviewCount +"개");
         				// 자스에서 list 사이즈 확인하는 메소드는 length 임
 
-                        // 댓글 클릭 이벤트 추가
+                        // 리뷰 클릭 이벤트 추가
                         $(".comment").click(function() {
                             const isActive = $(this).hasClass("active");
                             $(".comment").removeClass("active");
@@ -521,7 +521,7 @@
         			}, 
         			error : function() {
         				
-        				console.log("댓글리스트 조회용 ajax 통신 실패!");
+        				console.log("리뷰리스트 조회용 ajax 통신 실패!");
         				
         			}
         			
