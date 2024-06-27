@@ -1,11 +1,26 @@
-@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,900");
-@import url("fontawesome-all.min.css");
+
 
 /*
 	Big Picture by HTML5 UP
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
+
+@font-face {
+	font-family: 'Freesentation-9Black';
+	src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-9Black.woff2') format('woff2');
+	font-weight: 900;
+	font-style: normal;
+  }
+  
+	  *{
+		  font-family: 'Freesentation-9Black';
+		  color : black;
+	  }
+	  
+	  #tt{
+	  	color : white;
+	  }
 
 html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
@@ -22,7 +37,7 @@ section, summary, time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
-	font: inherit;
+	
 	vertical-align: baseline;}
 
 article, aside, details, figcaption, figure,

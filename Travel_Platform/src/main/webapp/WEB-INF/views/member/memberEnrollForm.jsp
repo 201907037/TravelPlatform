@@ -138,13 +138,14 @@
 	<div class="content animate__animated animate__fadeInUp">
         <br><br><br><br><br>
         <div class="innerOuter">
-			<h1 id="title">회원가입</h1>
+			
             
             <br><br><br>
 
             <form action="insert.me" method="post" id="enrollForm" name="enrollForm">
                 <div class="form-group">
-					<br>
+                <h1 id="title">회원가입</h1>
+					<br><br>
                     <label for="userId">아이디 : </label>
                     <input type="text" class="form-control" id="userId" placeholder="6 ~ 14글자로 생성해주세요." name="userId" maxlength="14" required> <br>
 					<div id="checkResult" 
@@ -349,6 +350,7 @@ $('.mail-check-input').blur(function () {
 								
 							} else {
 								// 사용 가능한 아이디일 경우
+								$("#enrollForm button[type=submit]").attr("disabled", false);
 								$("#checkResult").show().css("color", "green").text("멋진 아이디네요!");
 								
 							}
@@ -394,7 +396,7 @@ $('.mail-check-input').blur(function () {
 												.text("이미 사용중인 닉네임입니다.");
 								
 							} else {
-								
+								$("#enrollForm button[type=submit]").attr("disabled", false);
 								$("#checkResult1").show().css("color", "green").text("멋진 닉네임이에요!");
 								
 							}

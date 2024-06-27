@@ -276,17 +276,38 @@ public class MemberController {
 		return "member/myPage";
 	}
 	
+	@GetMapping("intro.me")
+	public String intro() {
+		
+		// System.out.println("마이페이지 요청됨");
+		
+		
+		// 마이페이지 화면 포워딩
+		// /WEB-INF/views/member/myPage.jsp
+		return "intro";
+	}
+	
+	@GetMapping("main")
+	public String main() {
+		
+		// System.out.println("마이페이지 요청됨");
+		
+		
+		// 마이페이지 화면 포워딩
+		// /WEB-INF/views/member/myPage.jsp
+		return "main";
+	}
+	
+	
+	
+	
+	
 	@PostMapping("update.me")
 	public String updateMember(@ModelAttribute Member m,
-	                           @RequestParam(value="postcode", required=false) String postcode,
-	                           @RequestParam(value="roadAddress", required=false) String roadAddress,
-	                           @RequestParam(value="jibunAddress", required=false) String jibunAddress,
-	                           @RequestParam(value="detailAddress") String detailAddress,
+	                           
 	                           HttpSession session) {
 
-	    // 주소 필드 합치기
-	    String fullAddress = roadAddress + " " + detailAddress;
-	    m.setAddress(fullAddress);
+	    
 
 	    MultipartFile profileImage = m.getProfileImageFile();
 

@@ -22,6 +22,14 @@
         #leftbutton:hover{
             color: grey;
         }
+
+        #optiontitle > a{
+            transition: .4s;
+        }
+
+        #optiontitle > a:hover{
+            color: grey;
+        }
     </style>
     
 </head>
@@ -30,9 +38,9 @@
         <div id="footerwrap">
             <div id="footertop">
                 <div id="left">
-                    <p id="leftment">더 많은 플래너를 보고싶다면.</p>
+                    <p id="leftment">다양한 후기들이 궁금하다면.</p>
 
-                    <button class="start-button" id="leftbutton">더 보러 가기</button>
+                    <button class="start-button" id="leftbutton">다양한 후기</button>
 
                     <p id="leftment2">Download the app</p>
 
@@ -45,29 +53,28 @@
                     <ul id="rightoption1">
                         <li id="optiontitle" ><a href="noticeList.bo">NOTICE</a></li>
                         <br>
-                        <li id="option" ><a href="">option1</a></li>
-                        <li id="option" ><a href="">option2</a></li>
-                        <li id="option" ><a href="">option3</a></li>
+                        
 
                     </ul>
 
                     <ul id="rightoption2">
                         <li id="optiontitle" ><a href="eventList.bo">FESTIVAL</a></li>
                         <br>
-                        <li id="option" ><a href="">option1</a></li>
-                        <li id="option" ><a href="">option2</a></li>
-                        <li id="option" ><a href="">option3</a></li>
+                        
 
                     </ul>
 
                     <ul id="rightoption3">
                         <li id="optiontitle" ><a href="msgPage.mg">GROUP MESSAGE</a></li>
                         <br>
-                        <li id="option" ><a href="">option1</a></li>
-                        <li id="option" ><a href="">option2</a></li>
-                        <li id="option" ><a href="">option3</a></li>
+                       
 
                     </ul>
+
+                    <p id="okment">Travely가 궁금하다면?</p>
+
+                    <button class="start-button" id="ok">Travlely?</button>
+                    
 
                     <ul id="righticon" >
                         <li><a href=""><img src="resources/image/facebook.png"></a></li>
@@ -93,7 +100,14 @@
         <script>
         	$(function(){
         		$("#leftbutton").click(function(){
-        			location.href="goList.pl";
+        			location.href="selectList.bo";
+        		});
+        	});
+
+
+            $(function(){
+        		$("#ok").click(function(){
+        			location.href="intro.me";
         		});
         	});
         </script>

@@ -48,6 +48,7 @@
 
     #startButton{
 
+	    transition: 1s;
         
     }
 
@@ -61,7 +62,7 @@
 
 	<c:if test="${ not empty sessionScope.alertMsg }">
 		<script>
-			alertify.alert('알림', '${ sessionScope.alertMsg }', function(){ alertify.success('Ok'); });
+			alertify.alert('알림', '${ sessionScope.alertMsg }');
 		</script>
 		<c:remove var="alertMsg" scope="session" />
 	</c:if>
@@ -174,7 +175,7 @@
                 
                 <div id="ment">
                     <h1 class= "animate__animated animate__fadeInLeft animate__delay-1s">
-                        지친 당신을 위해 준비했어요
+                        지친 당신을 위해 <br> 준비했어요.
                     </h1>
                 </div>
 
@@ -360,12 +361,12 @@
 
             <div id="ment3">
                 <h1 id="title2" >
-                    다양한 여행지의 후기가 보고싶다면
+                    더 많은 플래너가 보고싶다면.
                     
                 </h1>
                 <br><br>
                 
-                <button class="start-button" id="mid3_button">다양한 후기들 > </button>
+                <button class="start-button" id="mid3_button">플래너 보러가기</button>
             </div>
             </div>
             
@@ -445,6 +446,12 @@
 			location.href="goPlanner.pl";
 	   });
   });
+  
+  $(function(){
+		$("#mid3_button").click(function(){
+			location.href="goList.pl";
+		});
+	});
         
 
   // 버튼 누르면 검색창 나오고 배경바뀜

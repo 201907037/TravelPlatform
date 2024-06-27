@@ -751,6 +751,7 @@ button {
     left: 50%;
     transform: translate( -50%, -50%);
     position: absolute;
+    transition: .3s;
 }
 
 #startButton2{
@@ -823,7 +824,7 @@ button {
 #leftbutton{
   position: absolute;
   top: 35%;
-  left: 23%;
+  left: 21%;
   background-color: #000;
   color: #fff;
 }
@@ -891,6 +892,19 @@ button {
   position: absolute;
   top: 6%;
   left: 60%;
+}
+
+#okment{
+  position: absolute;
+  left: 10%;
+  top: 40%;
+  font-size: 42px;
+}
+
+#ok{
+  position: absolute;
+  left: 16%;
+  top: 60%;
 }
 
 #optiontitle{

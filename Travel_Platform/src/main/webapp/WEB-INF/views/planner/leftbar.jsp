@@ -312,13 +312,12 @@
 	.planObj{
 		width : 90%;
 		height : 120px;
-		border : 1px solid green;
-		margin-top : 5px;
+		border-top: 1px solid grey;
+		border-bottom: 1px solid grey;
+
+		margin-top : 24px;
 	}
-	.planTitle{
-		border-bottom: 1px solid green;
-		
-	}
+	
 	.adv_search{
 		height : 15%;
 		
@@ -430,6 +429,8 @@
 
 	#btn1{
 		border: none;
+		background-color: whitesmoke;
+		font-size: 20px;
 	}
 
 	#tt{
@@ -437,10 +438,40 @@
 		margin-left: 30px;
 	}
 
-	#oo{
+	#tm{
+
+		border: none;
+		
+		background-color: whitesmoke;
+		color: black;
+		border-bottom: 1px solid grey;
+
 		
 		
 	}
+
+	.material-symbols-outlined{
+		color: black;
+	}
+
+	.planAdd{
+		border: 1px solid black;
+		border-radius: 20px;
+		transition: .5s;
+		margin-top: 20px;
+		width: 100px;
+		
+
+	}
+
+	.planAdd:hover{
+		background-color: black;
+		color: white;
+	}
+
+	
+
+	
 
 
 
@@ -525,7 +556,7 @@
 	
 	<div class="left-bar" style="display : none; width : 0px;">
 		<div id="btn1" style="float : right;">
-			<button id="btn1" class="btn-cl">&lt;&lt;</button>
+			<button id="btn1" class="btn-cl">↩</button>
 		</div>
 		<h3 id="tt" align="center">여행지</h3>
 		<br>
@@ -587,7 +618,7 @@
 	</div>
 	<div class="leftleft-bar" style="display : none; width : 0px;">
 		<div style="float : right;">
-			<button class="btn-cl">&lt;&lt;</button>
+			<button id="btn1" class="btn-cl">↩</button>
 		</div>
 		<h4 align="center">일정관리</h4>
 	   	<div class="date_box" align="center">
@@ -600,7 +631,7 @@
 				arrow_upward
 				</span>
 			</button>
-	    	<input type="number" min="01" max="24" step="1" value="10" name="startH" readOnly>
+	    	<input id="tm" type="number" min="01" max="24" step="1" value="10" name="startH" readOnly>
 	    	<button class="desc btn" id="decStartH" style="color : white;">
 	    		<span class="material-symbols-outlined">
 					arrow_downward
@@ -614,7 +645,7 @@
 				arrow_upward
 				</span>
 			</button>
-			<input type="number" min="00" max="60" step="30" value="00" name="startM" class="endD" readOnly>
+			<input id="tm" type="number" min="00" max="60" step="30" value="00" name="startM" class="endD" readOnly>
 	    	<button class="desc btn" id="descStartM" style="color : white;">
 		    	<span class="material-symbols-outlined">
 					arrow_downward
@@ -630,7 +661,7 @@
 				arrow_upward
 				</span>
 			</button>
-	    	<input type="number" min="01" max="24" step="1" value="10" name="endH" readOnly>
+	    	<input id="tm" type="number" min="01" max="24" step="1" value="10" name="endH" readOnly>
 	    	<button class="desc btn" id="decEndM" style="color : white;">
 	    		<span class="material-symbols-outlined">
 					arrow_downward
@@ -644,7 +675,7 @@
 				arrow_upward
 				</span>
 			</button>
-			<input type="number" min="00" max="60" step="30" value="00" name="endM" class="endD" readOnly>
+			<input id="tm" type="number" min="00" max="60" step="30" value="00" name="endM" class="endD" readOnly>
 	    	<button class="desc btn" id="descEndM" style="color : white;">
 		    	<span class="material-symbols-outlined">
 					arrow_downward
@@ -1702,7 +1733,7 @@ let typeFlag=0;
 				}
 				let planObj=$("<div>").attr("class","planObj");
 				let title=$("<div>").attr("class","planTitle").css("height","28%").html("일정"+(i+1)+" : ");
-				let time = $("<input>").attr({"type":"number","step":"0.5","name":"time","value":dateObj.tourList[i].time,"class":"time"}).css("height","90%");
+				let time = $("<input>").attr({"type":"number","step":"0.5","name":"time","value":dateObj.tourList[i].time,"class":"time", "id" : "tm"}).css("height","90%", "border", "none");
 				title.append(time);
 				title.append("시간");
 				let body=$("<div>").attr("class","planbody").css("height","72%");
@@ -1716,11 +1747,11 @@ let typeFlag=0;
 						let span = $("<span>").attr("class","material-symbols-outlined").html("close");
 						imgBox.css("text-align","left").append(span)
 					}else{
-						let img = $("<img>").attr("src",dateObj.tourList[i].img).css({"width" : "100%","height" : "100%"});
+						let img = $("<img>").attr("src",dateObj.tourList[i].img, {"id" : "mmm"}).css({"width" : "100%","height" : "100%"});
 						imgBox.append(img);
 					}
 					let nameSpace = $("<div>").attr("align","center").css("float","right").css({"width":"60%","height" :"100%"});
-					let name = $("<div>").css("border-bottom","1px solid green").html(dateObj.tourList[i].name);
+					let name = $("<div>").html(dateObj.tourList[i].name);
 					let address = $("<div>").attr("class","address").css("text-align","left").html(dateObj.tourList[i].address);
 					nameSpace.append(name,address);
 					let hidden= $("<input>").attr({"type":"hidden","name" : "datePlanIndex","value": i});
