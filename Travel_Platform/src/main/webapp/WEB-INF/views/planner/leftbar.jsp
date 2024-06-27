@@ -838,6 +838,7 @@ let status;
 let option;
 let tourObj;
 
+
 let aroundNum;
 let mapX;
 let mapY;
@@ -1003,6 +1004,7 @@ let typeFlag=0;
 		                $("#skeyword").html(keyword);
 		    			$("#skeyword").parent().css("display","block");
 					}
+						
 					
 				},
 				error : function(){
@@ -1279,61 +1281,65 @@ let typeFlag=0;
 				console.log(e);
 				let tc = Number(e.response.body.totalCount);
 				let obj = e.response.body.items.item;
-				$.each(obj,function(i,v){
-					let tbox = $("<div>").attr("class","t_box");
-					let timg = $("<div>").attr("class","t_img");
-					if(v.firstimage==""){
-						let span = $("<span>").attr("class","material-symbols-outlined").html("close");
-						timg.append(span)
-					}else{
-						let img = $("<img>").attr("src",v.firstimage);
-						timg.append(img);
-					}
-					let tbody = $("<div>").attr("class","t_name");
-					let table = $("<table>").css({"width":"100%","height":"100%"});
-					let trN = $("<tr>");
-					let tdN = $("<td>").html(v.title);
-					let trA = $("<tr>");
-					let tdA = $("<td>").html(v.addr1);
-					trN.append(tdN);
-					trA.append(tdA);
-					table.append(trN,trA);
-					tbody.append(table);
-					let tno = $("<input>").attr({"type":"hidden","name":"tno","value":0});
-					let contentId = $("<input>").attr({"type":"hidden","name" : "contentId", "value" : v.contentid});
-					let xx = $("<input>").attr({"type":"hidden","name" : "XX","value" : v.mapx});
-					let yy = $("<input>").attr({"type":"hidden","name" : "YY", "value": v.mapy});
-					tbox.append(timg,tbody,tno,contentId,xx,yy);
-					$(".el_box").append(tbox);
-					
-				});
-				let maxPage = Math.ceil(tc / 5);
-				let startPage = Math.floor((aroundNum - 1) / 5) * 5 + 1;
-				let endPage = startPage + 5 - 1;
-				if(startPage!=1){
-                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-range-left").attr("class","range_left btn btn-success btn-sm").html("&lt;&lt;");
-                    //console.log(btnleft);
-                    $("#button_box").append(btnLeft);
-                }
-                for(let i = startPage;i<=endPage;i++){
-                    if(i==aroundNum){
-                    	var btnNum = $("<button>").attr("type","button").attr("disabled","ture").attr("class","btn_range_no btn btn-success btn-sm").text(i);
-                    }else{
-                    	var btnNum = $("<button>").attr("type","button").attr("class","btn_range_no btn btn-success btn-sm").text(i);
-                    }
-                    
-                    //console.log(btnNum);
-                    $("#button_box").append(btnNum);
-                }
-                if(maxPage!=endPage){
-                    
-                    var btnRight = $("<button>").attr("type","button").attr("id","btn-range-right").attr("class","range_right btn btn-success btn-sm").html("&gt;&gt;");
-                    $("#button_box").append(btnRight);
-                }
+				if(obj.length!=0){
+					$.each(obj,function(i,v){
+						let tbox = $("<div>").attr("class","t_box");
+						let timg = $("<div>").attr("class","t_img");
+						if(v.firstimage==""){
+							let span = $("<span>").attr("class","material-symbols-outlined").html("close");
+							timg.append(span)
+						}else{
+							let img = $("<img>").attr("src",v.firstimage);
+							timg.append(img);
+						}
+						let tbody = $("<div>").attr("class","t_name");
+						let table = $("<table>").css({"width":"100%","height":"100%"});
+						let trN = $("<tr>");
+						let tdN = $("<td>").html(v.title);
+						let trA = $("<tr>");
+						let tdA = $("<td>").html(v.addr1);
+						trN.append(tdN);
+						trA.append(tdA);
+						table.append(trN,trA);
+						tbody.append(table);
+						let tno = $("<input>").attr({"type":"hidden","name":"tno","value":0});
+						let contentId = $("<input>").attr({"type":"hidden","name" : "contentId", "value" : v.contentid});
+						let xx = $("<input>").attr({"type":"hidden","name" : "XX","value" : v.mapx});
+						let yy = $("<input>").attr({"type":"hidden","name" : "YY", "value": v.mapy});
+						tbox.append(timg,tbody,tno,contentId,xx,yy);
+						$(".el_box").append(tbox);
+						
+					});
+					let maxPage = Math.ceil(tc / 5);
+					let startPage = Math.floor((aroundNum - 1) / 5) * 5 + 1;
+					let endPage = startPage + 5 - 1;
+					if(startPage!=1){
+	                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-range-left").attr("class","range_left btn btn-success btn-sm").html("&lt;&lt;");
+	                    //console.log(btnleft);
+	                    $("#button_box").append(btnLeft);
+	                }
+	                for(let i = startPage;i<=endPage;i++){
+	                    if(i==aroundNum){
+	                    	var btnNum = $("<button>").attr("type","button").attr("disabled","ture").attr("class","btn_range_no btn btn-success btn-sm").text(i);
+	                    }else{
+	                    	var btnNum = $("<button>").attr("type","button").attr("class","btn_range_no btn btn-success btn-sm").text(i);
+	                    }
+	                    
+	                    //console.log(btnNum);
+	                    $("#button_box").append(btnNum);
+	                }
+	                if(maxPage!=endPage){
+	                    
+	                    var btnRight = $("<button>").attr("type","button").attr("id","btn-range-right").attr("class","range_right btn btn-success btn-sm").html("&gt;&gt;");
+	                    $("#button_box").append(btnRight);
+	                }
+				}else{
+					$(".el_box").html("검색 결과가 없습니다.");
+				}
                 
 			},
 			error : function(){
-				console.log("실패");
+				$(".el_box").html("검색결과가 없습니다.");
 			}
 		});
 	}
@@ -1654,6 +1660,7 @@ let typeFlag=0;
 					
 					$(".btn-cl").click();
 					if(status=="NN"){
+						alert("일정의 총 여행시간과 여행지 여행시간이 일치하지 않습니다.");
 						return;
 					}
 					$(".leftleft-bar").css("display","inline");
@@ -1726,9 +1733,18 @@ let typeFlag=0;
 				
 				if(dateObj.tourList[i].name!=null){
 					var position = new kakao.maps.LatLng(dateObj.tourList[i].YY,dateObj.tourList[i].XX);
-					marker = new kakao.maps.Marker({
-						position : position
-					});
+					var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+			        imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+			        imgOptions =  {
+			            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+			            spriteOrigin : new kakao.maps.Point(0, (i*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+			            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+			        }, markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+		            marker = new kakao.maps.Marker({
+			            position: position, // 마커의 위치
+			            image: markerImage 
+			        });
+
 					dateMarkerList.push(marker);
 					marker.setMap(map);
 					linePath.push(new kakao.maps.LatLng(dateObj.tourList[i].YY,dateObj.tourList[i].XX));
@@ -1772,7 +1788,7 @@ let typeFlag=0;
 		$("#planBox").on("click","button[class=planAdd]",function(){
 			addTo = $(this).parent().parent().parent().parent().children().eq(0).val();
 			datePlanIdx = $(this).parent().children().eq(1).val();
-			console.log(addTo);
+			console.log("addTo"+addTo);
 			console.log(datePlanIdx);
 			//console.log(plan);
 			$("#station").click();
@@ -1794,7 +1810,11 @@ let typeFlag=0;
 			//console.log($(this).children().eq(2).val());
 			//console.log(addTo);
 			//console.log($(this).children().eq(3).val());
-			console.log(tourObj.typeSearch);
+			//console.log(tourObj.typeSearch);
+			
+			let mapX = $(this).children().eq(4).val();
+			let mapY = $(this).children().eq(5).val();
+			
 			if($("#aroundSearch").is(":checked")){
 				//console.log("클릭");
 				aroundNum = 1;
@@ -1828,6 +1848,7 @@ let typeFlag=0;
 						});
 						console.log(result);
 					}
+					
 					if(result==1){
 						plan.planList[addTo].tourList[datePlanIdx].name = $(this).children().eq(1).children().children().eq(0).children().eq(0).text();
 						plan.planList[addTo].tourList[datePlanIdx].img = $(this).children().eq(0).children().attr("src");
@@ -1845,29 +1866,31 @@ let typeFlag=0;
 					}else{
 						alert("추가할 수 없는 여행지 입니다.");
 					}
-				}
-					console.log(tourObj);
+				}else{
+					//console.log(tourObj);
 					for(let i=0;i<markerList.length;i++){
 						markerList[i].setMap(null);
 					}
 					markerList = [];
 					//console.log(marker);
-					let mapX = $(this).children().eq(4).val();
-					let mapY = $(this).children().eq(5).val();
+					
+					console.log(addTo);
+					
 					var position = new kakao.maps.LatLng(mapY,mapX);
 					marker = new kakao.maps.Marker({
 						position : position
 					});
 					markerList.push(marker);
 					marker.setMap(map);
-					console.log(markerList);
-					var newloc =new kakao.maps.LatLng(mapY,mapX);
-					map.setCenter(newloc);
-					map.setLevel(5);
 					kakao.maps.event.addListener(marker,"click",function(){
 						//alert(tourObj.tno);
 						getDetail();
 					});
+				}
+				//console.log(markerList);
+				var newloc =new kakao.maps.LatLng(mapY,mapX);
+				map.setCenter(newloc);
+				map.setLevel(5);	
 				
 			}
 			
@@ -1930,7 +1953,7 @@ let typeFlag=0;
 					//console.log("발동");
 				 }else{
 					 status = "NN";
-					 alert("일정의 총 여행시간과 여행지 여행시간이 일치하지 않습니다.");
+					 
 					 
 				 }
 			}
@@ -1938,9 +1961,11 @@ let typeFlag=0;
 		$("#save-plan").click(function(){
 			let user = '${sessionScope.loginUser.nickName}';
 			//console.log(user);
+			
 			if(user==""){
 				alert("로그인 후 저장 가능합니다.");
 			}else{
+				
 				$("#planner-add-modal").modal("show");
 			}
 			
@@ -1951,6 +1976,7 @@ let typeFlag=0;
             $("input[name=file]").click();
         });
 		$("#btn-submit").click(function(){
+			$(".leftleft-bar button[class=btn-cl]").click();
 			let cknull=0;
 			$.each(plan.planList,function(j,v){
 				//console.log(v.tourList);
@@ -1963,6 +1989,7 @@ let typeFlag=0;
 					
 				});
 			});
+			
 			let obj = {
 					plan : plan,
 					set : 0
@@ -1970,6 +1997,11 @@ let typeFlag=0;
 			 let jsonPlan = JSON.stringify(obj);
 			 
 			 $("#plan-saver").val(jsonPlan);
+			 if(status=='NN'){
+				 alert("일정의 총 여행시간과 여행지 여행시간이 일치하지 않습니다.");
+				 return false;
+			 }
+			 
 			 if(cknull!=0){
 				 alert("플래너가 미완성 입니다.");
 				 return false;
@@ -2009,8 +2041,8 @@ let typeFlag=0;
 			let num = Number(el.val());
 			if(el.attr("name")=="startH"||el.attr("name")=="endH"){
 				num = num+1;
-				if(num==25){
-					num="01";
+				if(num>24){
+					num="24";
 				}
 			}else{
 				num = num+30;
@@ -2092,8 +2124,9 @@ let typeFlag=0;
 			let num = Number(el.val());
 			if(el.attr("name")=="startH"||el.attr("name")=="endH"){
 				num = num-1;
-				if(num==25){
-					num="01";
+				
+				if(num<1){
+					num="1";
 				}
 			}else{
 				num = num-30;
@@ -2174,7 +2207,7 @@ let typeFlag=0;
 			 
 		});
 		$("#planBox").on("click","button[class^=addEL]",function(){
-			 let dateObj = plan.planList[dateUseIdx];
+			let dateObj = plan.planList[dateUseIdx];
 			 let startTime = new Date(new Date().setHours(dateObj.startTimeH));
 			 let endTime = new Date(new Date().setHours(dateObj.endTimeH));
 			 endTime.setMinutes(dateObj.endTimeM);
@@ -2189,18 +2222,18 @@ let typeFlag=0;
 			 if(time%2==0){
 				 for(let i= 0;i<time/2;i++){
 					 let nt = 2;
-					 let p = {time : nt};
+					 let p = {time : nt,detailNo : 0};
 					 dateObj.tourList.push(p);
 				 }
 			 }else{
 				 let nt = 2;
 				 for(let i =0;i<(time-1)/2;i++){
 					 
-					 let p = {time : nt};
+					 let p = {time : nt,detailNo : 0};
 					 dateObj.tourList.push(p);
 				 }
 				 nt = 1;
-				 let p = {time:nt};
+				 let p = {time:nt,detailNo : 0};
 				 dateObj.tourList.push(p);
 			 }
 			 flag=1;
