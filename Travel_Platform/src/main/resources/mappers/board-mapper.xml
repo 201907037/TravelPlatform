@@ -28,6 +28,7 @@
  	<result column="CHANGE_NAME" property="changeName"/>
  	<result column="AGE" property="age"/>
  	<result column="GENDER" property="gender"/>
+ 	<result column="CREATE_DATE" property="createDate"/>
  </resultMap>
  
  <resultMap type="boardLike" id="boardLikeResultSet">
@@ -406,6 +407,16 @@ JOIN BOARD USING(USER_NO)
  	AND BOARD.BOARD_TITLE LIKE '%'||#{keyword}||'%'
   ORDER BY BOARD_NO DESC
 </select>
+
+<select id="selectProfileMember" 
+		parameterType="_int" 
+		resultMap="memberResultSet">
+	SELECT USER_NO, NICK_NAME, AGE, GENDER, CHANGE_NAME, CREATE_DATE
+  FROM MEMBER
+  WHERE STATUS = 'Y'
+    AND USER_NO = #{userNo}  
+ </select>
+
 
 </mapper>
 

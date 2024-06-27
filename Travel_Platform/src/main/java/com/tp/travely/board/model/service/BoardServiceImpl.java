@@ -201,6 +201,12 @@ public class BoardServiceImpl implements BoardService{
 		return boardDao.searchMember(sqlSession, keyword);
 	}
 
+	@Override
+	public Member selectProfileMember(int uno) {
+		
+		return boardDao.selectProfileMember(sqlSession, uno);
+	}
+
 	
 	
 	

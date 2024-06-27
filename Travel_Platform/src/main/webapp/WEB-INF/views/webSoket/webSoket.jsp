@@ -128,10 +128,6 @@
             height: 50px; /* 원하는 크기로 설정하세요 */
             border-radius: 50%;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 0;
         }
         
         .circle-image img {
@@ -297,7 +293,7 @@
             <div id="webSocketContent1" style="text-align: center; margin-top: 100px;">
                 <h2>채팅방 가이드 라인 </h2>
                 <br>
-                <h5><b>오픈채팅방 운영 시간 : 오전 9시~오후 8시</b> 
+                <p><b>오픈채팅방 운영 시간 : 오전 9시~오후 8시</b> 
                 	<br><br>
                 	• 로그인후 채팅방을 이용하는 방법은 입장버튼 클릭시 채팅방에 입장하실수 있습니다.
                 	<br><br>
@@ -312,7 +308,7 @@
                     • 차별 및 혐오에 기반한 발언, 타인을 조롱하거나 모욕하는 언행을 하는 경우에는 관리자에 의해 제지 및 퇴장조치 될 수 있습니다.
                     <br><br> 
                     • 기본적으로 관리자들이 오픈채팅방을 운영하지만, 다른 참여자들도 오픈카톡방의 활성화와 안정적인 운영을 위해 함께 참여해주시면 고맙겠습니다 🙂 
-                </h5>
+                </p>
                 
             </div>
             <div id="webSocketContent2" >
@@ -356,7 +352,7 @@
 		// 웹소켓 서버 접속 함수
 		function connect() {
 		    // 접속할 웹소켓의 주소를 넘기면서 자바스크립트의 WebSocket 객체 생성
-		    let url = "ws://localhost:8006/travely/ws/msgPage.mg";
+		    let url = "ws://localhost:80/travely/ws/msgPage.mg";
 		    socket = new WebSocket(url); // Connection Established
 	
 		    console.log(socket);
@@ -413,8 +409,8 @@
 				         data += '                '+ obj.nickName +'';
 				         data += '            </td>';
 				         data += '            <td rowspan="2" style="padding-right: 20px;">';
-				         data += '                <div class="profile-image" data-toggle="modal" data-target="#profile">';
-				         data += '                    <img src="'+ obj.changeName +'" alt="Profile Image">';
+				         data += '                <div class="profile-image">';
+				         data += '                    <a href="profilePage.bo?uno='+obj.userNo+'"><img src="'+ obj.changeName +'" alt="Profile Image"></a>';
 				         data += '                </div>';
 				         data += '            </td>';
 				         data += '        </tr>';
@@ -434,8 +430,8 @@
 		        	data += '    <table>';
 		        	data += '        <tr>';
 		        	data += '            <td rowspan="2" style="padding-left: 20px;">';
-		        	data += '                <div class="circle-image" data-toggle="modal" data-target="#profile">';
-		        	data += '                    <img src="'+ obj.changeName +'">';
+		        	data += '                <div class="circle-image">';
+		        	data += '                    <a href="profilePage.bo?uno='+obj.userNo+'"><img src="'+ obj.changeName +'"></a>';
 		        	data += '                </div>';
 		        	data += '            </td>';
 		        	data += '            <td class="name-section">';

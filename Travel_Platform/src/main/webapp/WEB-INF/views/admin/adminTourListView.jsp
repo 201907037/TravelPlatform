@@ -214,6 +214,8 @@
 		height: 100px;
 		margin-right: 20px;
 	}
+	
+	
 </style>
 </head>
 <body>
@@ -356,8 +358,8 @@
 		      				
 		      				let b = $(".modal-body>.tour-info");
 		      				let result = "";
-		      				result += "<div id='tour-thumbImg'>"
-		      							+ "<img src="+z["list"]["thumbImg"]+" alt='Thumbnail'>"
+		      				result += "<div id='tour-thumbImg' style='border: 0px;'>"
+		      							+ "<img src="+z["list"]["thumbImg"]+" alt='Thumbnail' style='border-radius: 10px;'>"
 		      							+ "</div><br>"
 		      							+ "<div id='tourImg'>";
 		      				
@@ -365,8 +367,8 @@
 		      				if(z["img"].length != null && z["img"].length > 0){
 		      					
 		      					for(let i =0; i < z["img"].length; i++){
-		      						result += "<div class='tourImgList'>"
-		      								+ "<img src="+z["img"][i]["changeNo"]+" alt='images'>"
+		      						result += "<div class='tourImgList'  style='border: 0px;'>"
+		      								+ "<img src="+z["img"][i]["changeNo"]+" width='100%' alt='images' style='border-radius: 10px;'>"
 		      								+ "</div>"
 		      					}
 		      					

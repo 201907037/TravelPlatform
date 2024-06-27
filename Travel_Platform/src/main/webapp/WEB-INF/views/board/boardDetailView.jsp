@@ -453,7 +453,7 @@
     <div class="item">
     	<div align="center">
     	<div class="header">
-                <img src="${ requestScope.m.changeName }" alt="Profile Picture">
+                <a href="profilePage.bo?uno=${ requestScope.m.userNo }"><img src="${ requestScope.m.changeName }" alt="Profile Picture"></a>
                 <span>${ requestScope.m.nickName }</span>
             </div>
         </div>
@@ -605,7 +605,7 @@
         					
         			        resultStr += '<div class="comment" id="comment'+i+'">';
        	                    resultStr += '<input type="hidden" class="replyUserNo" value="'+reply.userNo+'">';
-       	                    resultStr += '    <img class="profile" src="'+member.changeName+'" alt="Profile Picture">';
+       	                    resultStr += '    <a href="profilePage.bo?uno='+reply.userNo+'"><img class="profile" src="'+member.changeName+'" alt="Profile Picture"></a>';
        	                    resultStr += '    <div class="comment-content">';
        	                    resultStr += '        <div class="comment-header">';
        	                    resultStr += '            <span class="username">'+member.nickName+'</span>';

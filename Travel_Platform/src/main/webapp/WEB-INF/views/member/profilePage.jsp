@@ -143,8 +143,8 @@
         button[class^=btn-dis]{
         	background-color : blue;
         }
-        
-        /* 테이블 스타일 */
+    
+    	/* 테이블 스타일 */
 	    #tb {
 	        width: 80%;
 	        margin: 20px auto;
@@ -170,7 +170,8 @@
 	    #tb tr:nth-child(even) {
 	        background-color: #f9f9f9;
 	    }
-    
+	
+	   
 </style>
 </head>
 <body background="resources/image/pado.gif">
@@ -178,62 +179,42 @@
     <br><br><br><br><br><br><br>
     <div id="wrap" class="animate__animated animate__fadeInLeft">
         
-        <h1 align="center">MyPage</h1>
+        <h1 align="center"></h1>
         <br><br>
 
         <div id="first">
             <div>
-                <img id="profile" class="profile" src="${sessionScope.loginUser.changeName}" alt="Profile Image" style="width: 300px; height: 300px; border-radius: 50%;">
+                <img id="profile" class="profile" src="${requestScope.m.changeName}" alt="Profile Image" style="width: 300px; height: 300px; border-radius: 50%;">
             </div>
             <br><br>
-            <h2>${ sessionScope.loginUser.nickName }</h2>
+            <h1>${ requestScope.m.nickName }</h1>
             <br><br>
             
+
             
         </div>
-        
-        	<div>
+
+
+			<div>
             <table id="tb">
             	<tr>
             		<td>닉네임</td>
             		<td>나이</td>
-            		<td>전화번호</td>
-            		<td>주소</td>
-            		<td>이메일</td>
             		<td>성별</td>
             		<td>가입일</td>
             	</tr>
             	<tr>
-            		<td>${ sessionScope.loginUser.nickName }</td>
-            		<td>${ sessionScope.loginUser.age }</td>
-            		<td>${ sessionScope.loginUser.phone }</td>
-            		<td>${ sessionScope.loginUser.address }</td>
-            		<td>${ sessionScope.loginUser.email }</td>
-            		<td>${ sessionScope.loginUser.gender }</td>
-            		<td>${ sessionScope.loginUser.createDate }</td>
+            		<td>${ requestScope.m.nickName }</td>
+            		<td>${ requestScope.m.age }</td>
+            		<td>${ requestScope.m.gender }</td>
+            		<td>${ requestScope.m.createDate }</td>
             	</tr>
             	
             </table>
             </div>
-			<br><br><br>    
-        
-        	<div align="center">
-	        	<button id="btn" onclick="location.href='myPage.me'">
-	                프로필 편집
-	            </button>
-	
-	            <button id="btn" onclick="location.href='updatePassword.me'">
-	                비밀번호 변경
-	            </button>
-	            <br><br>
-	
-	            <button id="btn2" class="nn" onclick="location.href=''">
-	                플래너 수정
-	            </button>
-			</div>
-			<br><br>
-			
-            <h1>내 플래너</h1>
+			<br><br><br>            
+            
+            <h1>${ requestScope.m.nickName }님의 플래너</h1>
 
             <div class="planner-gallery">
             </div>
@@ -270,55 +251,49 @@
 				console.log(e);
 				let list = e.list;
 				let pinfo = e.pinfo;
-				console.log(list.length);
-				if(list.length!=0){
-					$.each(list,function(i,v){
-						let div = $("<div>").attr("class","planner-thumbnail");
-						let planImg = $("<div>").attr("class","planner-thumbnail-imgae").attr("align","center");
-						let img = $("<img>").css({width : "200px",height:"130px"}).attr("src",v.changeName);
-						planImg.append(img);
-						let planexp = $("<div>").attr("class","planner-ex");
-						let title = $("<span>").attr("class","title").html(v.planName);
-						let br = $("<br>");
-						let region;
-						if(v.sigunguName==null){
-							region = $("<span>").attr("class","region").html(v.areaName);
-						}else{
-							region = $("<span>").attr("class","region").html(v.sigunguName);
-						}
-						let count = $("<span>").attr("class","count").html("조회수 : "+v.count);
-						planexp.append(title,br,region,count);
-						let tno = $("<input>").attr({type : "hidden","name":"plan_no","value":v.planNo});
-						
-						div.append(planImg,planexp,tno);
-						$(".planner-gallery").append(div);
-					});
+				$.each(list,function(i,v){
+					let div = $("<div>").attr("class","planner-thumbnail");
+					let planImg = $("<div>").attr("class","planner-thumbnail-imgae").attr("align","center");
+					let img = $("<img>").css({width : "200px",height:"130px"}).attr("src",v.changeName);
+					planImg.append(img);
+					let planexp = $("<div>").attr("class","planner-ex");
+					let title = $("<span>").attr("class","title").html(v.planName);
+					let br = $("<br>");
+					let region;
+					if(v.sigunguName==null){
+						region = $("<span>").attr("class","region").html(v.areaName);
+					}else{
+						region = $("<span>").attr("class","region").html(v.sigunguName);
+					}
+					let count = $("<span>").attr("class","count").html("조회수 : "+v.count);
+					planexp.append(title,br,region,count);
+					let tno = $("<input>").attr({type : "hidden","name":"plan_no","value":v.planNo});
 					
-					if(pinfo.startPage!=1){
-	                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-left").attr("class","left btn btn-success btn-sm").html("&lt;&lt;");
-	                    //console.log(btnleft);
-	                    $(".paging-area").append(btnLeft);
-	                }
-	                for(let i = pinfo.startPage;i<=pinfo.endPage;i++){
-	                    if(i==pinfo.currentPage){
-	                    	var btnNum = $("<button>").attr("type","button").attr("disabled","ture").attr("class","btn-dis btn btn-success btn-sm").text(i);
-	                    }else{
-	                    	var btnNum = $("<button>").attr("type","button").attr("class","btn_no btn btn-success btn-sm").text(i);
-	                    }
-	                    
-	                    //console.log(btnNum);
-	                    $(".paging-area").append(btnNum);
-	                }
-	                if(pinfo.maxPage!=pinfo.endPage){
-	                    
-	                    var btnRight = $("<button>").attr("type","button").attr("id","btn-right").attr("class","right btn btn-success btn-sm").html("&gt;&gt;");
-	                    $(".paging-area").append(btnRight);
-	                }
-	                $("#search-result").css("display","none");
-				}else{
-					let btn = $("<button>").attr({type : "button",id:"make-plan"}).html("플래너 작성하러가기");
-					$(".planner-gallery").append(btn);
-				}
+					div.append(planImg,planexp,tno);
+					$(".planner-gallery").append(div);
+				});
+				
+				if(pinfo.startPage!=1){
+                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-left").attr("class","left btn btn-success btn-sm").html("&lt;&lt;");
+                    //console.log(btnleft);
+                    $(".paging-area").append(btnLeft);
+                }
+                for(let i = pinfo.startPage;i<=pinfo.endPage;i++){
+                    if(i==pinfo.currentPage){
+                    	var btnNum = $("<button>").attr("type","button").attr("disabled","ture").attr("class","btn-dis btn btn-success btn-sm").text(i);
+                    }else{
+                    	var btnNum = $("<button>").attr("type","button").attr("class","btn_no btn btn-success btn-sm").text(i);
+                    }
+                    
+                    //console.log(btnNum);
+                    $(".paging-area").append(btnNum);
+                }
+                if(pinfo.maxPage!=pinfo.endPage){
+                    
+                    var btnRight = $("<button>").attr("type","button").attr("id","btn-right").attr("class","right btn btn-success btn-sm").html("&gt;&gt;");
+                    $(".paging-area").append(btnRight);
+                }
+                $("#search-result").css("display","none");
 			},
 			error : function(){
 				console.log("실패");
@@ -343,9 +318,6 @@
     			pno++;
     			
     			getPlanList();
-    		});
-    		$(".planner-gallery").on("click","div[class=planner-thumbnail]",function(){
-    			location.href="changePlan.pl?pno="+$(this).children().eq(2).val();
     		});
     	});
     
