@@ -127,9 +127,9 @@
         <div class="h3">
             <c:choose>
                 <c:when test="${not empty sessionScope.loginUser}">
-                
-                    
-                
+                    <c:if test="${ sessionScope.loginUser.userId eq 'admin'}">
+                	<a id="ml" href="dashBoard.ad" class="yellow underline">AdminPage</a>
+                	</c:if>
                     <a id="ml" href="myPage1.me" class="yellow underline">My Page</a>
                     <a id="ml" href="logout.me" class="yellow underline">Logout</a>
                 </c:when>
