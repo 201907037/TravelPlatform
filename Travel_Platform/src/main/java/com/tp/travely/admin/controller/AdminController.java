@@ -1,16 +1,15 @@
 package com.tp.travely.admin.controller;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tp.travely.admin.service.AdminService;
-import com.tp.travely.admin.service.GenderCount;
 import com.tp.travely.board.model.vo.Board;
 import com.tp.travely.member.model.vo.Member;
 
@@ -71,6 +70,27 @@ public class AdminController {
 		}else {
 			// 가입에서 탈퇴로
 			result = adminService.boardDelate(boardNo);
+			s = "탈퇴";
+		}
+		return s;
+	}
+	
+	@ResponseBody
+	@PostMapping(value="adminMemberStatus.ad", produces="text/html; charset=UTF-8")
+	public String adminMemberStatus(int userNo, String statusResult) {
+		
+		 System.out.println(userNo);
+		 System.out.println(statusResult);
+
+		int result = 0;
+		String s = "";
+		if(statusResult.equals("Y")) {
+			// 탈퇴에서 가입으로
+			result = adminService.memberSafe(userNo);
+			s = "가입";
+		}else {
+			// 가입에서 탈퇴로
+			result = adminService.memberDelate(userNo);
 			s = "탈퇴";
 		}
 		return s;

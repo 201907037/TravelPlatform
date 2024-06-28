@@ -24,5 +24,9 @@ public interface AdminService  {
 
 	ArrayList<Map> uploadCount();
 	
+	int memberSafe(int userNo);
+
+	int memberDelate(int userNo);
+	
 
 }

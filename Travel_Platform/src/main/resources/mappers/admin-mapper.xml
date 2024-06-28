@@ -33,7 +33,6 @@
 		resultMap="memberResultSet">
 SELECT *
   FROM MEMBER
- WHERE STATUS = 'Y'
 </select>
 
 
@@ -86,5 +85,21 @@ WHERE CREATE_DATE > SYSDATE-7
 GROUP BY CREATE_DATE
 ORDER BY CREATE_DATE
 </select>
+
+
+<update id="memberSafe"
+		parameterType="_int">
+UPDATE MEMBER
+SET STATUS='Y'
+WHERE USER_NO = #{userNo}
+</update>
+
+<update id="memberDelate"
+		parameterType="_int">
+UPDATE MEMBER
+SET STATUS='N'
+WHERE USER_NO = #{userNo}
+</update>
+
 
 </mapper>

@@ -45,4 +45,16 @@ public class AdminDao {
 		return (ArrayList)sqlSession.selectList("adminMapper.uploadCount");
 	}
 
+	public int memberDelate(SqlSessionTemplate sqlSession, int userNo) {
+		
+		System.out.println(userNo);
+		
+		return sqlSession.update("adminMapper.memberDelate", userNo);
+	}
+
+	public int memberSafe(SqlSessionTemplate sqlSession, int userNo) {
+		
+		return sqlSession.update("adminMapper.memberSafe", userNo);
+	}
+
 }

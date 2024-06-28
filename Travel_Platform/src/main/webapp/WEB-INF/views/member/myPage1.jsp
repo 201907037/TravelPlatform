@@ -44,12 +44,14 @@
 
     #btn{
         background-color:   whitesmoke;
-        border: 1px solid black;
-        
+        border: 0px solid black;
         outline: none;
         padding: 12px;
         width: 400px;
         cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
     }
     #btn > a{
         width: 100%;
@@ -62,12 +64,14 @@
 
     #btn2{
         background-color:   whitesmoke;
-        border: 1px solid black;
-        border-radius: 2px;
+        border: 0px solid black;
+        border-radius: 10px;
         outline: none;
         padding: 12px;
         width: 800px;
         cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
     }
 
     #btn2:hover{
@@ -201,7 +205,6 @@
             		<td>닉네임</td>
             		<td>나이</td>
             		<td>전화번호</td>
-            		<td>주소</td>
             		<td>이메일</td>
             		<td>성별</td>
             		<td>가입일</td>
@@ -210,7 +213,6 @@
             		<td>${ sessionScope.loginUser.nickName }</td>
             		<td>${ sessionScope.loginUser.age }</td>
             		<td>${ sessionScope.loginUser.phone }</td>
-            		<td>${ sessionScope.loginUser.address }</td>
             		<td>${ sessionScope.loginUser.email }</td>
             		<td>${ sessionScope.loginUser.gender }</td>
             		<td>${ sessionScope.loginUser.createDate }</td>
@@ -230,9 +232,7 @@
 	            </button>
 	            <br><br>
 	
-	            <button id="btn2" class="nn" onclick="location.href=''">
-	                플래너 수정
-	            </button>
+	           
 			</div>
 			<br><br>
 			

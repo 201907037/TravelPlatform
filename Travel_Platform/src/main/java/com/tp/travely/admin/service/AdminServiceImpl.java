@@ -6,6 +6,7 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tp.travely.admin.dao.AdminDao;
 import com.tp.travely.board.model.vo.Board;
@@ -36,12 +37,13 @@ public class AdminServiceImpl implements AdminService {
 		return adminDao.adminBoardListView(sqlSession);
 	}
 
-
+	@Transactional
 	@Override
 	public int boardSafe(int boardNo) {
 		return adminDao.boardSafe(sqlSession, boardNo);
 	}
 	
+	@Transactional
 	@Override
 	public int boardDelate(int boardNo) {
 		return adminDao.boardDelate(sqlSession, boardNo);
@@ -65,7 +67,18 @@ public class AdminServiceImpl implements AdminService {
 		return adminDao.uploadCount(sqlSession);
 	}
 	
-	
-	
+	@Transactional
+	@Override
+	public int memberDelate(int userNo) {
+		
+		return adminDao.memberDelate(sqlSession, userNo);
+	}
+
+	@Transactional
+	@Override
+	public int memberSafe(int userNo) {
+		
+		return adminDao.memberSafe(sqlSession, userNo);
+	}
 	
 }
