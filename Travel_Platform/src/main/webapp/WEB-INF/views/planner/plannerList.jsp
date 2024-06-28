@@ -124,7 +124,7 @@
         .paging-area button {
             color: skyblue;
             background-color: white;
-            border: 2px solid skyblue;
+            border: 2px solid darkblue;
             padding: 10px 15px;
             margin: 0px 2px; 
             border-radius: 5px;
@@ -138,7 +138,7 @@
             color: white;
         }
         button[class^=btn-dis]{
-        	background-color : blue;
+        	background-color : cornflowerblue;
         }
         #search-result{
         	display : none;

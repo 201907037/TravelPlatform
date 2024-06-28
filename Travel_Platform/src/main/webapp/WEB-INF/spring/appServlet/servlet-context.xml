@@ -102,7 +102,20 @@
         </websocket:handshake-interceptors>
     </websocket:handlers>
     
-    <!-- 인턴셉터 필요시 추가 -->
+    <!-- 인터셉터 필요시 추가 -->
+    <interceptors>
+		<interceptor>
+			<!-- 권한 체크가 필요한 요청들을 mapping으로 나열 -->
+			<mapping path="/changePlan.pl"/>
+			<mapping path="/myPage1.me"/>
+			<mapping path="/dashBoard.ad"/>
+			<mapping path="/adminMember.ad"/>
+			<mapping path="/adminBoardListView.ad"/>
+			<mapping path="/noticeList.ad"/>
+			<mapping path="/adminTour.ad"/>
+			<beans:bean class="com.tp.travely.common.LoginInterceptor" id="loginInterceptor"/>
+		</interceptor>
+	</interceptors>
 </beans:beans>
 
 

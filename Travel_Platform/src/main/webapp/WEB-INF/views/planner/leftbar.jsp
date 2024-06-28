@@ -759,7 +759,7 @@
                     		<c:when test="${empty sessionScope.loginUser }">
                     			<!-- 로그인 전 -->
                     			<th colspan="2">
-		                            <textarea class="form-control" name="" id="contentR" cols="55" rows="3" style="resize:none; width:100%;" readonly>로그인한 사용자만 이용 가능한 서비스입니다. 로그인 후 이용해주세요.</textarea>
+		                            <textarea class="form-control" name="" id="contentR" cols="55" rows="3" style="resize:none; width:100%;" placeholder="로그인한 사용자만 이용 가능한 서비스입니다. 로그인 후 이용해주세요." readonly>로그인한 사용자만 이용 가능한 서비스입니다. 로그인 후 이용해주세요.</textarea>
 		                        </th>
 		                        <th style="vertical-align:middle;text-align:right"><button class="btn btn-secondary" style="padding : 0px;width :100%;height: 60px;margin : auto;" disabled>등록</button></th>
                     		</c:when>
@@ -943,7 +943,7 @@ let typeFlag=0;
 				}
 				
 				if(pinfo.startPage!=1){
-                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-left").attr("class","left btn btn-success btn-sm").html("&lt;&lt;");
+                    var btnLeft = $("<button>").attr("type","button").attr("id","btn-left").attr("class","left btn btn-secondary btn-sm").html("&lt;&lt;");
                     //console.log(btnleft);
                     $("#button_box").append(btnLeft);
                 }
@@ -1058,7 +1058,22 @@ let typeFlag=0;
 			contentType=tourObj.typeSearch;
 		}
 		//console.log(contentType);
-		
+		rs = 1;
+		$.ajax({
+			url : "ckTour.pl",
+			async : false,
+			method : "get",
+			data : {contentId : tourObj.contentId},
+			success : function(e){
+				console.log(e);
+				rs = rs*Number(e.ck);
+				
+			},
+			error : function(){
+				console.log("실패");
+			}
+		});
+		getImg();
 		$.ajax({
 			url : "getDetail.to",
 			method : "GET",
@@ -1084,22 +1099,8 @@ let typeFlag=0;
 					create39(obj);
 					break;
 				}
-				getImg();
-				rs = 1;
-				$.ajax({
-					url : "ckTour.pl",
-					async : false,
-					method : "get",
-					data : {contentId : tourObj.contentId},
-					success : function(e){
-						console.log(e);
-						rs = rs*Number(e.ck);
-						
-					},
-					error : function(){
-						console.log("실패");
-					}
-				});
+				
+				
 				console.log("result : "+rs)
 				if(rs==1){
 					getReview();
@@ -1436,13 +1437,15 @@ let typeFlag=0;
 			}
 		});
 	}
-	
+	let upFlag = '${requestScope.upFlag}';	
 	$(function(){
 		//let date = new Date("2024-06-28");
 		//date.setHours(23);
 		//date.setMinutes(59);
 		//date.setSeconds(56);
 		//console.log(date);
+			
+		
 		
 		$("#left-img").click(function(){
 			
@@ -1783,7 +1786,14 @@ let typeFlag=0;
 				}
 				
 			}
-			
+				let x = plan.planList[dateUseIdx].tourList[0].XX;
+				let y = plan.planList[dateUseIdx].tourList[0].YY;
+				if(x!=null && y!=null){
+					var newloc =new kakao.maps.LatLng(y,x);
+					map.setCenter(newloc);
+					map.setLevel(5);
+				}
+				
 				polyline = new kakao.maps.Polyline({
 				    path: linePath, // 선을 구성하는 좌표배열 입니다
 				    strokeWeight: 5, // 선의 두께 입니다
@@ -1945,22 +1955,13 @@ let typeFlag=0;
 				//console.log("발동");
 			}else{
 				//console.log(dateMarkerList);
-				for(let i =0;i<dateMarkerList.length;i++){
-					dateMarkerList[i].setMap(null);
-				}
-				for(let i=0;i<markerList.length;i++){
-					markerList[i].setMap(null);
-				}
-				if(polyline!=null){
-					polyline.setMap(null);
-				}
-				dateMarkerList=[];
+				
 				//console.log($(".left-bar").css("width"));
 				
 				$(".left-bar").css("display","none");
 				
 				let dateObj = plan.planList[dateUseIdx];
-				//console.log(dateObj);
+				console.log(dateObj);
 				let startTime = new Date(new Date().setHours(dateObj.startTimeH));
 				 let endTime = new Date(new Date().setHours(dateObj.endTimeH));
 				 endTime.setMinutes(dateObj.endTimeM);
@@ -1973,6 +1974,16 @@ let typeFlag=0;
 				 });
 				 //console.log(Number(maxTime)==total);
 				 if(Number(maxTime)==total){
+					 for(let i =0;i<dateMarkerList.length;i++){
+							dateMarkerList[i].setMap(null);
+						}
+						for(let i=0;i<markerList.length;i++){
+							markerList[i].setMap(null);
+						}
+						if(polyline!=null){
+							polyline.setMap(null);
+						}
+						dateMarkerList=[];
 					 status = "YY";
 					 $(".leftleft-bar").css("width","0px");
 					 $(".leftleft-bar").css("display","none");
@@ -2007,6 +2018,7 @@ let typeFlag=0;
             $("input[name=file]").click();
         });
 		$("#btn-submit").click(function(){
+			
 			$(".leftleft-bar button[class=btn-cl]").click();
 			let cknull=0;
 			$.each(plan.planList,function(j,v){
@@ -2455,7 +2467,11 @@ let typeFlag=0;
 			
 			console.log(plan);
 		});
-		
+		if(upFlag!=""){
+			console.log(upFlag);
+			$(".d_box").children().eq(1).click();
+			
+		}
 	});
 </script>
  <!-- IONICONS -->

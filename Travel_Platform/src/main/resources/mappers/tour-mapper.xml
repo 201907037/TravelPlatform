@@ -237,7 +237,7 @@
 					 	  TOUR_NAME, 
 					 	  ADDRESS, 
 					 	  THUMB_IMG, 
-					 	  TOUR_TYPE 
+					 	  TOUR_TYPE, 
 					 	  MAP_X, 
 					 	  MAP_Y) 
 					VALUES(TOUR_DNO.CURRVAL, 
@@ -272,7 +272,7 @@
 					 	  TOUR_NAME, 
 					 	  ADDRESS, 
 					 	  THUMB_IMG, 
-					 	  TOUR_TYPE 
+					 	  TOUR_TYPE, 
 					 	  MAP_X, 
 					 	  MAP_Y) 
 					VALUES(TOUR_DNO.CURRVAL, 
@@ -307,7 +307,7 @@
 					 	  TOUR_NAME, 
 					 	  ADDRESS, 
 					 	  THUMB_IMG, 
-					 	  TOUR_TYPE 
+					 	  TOUR_TYPE, 
 					 	  MAP_X, 
 					 	  MAP_Y) 
 					VALUES(TOUR_DNO.CURRVAL, 

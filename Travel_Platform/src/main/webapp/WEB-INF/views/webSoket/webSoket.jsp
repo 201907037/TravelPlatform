@@ -352,7 +352,7 @@
 		// 웹소켓 서버 접속 함수
 		function connect() {
 		    // 접속할 웹소켓의 주소를 넘기면서 자바스크립트의 WebSocket 객체 생성
-		    let url = "ws://localhost:80/travely/ws/msgPage.mg";
+		    let url = "ws://192.168.0.15:80/travely/ws/msgPage.mg";
 		    socket = new WebSocket(url); // Connection Established
 	
 		    console.log(socket);

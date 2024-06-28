@@ -52,8 +52,8 @@
                             <option value="N">N</option>
                         </c:when>
                         <c:otherwise>
-                          	<option value="N">Y</option>
-                            <option value="Y">N</option>
+                          	<option value="N">N</option>
+                            <option value="Y">Y</option>
                         </c:otherwise>
                         </c:choose>
                         </select>

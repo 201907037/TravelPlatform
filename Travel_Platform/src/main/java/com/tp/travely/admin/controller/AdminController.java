@@ -66,11 +66,11 @@ public class AdminController {
 		if(statusResult.equals("Y")) {
 			// 탈퇴에서 가입으로
 			result = adminService.boardSafe(boardNo);
-			s = "가입";
+			s = "게시";
 		}else {
 			// 가입에서 탈퇴로
 			result = adminService.boardDelate(boardNo);
-			s = "탈퇴";
+			s = "삭제";
 		}
 		return s;
 	}

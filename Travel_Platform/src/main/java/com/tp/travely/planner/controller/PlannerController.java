@@ -150,7 +150,7 @@ public class PlannerController {
 	@PostMapping(value="updatePlan.pl")
 	public String changePlanner(MultipartFile file,String plan, String title,String content,String ckOpen,HttpSession session) {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-		
+		//System.out.println(plan);
 		JsonObject totalObj = JsonParser.parseString(plan).getAsJsonObject();
 		JsonObject planObj = totalObj.getAsJsonObject("plan"); 
 		JsonArray planArr = planObj.getAsJsonArray("planList");
@@ -226,17 +226,17 @@ public class PlannerController {
 			 	 detailList.add(pDetail); 
 			 } 
 		}
-		 System.out.println(planner);
-		 for(PlanDetail p : detailList) {
-				System.out.println(p);
-			}
+//		 System.out.println(planner);
+//		 for(PlanDetail p : detailList) {
+//				System.out.println(p);
+//			}
 		 
 		 int rs = plannerService.updatePlanner(planner, detailList);
 		 //System.out.println(planner); 
-		
+		 
 		if(rs>0) {
 			session.setAttribute("msg", "저장 성공!");
-			return "redirect:/goList.pl";
+			return "redirect:/myPage1.me";
 		}else {
 			return "redirect:/index";
 		}
@@ -459,7 +459,7 @@ public class PlannerController {
 		model.addAttribute("p", p);
 		model.addAttribute("planner",new Gson().toJson(p));
 		model.addAttribute("list",new Gson().toJson(list));
-		
+		model.addAttribute("upFlag","ck");
 		return "/planner/plannerView";
 	}
 	

@@ -41,6 +41,18 @@
       	border : 1px solid black;
       	border-radius : 15px;
       }
+      
+      
+      
+      a{
+      	color : black;
+      	text-decoration : none;
+      }
+      
+     a:hover{
+     	color : black;
+     	text-decoration : none;
+     }
 </style>
 </head>
 <body>
@@ -51,7 +63,7 @@
 		<h3>${requestScope.p.planName }</h3>
 		
 		<span id="createDate">${requestScope.p.createDate}</span>
-		<span id="nickName" style="margin-right : 10px;">홍길동</span>&nbsp;
+		<span id="nickName" style="margin-right : 10px;">${requestScope.loginUser.nickName}</span>&nbsp;
 	</div>
 	<div id="map" style="width:80%;height:50%;margin : auto;"></div>
 <div style="width : 80%; height : 30%;margin : auto;">

@@ -177,6 +177,16 @@
 	    #tb tr:nth-child(even) {
 	        background-color: #f9f9f9;
 	    }
+
+        a{
+            color: black;
+            text-decoration: none;
+        }
+
+        a:hover{
+            color: black;
+            text-decoration: none;
+        }
     
 </style>
 </head>
