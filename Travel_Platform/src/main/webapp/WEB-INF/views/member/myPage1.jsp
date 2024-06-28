@@ -388,6 +388,10 @@
     		$("#see").click(function(){
     			location.href="detail.pl?pno="+planNo;
     		});
+    		$(".planner-gallery").on("click","button[id=btn2]",function(){
+    			location.href="goPlanner.pl";
+    		});
+    		
     		$("#delete").click(function(){
     			pno = 1;
     			$.ajax({

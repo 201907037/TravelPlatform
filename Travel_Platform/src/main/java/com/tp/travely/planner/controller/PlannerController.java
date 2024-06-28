@@ -368,7 +368,7 @@ public class PlannerController {
 		map.put("mno", mno+"");
 		int listCount = plannerService.getOtherPlannerCount(map);
 		//System.out.println(listCount);
-		PageInfo pinfo = getPagInfo(listCount, pno,10,9);
+		PageInfo pinfo = getPagInfo(listCount, pno,10,4);
 		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
 		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
 		map.put("start", (start+""));
@@ -424,7 +424,7 @@ public class PlannerController {
 		map.put("userNo", userNo+"");
 		int listCount = plannerService.getMyPlannerCount(map);
 		System.out.println(listCount);
-		PageInfo pinfo = getPagInfo(listCount, pno,10,9);
+		PageInfo pinfo = getPagInfo(listCount, pno,10,4);
 		int start = (pinfo.getCurrentPage()-1)*pinfo.getBoardLimit()+1;
 		int end = (pinfo.getCurrentPage()*pinfo.getBoardLimit());
 		map.put("start", (start+""));
