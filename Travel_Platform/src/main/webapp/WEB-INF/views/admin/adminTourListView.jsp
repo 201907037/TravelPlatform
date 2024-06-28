@@ -260,13 +260,13 @@
 	                        </th>
 	                        <th>
 	                        	<c:choose>
-								      <c:when test="${t.tourType.equals('tourSpot')}">
+								      <c:when test="${t.tourType.equals('tourSpot') or t.tourType.equals('관광지')}">
 								      		관광지
 								      </c:when>
-								      <c:when test="${t.tourType.equals('lodging')}">
+								      <c:when test="${t.tourType.equals('lodging') or t.tourType.equals('숙박')}">
 								      		숙박시설
 								      </c:when>
-								      <c:when test="${t.tourType.equals('restaurant')}">
+								      <c:when test="${t.tourType.equals('restaurant') or t.tourType.equals('음식점')}">
 								      		식당/카페
 								      </c:when>
 								      <c:otherwise>
